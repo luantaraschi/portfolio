@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<script>(function(){var t=null;try{t=localStorage.getItem('lt-tema')}catch(e){}
+if(!t)t=window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';
+if(t==='light')document.documentElement.setAttribute('data-theme','light')
+try{history.scrollRestoration="manual"}catch(e){}})()</script>
+<title>Triagem por IA no WhatsApp · Luan Taraschi</title>
+<meta name="description" content="Estudo de caso: agente de IA que tria cerca de mil conversas por mês no WhatsApp de um escritório jurídico, com guardrails para nunca dar consultoria jurídica." />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'><rect width='8' height='8' fill='%231a1917'/><g fill='%23fce4a6'><rect width='4' height='4'/><rect x='4' y='4' width='4' height='4'/></g></svg>" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Space+Grotesk:wght@300..700&family=Space+Mono:wght@400;700&display=swap" />
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<a class="skip" href="#conteudo">Pular para o conteúdo</a>
+<div class="grid-glow" data-glow aria-hidden="true"></div>
+<div class="wipe" data-wipe aria-hidden="true"></div>
+
+<header class="nav" data-od-id="nav">
+  <div class="wrap nav__inner">
+    <a class="nav__mark" href="index.html">
+      <span class="nav__glyph" aria-hidden="true"></span>
+      Luan Taraschi
+    </a>
+    <nav class="nav__links" aria-label="Seções do site">
+      <a class="nav__link" href="index.html#sobre">Sobre</a>
+      <a class="nav__link" href="index.html#projetos" aria-current="page">Projetos</a>
+      <a class="nav__link" href="index.html#games">Games</a>
+      <a class="nav__link" href="index.html#skills">Stack</a>
+      <a class="nav__link" href="index.html#experiencia">Experiência</a>
+      <a class="nav__link" href="index.html#contato">Contato</a>
+    </nav>
+    <button class="lamp" type="button" role="switch" aria-checked="false"
+            data-theme-toggle title="Luz da página"
+            aria-label="Alternar entre modo escuro e claro">
+      <span class="lamp__track" aria-hidden="true"><span class="lamp__knob"></span></span>
+    </button>
+
+    <button class="nav__toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="menu-mobile">
+      Menu
+    </button>
+  </div>
+  <div class="nav__panel" id="menu-mobile" data-nav-panel hidden>
+    <a href="index.html#sobre">Sobre</a>
+    <a href="index.html#projetos">Projetos</a>
+    <a href="index.html#games">Games</a>
+    <a href="index.html#skills">Stack</a>
+    <a href="index.html#experiencia">Experiência</a>
+    <a href="index.html#contato">Contato</a>
+  </div>
+</header>
+
+<main id="conteudo">
+  <article class="wrap" data-od-id="case">
+
+    <header class="case__head">
+      <span class="kicker">projetos/02 · produção</span>
+      <h1 class="h1 case__title">Triagem por IA no WhatsApp</h1>
+      <p class="lead case__lead">
+        O canal onde o escritório realmente atende: cerca de mil conversas por mês,
+        organizadas por um agente antes de chegar a qualquer pessoa. É o módulo de
+        captação do <a href="projeto-jvb.html">ERP JVB</a>.
+      </p>
+
+      <dl class="case__meta invert">
+        <div><dt>Ano</dt><dd>2025 · em produção</dd></div>
+        <div><dt>Papel</dt><dd>Dev full stack, do requisito ao suporte</dd></div>
+        <div><dt>Stack</dt><dd>TypeScript · tRPC · PostgreSQL · Whapi/Evolution · IA multi-provedor</dd></div>
+        <div><dt>Link</dt><dd>sistema privado do cliente</dd></div>
+      </dl>
+    </header>
+
+    <!-- slot: assets/shots/triagem-conversa.png · print mais sensível da lista,
+         conversa 100% fabricada. Checklist de sigilo em SHOTS.md -->
+    <figure class="shot dither-50">
+      <figcaption>
+        <span>a conversa do WhatsApp dentro do sistema</span>
+        <span class="shot__cor">passe o cursor para ver em cor</span>
+      </figcaption>
+    </figure>
+
+    <div class="case__body">
+      <section class="case__block">
+        <h2 class="h2">O problema</h2>
+        <p class="body-text">
+          Todo contato novo chegava pelo WhatsApp, no mesmo lugar onde já corria a
+          conversa dos casos em andamento. Quem atendia gastava o dia separando
+          curioso de cliente, e o histórico de cada processo ficava espalhado em
+          conversas soltas, sem ligação nenhuma com o sistema de gestão do
+          escritório.
+        </p>
+      </section>
+
+      <section class="case__block">
+        <h2 class="h2">A decisão</h2>
+        <p class="body-text">
+          Colocar a IA na triagem, não na resposta. O agente lê a conversa,
+          classifica por perfil e intenção e decide se aquilo vira lead; a partir daí
+          quem fala é o humano. É a parte do trabalho que é repetitiva de verdade, e
+          é a única em que errar sai barato: um lead mal classificado se corrige na
+          tela, uma resposta jurídica errada não.
+        </p>
+      </section>
+
+      <section class="case__block case__block--wide">
+        <h2 class="h2">Guarda-corpo, não prompt</h2>
+        <p class="body-text">
+          Um assistente que responde no WhatsApp de um escritório de advocacia não
+          pode dar consultoria jurídica. Isso não é constrangimento de UX, é risco
+          disciplinar. Então a defesa não mora no prompt: é uma camada de guardrails
+          com escopo explícito (triar e coletar dado, nunca aconselhar), defesa contra
+          prompt injection, disjuntor de custo, e handoff que pausa o bot no instante
+          em que um advogado assume a conversa.
+        </p>
+        <p class="body-text">
+          A checagem roda antes do modelo. Uma pergunta de mérito jurídico nunca chega
+          a ser respondida: ela é encaminhada para um humano.
+        </p>
+        <div class="case__nums">
+          <div class="case__num"><b>~1.000</b><span>conversas por mês</span></div>
+          <div class="case__num"><b>100%</b><span>da triagem por IA</span></div>
+          <div class="case__num"><b>0</b><span>consultoria dada pelo bot</span></div>
+        </div>
+      </section>
+
+      <section class="case__block">
+        <h2 class="h2">O nono dígito duplicava as conversas</h2>
+        <p class="body-text">
+          O WhatsApp entrega o identificador do contato às vezes com o nono dígito do
+          celular brasileiro, às vezes sem. O mesmo cliente aparecia como duas
+          conversas, com o histórico partido ao meio.
+        </p>
+        <p class="body-text">
+          A correção não foi mascarar na tela. Foi definir um identificador canônico e
+          casar as variantes já na entrada do webhook, antes de qualquer coisa tocar o
+          banco. Bug de domínio regional que documentação nenhuma avisa.
+        </p>
+      </section>
+
+      <section class="case__block">
+        <h2 class="h2">Como ficou</h2>
+        <p class="body-text">
+          Hoje a triagem roda inteira por IA e só o lead qualificado chega à equipe.
+          As conversas ficam amarradas ao processo dentro do próprio sistema, então o
+          histórico deixou de morar no celular de alguém. Está em produção sob meu
+          suporte direto, e isso muda o trabalho: o que eu entrego não é uma entrega,
+          é um sistema que precisa acordar funcionando toda manhã.
+        </p>
+        <div class="case__gallery">
+          <!-- slot: assets/shots/triagem-lead.mp4 · o gif de maior retorno da lista -->
+          <figure class="shot shot--tall dither-25">
+            <figcaption><span>mensagem → lead → card no funil</span></figcaption>
+          </figure>
+          <!-- slot: assets/shots/triagem-handoff.png -->
+          <figure class="shot shot--tall dither-12">
+            <figcaption><span>o advogado assume e o bot pausa</span></figcaption>
+          </figure>
+        </div>
+      </section>
+    </div>
+
+    <nav class="case__nav" aria-label="Navegação entre projetos">
+      <a class="btn btn--ghost" href="projeto-jvb.html">‹ Anterior: ERP JVB</a>
+      <a class="btn" href="index.html#projetos">Todos os projetos ›</a>
+    </nav>
+
+  </article>
+</main>
+
+<footer class="foot" data-od-id="footer">
+  <div class="wrap foot__inner">
+    <span class="mono-caps">Luan Taraschi · MMXXVI</span>
+    <span class="mono-caps">feito por mim, com muito amor</span>
+  </div>
+</footer>
+
+<script src="js/app.js" defer></script>
+</body>
+</html>

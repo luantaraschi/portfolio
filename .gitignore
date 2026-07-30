@@ -1,0 +1,23 @@
+# Sobras do export do Open Design: nenhum destes arquivos é carregado pelo site.
+Portfólio-ASCII-Pixel-Art.zip
+ms*.png
+ms*.gif
+DESIGN-HANDOFF.md
+DESIGN-MANIFEST.json
+
+# Material interno. O case do JVB descreve por dentro o sistema de um cliente e
+# pede autorização por escrito antes de qualquer publicação: fora de repo público.
+PORTFOLIO-JVB-KANBAN.md
+
+# O currículo publicado é assets/luan-taraschi-cv.pdf, que o site oferece para
+# download. Este aqui na raiz é a cópia de trabalho.
+Curriculo Luan Taraschi.pdf
+
+# Sistema operacional e editor
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+
+# Cache de ferramenta local
+.impeccable/

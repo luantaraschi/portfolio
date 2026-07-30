@@ -1,0 +1,1611 @@
+/* ============================================================================
+   Luan Taraschi - portfólio 1-bit
+   Sistema: canvas carvão + tinta areia, dithering Bayer, zero raio, sombra
+   dura deslocada. Paleta amostrada das referências - ver brand-spec.md.
+   O acento é a própria inversão de polaridade, não um hue novo.
+
+   Ordem: 1 tokens · 2 base · 3 tipografia · 4 dither · 5 componentes
+          6 seções · 7 responsivo · 8 acessibilidade/motion
+   ========================================================================== */
+
+/* ---------- 1. TOKENS ---------------------------------------------------- */
+/* Duas paletas, um par de tokens. `.invert` significa sempre "o contrário da
+   página", então ele troca de lado sozinho quando o interruptor troca o tema. */
+
+/* Cada modo tem o seu próprio par. O escuro é carvão+areia (board da marca);
+   o claro é solarized - cinza quente, tinta ardósia e highlights saturados,
+   amostrado de ms7uqgui-diethehehet.png. Trocar o tema troca as duas cores.
+   Literais de propósito: var() dentro de custom property resolve no elemento
+   que declara, e congelaria a cor errada dentro de .invert. */
+
+/* carvão - página no modo escuro */
+:root {
+  --paper:      #1a1917;   /* canvas dominante (ref 2) */
+  --paper-2:    #252420;   /* painel escuro (ref 1)    */
+  --ink:        #fce4a6;   /* tinta areia (ref 1)      */
+  --ink-2:      #9a948a;
+  --rule:       #fce4a6;
+  --rule-soft:  #413e37;
+  --accent:     #fce4a6;
+  --tex:        rgba(252, 228, 166, 0.06);
+  --tex-hi:     rgba(252, 228, 166, 0.30);  /* mesma retícula, acesa pelo cursor */
+  --shadow:     4px 4px 0 #fce4a6;
+}
+
+/* areia - painel invertido dentro da página carvão */
+.invert {
+  --paper:      #fce4a6;
+  --paper-2:    #f3d792;
+  --ink:        #1a1917;
+  --ink-2:      #6b6558;
+  --rule:       #1a1917;
+  --rule-soft:  #d6bd76;
+  --accent:     #1a1917;
+  --tex:        rgba(26, 25, 23, 0.08);
+  --tex-hi:     rgba(26, 25, 23, 0.34);
+  --shadow:     4px 4px 0 #1a1917;
+}
+
+/* solarized claro - página no modo claro */
+:root[data-theme='light'] {
+  --paper:      #eee8d5;   /* base2  */
+  --paper-2:    #e3ddc7;   /* derivado */
+  --ink:        #073642;   /* base02 - ardósia, nunca preto */
+  --ink-2:      #4c6068;   /* base01 escurecido até passar 4.5:1 */
+  --rule:       #073642;
+  --rule-soft:  #cfc8b0;
+  --accent:     #073642;
+  --tex:        rgba(7, 54, 66, 0.10);
+  --tex-hi:     rgba(42, 161, 152, 0.55);   /* a retícula sob o cursor acende ciano */
+  --shadow:     4px 4px 0 #073642;
+}
+
+/* solarized escuro - painel invertido dentro da página clara */
+:root[data-theme='light'] .invert {
+  --paper:      #002b36;   /* base03 */
+  --paper-2:    #073642;   /* base02 */
+  --ink:        #eee8d5;
+  --ink-2:      #93a1a1;   /* base1  */
+  --rule:       #eee8d5;
+  --rule-soft:  #20505c;
+  --accent:     #eee8d5;
+  --tex:        rgba(238, 232, 213, 0.07);
+  --tex-hi:     rgba(238, 232, 213, 0.30);
+  --shadow:     4px 4px 0 #eee8d5;
+}
+
+/* 1.1 os highlights. No escuro não existe terceira cor - os três apontam para
+   a tinta. No claro cada um é um acento solarized, e eles só pintam detalhe:
+   ponto de retícula, sublinhado, marcador, rastro do clique. Texto nunca. */
+:root                     { --pop-1: #fce4a6; --pop-2: #fce4a6; --pop-3: #fce4a6; }
+:root[data-theme='light'] { --pop-1: #dc322f; --pop-2: #268bd2; --pop-3: #2aa198; }
+
+/* 1.2 o retrato tem polaridade fixa: cabelo escuro sobre fundo claro nos dois
+   modos, porque inverter uma foto de rosto dá um negativo ilegível. O que
+   muda é só o par de cores - por isso ele é máscara, não bitmap colorido. */
+:root                     { --face-paper: #fce4a6; --face-ink: #1a1917; }
+:root[data-theme='light'] { --face-paper: #eee8d5; --face-ink: #073642; }
+
+/* 1.3 a cor que a cortina carrega. Literal porque ela pinta o tema que ainda
+   não entrou - não dá para ler do :root, que nesse instante é o tema velho. */
+.wipe--claro  { --wipe-cor: #eee8d5; }
+.wipe--escuro { --wipe-cor: #1a1917; }
+
+:root                     { color-scheme: dark; }
+:root[data-theme='light'] { color-scheme: light; }
+
+:root {
+  --alert:      #ff6b3d;   /* só erro de formulário */
+
+  /* Três vozes, uma família de origem. Silkscreen continua sendo a marca.
+     Space Grotesk no corpo: grotesca de terminais quadrados, com o "a" e o "g"
+     de desenho técnico - some a cara de sistema operacional que o texto tinha.
+     Space Mono nos metadados, que é literalmente a mãe da Space Grotesk, então
+     os dois pesos combinam sem parecerem duas decisões diferentes. */
+  --font-display: 'Silkscreen', 'Courier New', ui-monospace, monospace;
+  /* só o nome do hero. A Silkscreen é um grid de 5x7: em corpo de rótulo ela é
+     ótima, em corpo de 200px cada letra vira meia dúzia de tijolos e o nome
+     deixa de se ler. A Pixelify Sans tem grid bem mais fino, então o mesmo
+     tamanho carrega muito mais desenho. Carregada só no index. */
+  --font-title:   'Pixelify Sans', 'Silkscreen', ui-monospace, monospace;
+  --font-body:    'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --font-mono:    'Space Mono', ui-monospace, 'SF Mono', Menlo, 'Cascadia Mono', monospace;
+
+  --wrap:   1240px;
+  --gutter: clamp(20px, 5vw, 56px);
+  --bay:    clamp(64px, 9vw, 116px); /* respiro vertical de seção */
+}
+
+/* ---------- 2. BASE ------------------------------------------------------ */
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  scroll-padding-top: 84px;
+}
+
+body {
+  background-color: var(--paper);
+  /* textura: retícula de 1px quase imperceptível, vira junto com o tema */
+  background-image: radial-gradient(var(--tex) 0.8px, transparent 0.9px);
+  background-size: 10px 10px;
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* a retícula do fundo acende sob o cursor: mesma grade de 10px, só mais forte,
+   recortada por uma máscara redonda.
+
+   Antes isso era um elemento do tamanho do viewport com a máscara centrada em
+   --mx/--my. Mover o centro de uma máscara é pintura, e a área pintada era a
+   tela inteira, a cada quadro em que o ponteiro andasse - numa tela grande, uns
+   3,7 milhões de pixels rasterizados de novo por quadro só para acender um
+   borrão de 190px. Agora a caixa tem 320px, a máscara é fixa no meio dela e
+   quem anda é um translate3d: composição pura, nada repinta.
+
+   A grade continua casando com a do body porque o JS trava o deslocamento em
+   múltiplos de 10px - o mesmo passo do background-size. O salto de 10px é
+   invisível num borrão que só fica sólido no miolo. */
+.grid-glow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 320px;
+  height: 320px;
+  margin: -160px 0 0 -160px;   /* múltiplo de 10: mantém a fase da retícula */
+  transform: translate3d(-500px, -500px, 0);
+  z-index: -1;                 /* acima do fundo do body, abaixo do conteúdo */
+  pointer-events: none;
+  opacity: 0;
+  background-image: radial-gradient(var(--tex-hi) 1px, transparent 1.1px);
+  background-size: 10px 10px;
+  -webkit-mask-image: radial-gradient(circle 190px at 50% 50%,
+                        #000 0%, rgba(0, 0, 0, 0.4) 46%, transparent 74%);
+          mask-image: radial-gradient(circle 190px at 50% 50%,
+                        #000 0%, rgba(0, 0, 0, 0.4) 46%, transparent 74%);
+  transition: opacity 260ms ease-out;
+}
+.grid-glow.is-lit { opacity: 1; }
+
+/* 2.1 o cursor faz parte do sistema: seta 1-bit desenhada, com contorno.
+   Sobre o clicável ela inverte a polaridade - a mesma regra da seleção.
+   No :active a mesma seta vem menor (20x32 -> 17x27): o ponteiro afunda junto
+   com o botão, igual a todo o resto do site. As URLs moram aqui em cima porque
+   são quatro polaridades x dois estados; as regras lá embaixo ficam curtas. */
+:root {
+  --seta:        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='32' viewBox='0 0 12 19'%3E%3Cpath d='M1 1L1 16L4.6 12.6L6.9 18L9.3 17L7 11.8L11.4 11.8Z' fill='%23fce4a6' stroke='%231a1917' stroke-width='1.6' stroke-linejoin='miter' paint-order='stroke'/%3E%3C/svg%3E");
+  --seta-press:  url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='17' height='27' viewBox='0 0 12 19'%3E%3Cpath d='M1 1L1 16L4.6 12.6L6.9 18L9.3 17L7 11.8L11.4 11.8Z' fill='%23fce4a6' stroke='%231a1917' stroke-width='1.6' stroke-linejoin='miter' paint-order='stroke'/%3E%3C/svg%3E");
+  --seta-inv:    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='32' viewBox='0 0 12 19'%3E%3Cpath d='M1 1L1 16L4.6 12.6L6.9 18L9.3 17L7 11.8L11.4 11.8Z' fill='%231a1917' stroke='%23fce4a6' stroke-width='1.6' stroke-linejoin='miter' paint-order='stroke'/%3E%3C/svg%3E");
+  --seta-inv-press: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='17' height='27' viewBox='0 0 12 19'%3E%3Cpath d='M1 1L1 16L4.6 12.6L6.9 18L9.3 17L7 11.8L11.4 11.8Z' fill='%231a1917' stroke='%23fce4a6' stroke-width='1.6' stroke-linejoin='miter' paint-order='stroke'/%3E%3C/svg%3E");
+}
+:root[data-theme='light'] {
+  --seta:        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='32' viewBox='0 0 12 19'%3E%3Cpath d='M1 1L1 16L4.6 12.6L6.9 18L9.3 17L7 11.8L11.4 11.8Z' fill='%23073642' stroke='%23eee8d5' stroke-width='1.6' stroke-linejoin='miter' paint-order='stroke'/%3E%3C/svg%3E");
+  --seta-press:  url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='17' height='27' viewBox='0 0 12 19'%3E%3Cpath d='M1 1L1 16L4.6 12.6L6.9 18L9.3 17L7 11.8L11.4 11.8Z' fill='%23073642' stroke='%23eee8d5' stroke-width='1.6' stroke-linejoin='miter' paint-order='stroke'/%3E%3C/svg%3E");
+  --seta-inv:    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='32' viewBox='0 0 12 19'%3E%3Cpath d='M1 1L1 16L4.6 12.6L6.9 18L9.3 17L7 11.8L11.4 11.8Z' fill='%23eee8d5' stroke='%23073642' stroke-width='1.6' stroke-linejoin='miter' paint-order='stroke'/%3E%3C/svg%3E");
+  --seta-inv-press: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='17' height='27' viewBox='0 0 12 19'%3E%3Cpath d='M1 1L1 16L4.6 12.6L6.9 18L9.3 17L7 11.8L11.4 11.8Z' fill='%23eee8d5' stroke='%23073642' stroke-width='1.6' stroke-linejoin='miter' paint-order='stroke'/%3E%3C/svg%3E");
+}
+
+:root                                              { cursor: var(--seta) 2 2, auto; }
+a, button, summary, label, [role='switch']         { cursor: var(--seta-inv) 2 2, pointer; }
+:root:active                                       { cursor: var(--seta-press) 2 2, auto; }
+:is(a, button, summary, label, [role='switch']):active {
+  cursor: var(--seta-inv-press) 2 2, pointer;
+}
+/* campo de texto continua com cursor de texto - `cursor` é herdado */
+input, textarea { cursor: text; }
+
+/* 2.2 a cortina: uma faixa estreita da cor que está entrando cruza a tela da
+   direita para a esquerda. Nunca cobre tudo - a ideia é uma emenda passando,
+   não um blecaute. O JS vira o tema quando ela está no meio do caminho, então
+   o corte acontece debaixo dela. Frente sólida, rastro em retícula de 50%,
+   que deixa a página aparecer por trás enquanto a faixa sai. */
+.wipe {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: var(--wipe-de, 100vw);
+  width: 22vw;
+  min-width: 130px;
+  z-index: 240;
+  pointer-events: none;
+  opacity: 0;
+  background-image: repeating-conic-gradient(var(--wipe-cor) 0 25%, transparent 0 50%);
+  background-size: 4px 4px;
+}
+.wipe::before {                     /* a frente da faixa, sem furo */
+  content: '';
+  position: absolute;
+  inset: 0 62% 0 0;
+  background-color: var(--wipe-cor);
+}
+.wipe.is-on {
+  opacity: 1;
+  animation: wipe 420ms steps(7, end) 1;
+}
+@keyframes wipe {
+  from { transform: translateX(0); }
+  to   { transform: translateX(var(--wipe-ate, calc(-100vw - 22vw))); }
+}
+
+/* a faixa vai e volta: uma troca varre para a esquerda, a seguinte para a
+   direita. Só inverte de onde ela parte, para onde vai e de que lado fica a
+   frente sólida - a retícula do rastro continua atrás dela nos dois sentidos.
+   ponytail: os 130px repetem o min-width lá de cima. Se aquele valor mudar,
+   muda aqui também, senão a faixa larga não limpa a tela em celular. */
+.wipe--volta {
+  --wipe-de: calc(0px - 22vw - 130px);
+  --wipe-ate: calc(100vw + 22vw + 130px);
+}
+.wipe--volta::before { inset: 0 0 0 62%; }
+
+/* o rastro do clique: um quadrado 1-bit que abre e some. Um só elemento,
+   reposicionado a cada pointerdown - ver módulo 12. */
+.click-fx {
+  position: fixed;
+  z-index: 300;
+  width: 14px;
+  height: 14px;
+  margin: -7px 0 0 -7px;
+  border: 2px solid var(--pop-1);
+  pointer-events: none;
+  opacity: 0;
+}
+.click-fx.on { animation: click-fx 260ms steps(4, end) 1; }
+@keyframes click-fx {
+  from { opacity: 1; transform: scale(0.4); }
+  to   { opacity: 0; transform: scale(3.4); }
+}
+
+img, canvas, svg { display: block; max-width: 100%; }
+
+a { color: inherit; }
+
+.wrap {
+  width: 100%;
+  max-width: var(--wrap);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.skip {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 200;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 12px 18px;
+  font: 13px/1 var(--font-mono);
+  letter-spacing: 0.08em;
+}
+.skip:focus { left: 8px; top: 8px; }
+
+/* ---------- 3. TIPOGRAFIA ------------------------------------------------ */
+.h1 {
+  font-family: var(--font-display);
+  font-size: clamp(34px, 7.4vw, 74px);
+  line-height: 1.06;
+  letter-spacing: 0.06em;   /* caixa alta bitmap pede tracking positivo */
+  text-transform: uppercase;
+  font-weight: 400;
+}
+
+.h2 {
+  font-family: var(--font-display);
+  font-size: clamp(24px, 3.6vw, 40px);
+  line-height: 1.15;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 400;
+}
+
+.h3 {
+  font-family: var(--font-display);
+  font-size: clamp(16px, 2vw, 20px);
+  line-height: 1.3;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 400;
+}
+
+.kicker {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+
+/* a rolagem da página escrita em ASCII ao lado do kicker: [####······] */
+.kicker--barra { margin-left: 12px; letter-spacing: 0.02em; }
+
+/* a Space Grotesk aguenta peso 300 em corpo grande sem sumir, e é aí que ela
+   fica bonita: a entrada de cada seção vem leve e mais apertada que o corpo */
+.lead {
+  font-size: clamp(17px, 2vw, 20px);
+  font-weight: 300;
+  letter-spacing: -0.012em;
+  line-height: 1.5;
+  max-width: 58ch;
+  text-wrap: pretty;
+}
+
+.body-text { max-width: 62ch; text-wrap: pretty; }
+.body-text + .body-text { margin-top: 1em; }
+
+.mono {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+}
+
+.mono-caps {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* placeholder honesto: conteúdo ainda não fornecido */
+.slot {
+  color: var(--ink-2);
+  border-bottom: 2px dotted var(--rule-soft);
+  text-decoration: none;
+}
+
+/* ---------- 4. DITHER ---------------------------------------------------- */
+/* Três densidades ordenadas. Usadas como preenchimento de painéis, thumbs e
+   faixas de transição. A máscara em rampa simula o degradê pontilhado. */
+/* --dot é o que a retícula pinta. Por padrão é a tinta; a rampa troca banda a
+   banda pelos acentos, que é onde a cor do modo claro aparece de verdade. */
+.dither-12,
+.dither-25,
+.dither-50 {
+  --dot: var(--ink);
+  background-color: var(--paper-2);
+  background-repeat: repeat;
+}
+.dither-12 {
+  background-image: radial-gradient(var(--dot) 0.8px, transparent 0.9px);
+  background-size: 9px 9px;
+}
+.dither-25 {
+  background-image: radial-gradient(var(--dot) 0.85px, transparent 0.95px);
+  background-size: 5px 5px;
+}
+.dither-50 {
+  background-image: repeating-conic-gradient(var(--dot) 0 25%, transparent 0 50%);
+  background-size: 4px 4px;
+}
+
+.dither-fade {
+  -webkit-mask-image: linear-gradient(155deg, #000 8%, rgba(0, 0, 0, 0.45) 52%, transparent 92%);
+          mask-image: linear-gradient(155deg, #000 8%, rgba(0, 0, 0, 0.45) 52%, transparent 92%);
+}
+
+/* faixa divisória: a erosão da referência 2 em três degraus reais de densidade.
+   Uma banda por densidade, cada uma esmaecendo dentro da seguinte. */
+.ramp {
+  display: grid;
+  grid-template-rows: repeat(3, 1fr);
+  height: clamp(56px, 7vw, 100px);
+}
+.ramp > span { background-color: transparent; }
+.ramp > span:nth-child(1) { --dot: var(--pop-1); }
+.ramp > span:nth-child(2) { --dot: var(--pop-2); }
+.ramp > span:nth-child(3) { --dot: var(--pop-3); }
+.ramp > span:nth-child(1) {
+  -webkit-mask-image: linear-gradient(to bottom, #000, rgba(0, 0, 0, 0.3));
+          mask-image: linear-gradient(to bottom, #000, rgba(0, 0, 0, 0.3));
+}
+.ramp > span:nth-child(2) {
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.22));
+          mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.22));
+}
+.ramp > span:nth-child(3) {
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.45), transparent);
+          mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.45), transparent);
+}
+
+/* a rampa erode ao entrar em cena: as três bandas nascem densas e se abrem até
+   a própria densidade de repouso. Uma vez só, junto com o .reveal do módulo 6.
+   ponytail: `from` sozinho porque o `to` é o valor que a classe já define. */
+@keyframes erodir { from { background-size: 3px 3px; } }
+.ramp.is-in > span { animation: erodir 640ms steps(4, end) backwards; }
+.ramp.is-in > span:nth-child(2) { animation-delay: 90ms; }
+.ramp.is-in > span:nth-child(3) { animation-delay: 180ms; }
+
+/* ---------- 5. COMPONENTES ---------------------------------------------- */
+
+/* 5.1 botões - a pancada tátil vive aqui */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 13px 22px;
+  border: 2px solid var(--ink);
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: transform 90ms steps(2, end), box-shadow 90ms steps(2, end), background 90ms;
+}
+.btn:hover  { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--ink); }
+.btn:active { transform: translate(4px, 4px);  box-shadow: 0 0 0 var(--ink); }
+
+/* primário = inversão de polaridade, a "seleção" do sistema 1-bit */
+.btn--primary { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.btn--ghost   { background: transparent; }
+
+.btn--tiny {
+  min-height: 40px;
+  padding: 9px 14px;
+  font-size: 11px;
+  box-shadow: 3px 3px 0 var(--ink);
+}
+.btn--tiny:hover  { box-shadow: 5px 5px 0 var(--ink); }
+.btn--tiny:active { box-shadow: 0 0 0 var(--ink); }
+
+/* 5.2 janela - barra de título em pinstripe, herança Mac 1-bit */
+.panel {
+  border: 2px solid var(--ink);
+  background: var(--paper);
+  box-shadow: var(--shadow);
+}
+.panel__bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 10px;
+  border-bottom: 2px solid var(--ink);
+  background-image: repeating-linear-gradient(to bottom, var(--ink) 0 1px, transparent 1px 3px);
+}
+.panel__box {
+  flex: none;
+  width: 13px;
+  height: 13px;
+  border: 2px solid var(--ink);
+  background: var(--paper);
+}
+.panel__title {
+  background: var(--paper);
+  padding: 2px 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.panel__body { padding: clamp(18px, 3vw, 28px); }
+
+/* 5.3 navegação */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  border-bottom: 2px solid var(--ink);
+  /* opaca de propósito. Um backdrop-filter aqui obrigava o browser a recortar
+     e borrar a faixa de trás da barra a cada quadro de rolagem - e por cima de
+     um fundo 90% sólido o borrão era invisível. Custo alto, efeito nenhum. */
+  background: var(--paper);
+}
+.nav__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 62px;
+}
+.nav__mark {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-display);
+  font-size: 14px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+.nav__glyph {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--ink);
+  background-color: var(--paper);
+  background-image: repeating-conic-gradient(var(--ink) 0 25%, transparent 0 50%);
+  background-size: 4px 4px;
+}
+.nav__links { display: none; gap: 4px; }
+.nav__link {
+  padding: 10px 12px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 2px solid transparent;
+  /* a seleção sobe de baixo em 4 degraus; a cor do texto vira só quando o
+     preenchimento chega em cima, senão fica papel sobre papel no meio */
+  background-image: linear-gradient(var(--ink), var(--ink));
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 100% 0;
+  transition: background-size 140ms steps(4, end), color 0ms;
+}
+.nav__link:hover,
+.nav__link:focus-visible {
+  background-size: 100% 100%;
+  color: var(--paper);
+  transition: background-size 140ms steps(4, end), color 0ms 140ms;
+}
+.nav__link[aria-current] { border-color: var(--ink); }
+
+/* 5.3.1 lâmpada - o interruptor de tema, sempre visível no topo */
+.lamp {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+.lamp__track {
+  position: relative;
+  display: block;
+  width: 42px;
+  height: 24px;
+  border: 2px solid var(--ink);
+  background-color: var(--paper);
+  background-image: repeating-conic-gradient(var(--ink) 0 25%, transparent 0 50%);
+  background-size: 4px 4px;
+  transition: box-shadow 90ms steps(2, end), transform 90ms steps(2, end);
+}
+.lamp__knob {
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  left: 2px;
+  width: 14px;
+  border: 2px solid var(--ink);
+  background: var(--paper);
+  transition: transform 160ms steps(4, end);
+}
+.lamp[aria-checked='true'] .lamp__knob { transform: translateX(20px); }
+.lamp:hover  .lamp__track { transform: translate(-2px, -2px); box-shadow: 4px 4px 0 var(--ink); }
+.lamp:active .lamp__track { transform: translate(2px, 2px);   box-shadow: 0 0 0 var(--ink); }
+
+.nav__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 8px 14px;
+  border: 2px solid var(--ink);
+  background: var(--paper);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.nav__panel {
+  display: grid;
+  border-top: 2px solid var(--ink);
+  background: var(--paper);
+}
+.nav__panel[hidden] { display: none; }
+.nav__panel a {
+  padding: 15px var(--gutter);
+  border-bottom: 1px solid var(--rule-soft);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+.nav__panel a:last-child { border-bottom: 0; }
+
+/* 5.4 cabeçalho de seção */
+.sec { padding-block: var(--bay); }
+.sec--tight { padding-block: calc(var(--bay) * 0.62); }
+.sec__head { margin-bottom: clamp(28px, 4vw, 48px); }
+.sec__head .h2 { margin-top: 12px; }
+.sec__head .lead { margin-top: 16px; }
+
+/* 5.5 cards de projeto */
+.grid-projects {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 270px), 1fr));
+  gap: clamp(16px, 2.4vw, 26px);
+}
+.card {
+  display: flex;
+  flex-direction: column;
+  border: 2px solid var(--ink);
+  background: var(--paper);
+  color: inherit;
+  text-decoration: none;
+  box-shadow: 0 0 0 var(--ink);
+  transition: transform 110ms steps(2, end), box-shadow 110ms steps(2, end);
+}
+.card:hover { transform: translate(-3px, -3px); box-shadow: 6px 6px 0 var(--ink); }
+.card:active { transform: translate(2px, 2px); box-shadow: 0 0 0 var(--ink); }
+.card__thumb {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  border-bottom: 2px solid var(--ink);
+  /* a textura anda e rala: os pontos se afastam, a forma se desfaz */
+  transition: background-position 240ms steps(4, end), background-size 240ms steps(4, end);
+}
+.card:hover .card__thumb { background-position: 6px 6px; }
+.card:hover .dither-50 { background-size: 7px 7px; }
+.card:hover .dither-25 { background-size: 9px 9px; }
+.card:hover .dither-12 { background-size: 15px 15px; }
+.card:hover .card__idx   { background: var(--ink); color: var(--paper); }
+
+/* o cursor rala o dither de perto: num raio em volta do ponteiro o papel volta
+   por cima e os pontos somem. É a erosão da referência virando resposta ao toque.
+   ponytail: papel por cima em vez de furo na máscara, porque o thumb já gasta a
+   máscara dele com o .dither-fade. Se um dia precisar do furo de verdade, é
+   mask-composite: intersect com as duas. */
+.card__thumb::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(circle 84px at var(--cx, 50%) var(--cy, 50%),
+                var(--paper-2) 0%, transparent 72%);
+  transition: opacity 160ms steps(2, end);
+}
+.card:hover .card__thumb::after { opacity: 1; }
+
+.card__idx {
+  position: absolute;
+  z-index: 1;                  /* acima do papel que o cursor derrama no thumb */
+  left: 10px;
+  bottom: 8px;
+  font-family: var(--font-display);
+  font-size: 26px;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+  background: var(--paper);
+  padding: 2px 8px;
+  border: 2px solid var(--ink);
+}
+.card__body { padding: 16px 16px 18px; display: grid; gap: 8px; }
+.card__tags {
+  margin-top: 4px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.tag {
+  border: 1px solid var(--rule-soft);
+  padding: 4px 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+
+/* 5.7 timeline */
+.tl { border-left: 2px solid var(--ink); padding-left: clamp(20px, 3vw, 30px); }
+.tl__item { position: relative; padding-bottom: clamp(28px, 4vw, 40px); }
+.tl__item:last-child { padding-bottom: 0; }
+.tl__item::before {
+  content: '';
+  position: absolute;
+  top: 6px;
+  left: calc(-1 * clamp(20px, 3vw, 30px) - 7px);
+  width: 12px;
+  height: 12px;
+  background: var(--pop-1);
+  transition: transform 140ms steps(2, end);
+}
+.tl__item:nth-child(3n+2)::before { background: var(--pop-2); }
+.tl__item:nth-child(3n)::before   { background: var(--pop-3); }
+.tl__item:hover::before { transform: scale(1.45); }
+.tl__year {
+  font-family: var(--font-display);
+  font-size: 15px;
+  letter-spacing: 0.08em;
+}
+.tl__role { margin-top: 8px; }
+
+/* a linha do tempo desperdiçava metade da largura em tela grande. A coluna da
+   direita recebe o redemoinho, preso enquanto os cargos rolam por baixo.
+   ponytail: some abaixo de 940px em vez de virar faixa horizontal - no celular
+   a coluna não existe, e um canvas a mais só custaria bateria. */
+.tl__aside { display: none; }
+@media (min-width: 940px) {
+  .tl-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.8fr);
+    gap: clamp(28px, 4vw, 64px);
+    align-items: start;
+  }
+  .tl__aside { display: block; position: sticky; top: 100px; }
+}
+.tl__swirl {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  border: 2px solid var(--ink);
+  box-shadow: var(--shadow);
+  image-rendering: pixelated;   /* pintado em ~180px e esticado: pixel é pixel */
+}
+.tl__cap {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 10px;
+  color: var(--ink-2);
+}
+
+/* 5.8 formulário */
+.field { display: grid; gap: 7px; margin-bottom: 18px; }
+.field > label {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+/* o campo também fala quando dá certo. Mora no rótulo, e não no [role=alert]
+   logo abaixo: escrever no alerta faria o leitor de tela anunciar a cada tecla. */
+.field.is-ok > label::after {
+  content: ' ✓';
+  color: var(--accent);
+}
+/* o contador da barra do painel: mesma pastilha do título, encostada à direita */
+.panel__conta {
+  margin-left: auto;
+  background: var(--paper);
+  padding: 2px 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+/* vazio ele seria só uma pastilha de papel pendurada na barra */
+.panel__conta:empty { display: none; }
+.field input,
+.field textarea {
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 14px;
+  border: 2px solid var(--ink);
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  border-radius: 0;
+}
+.field textarea { min-height: 132px; resize: vertical; line-height: 1.5; }
+.field input:focus-visible,
+.field textarea:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.field input[aria-invalid='true'],
+.field textarea[aria-invalid='true'] {
+  border-color: var(--alert);
+  background-color: var(--paper-2);
+  background-image: radial-gradient(rgba(255, 107, 61, 0.3) 0.9px, transparent 1px);
+  background-size: 4px 4px;
+}
+.field__err {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--alert);
+  min-height: 1em;
+}
+.field__err:empty { display: none; }
+
+.form__status {
+  margin-top: 14px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  min-height: 1.4em;
+}
+
+/* 5.9 linha de contato */
+.contact-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 10px;
+  margin-inline: -10px;
+  border-bottom: 1px solid var(--rule-soft);
+  transition: background-color 140ms steps(2, end);
+}
+.contact-row:hover { background-color: var(--paper-2); }
+.contact-row__key {
+  flex: none;
+  width: 92px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+.contact-row__val { flex: 1 1 200px; word-break: break-word; }
+
+/* 5.10 rodapé */
+.foot {
+  border-top: 2px solid var(--ink);
+  padding-block: 34px;
+}
+.foot__inner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+/* ---------- 6. SEÇÕES ---------------------------------------------------- */
+
+/* 6.1 hero */
+.hero { padding-block: clamp(48px, 8vw, 92px) var(--bay); }
+.hero__grid {
+  display: grid;
+  gap: clamp(30px, 5vw, 56px);
+  align-items: center;
+  grid-template-columns: minmax(0, 1fr);
+}
+/* 6.1.1 masthead - o nome é a imagem, não o rótulo acima dela. Cada linha é
+   medida no JS e ganha um corpo em px inteiro (fonte bitmap só fica limpa em
+   tamanho cheio), então as duas encostam nas bordas da coluna.
+
+   Antes sangrava a tela inteira. Duas coisas quebravam: em corpo de ~230px a
+   Silkscreen mostrava o grid de 5x7 cru e "Taraschi" virava um friso de blocos
+   sem palavra dentro, e o nome era o único elemento da página fora da medida
+   de leitura. Agora mora no `.wrap` como todo o resto e usa a Pixelify Sans,
+   que tem pixel bem menor. Menos tamanho, mais desenho por letra. */
+.masthead {
+  margin-block: clamp(10px, 2vw, 20px) clamp(26px, 4vw, 46px);
+  font-family: var(--font-title);
+  font-weight: 700;          /* o peso cheio é o que engrossa a haste de 1 px */
+  letter-spacing: 0.04em;    /* grid mais fino pede menos ar que a Silkscreen */
+  line-height: 0.86;
+  font-size: 0;              /* mata o espaço em branco entre as duas linhas */
+}
+.masthead__line {
+  display: block;
+  width: max-content;
+  white-space: nowrap;
+  font-size: 12vw;           /* valor de partida; o JS refina */
+  /* a última letra também ganha tracking - puxar de volta para encostar */
+  margin-right: -0.04em;
+}
+
+/* 6.1.2 letra a letra: a que está sob o cursor sobe um fio e ganha um risco
+   embaixo, que entra em três degraus da esquerda para a direita. Nada de
+   inverter o bloco inteiro - em corpo de 12vw aquilo virava um tapa. No modo
+   claro cada terça letra pega um acento diferente; no escuro os três são areia. */
+.masthead__line .ch {
+  display: inline-block;
+  position: relative;
+  z-index: 2;                /* acima das cópias do glitch */
+  background-image: linear-gradient(var(--pop-1), var(--pop-1));
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0 0.05em;
+  transition: transform 90ms steps(2, end),
+              background-size 110ms steps(3, end);
+}
+.masthead__line .ch:nth-child(3n+2) { background-image: linear-gradient(var(--pop-2), var(--pop-2)); }
+.masthead__line .ch:nth-child(3n)   { background-image: linear-gradient(var(--pop-3), var(--pop-3)); }
+.masthead__line .ch:hover {
+  transform: translateY(-0.02em);
+  background-size: 100% 0.05em;
+}
+
+/* o acidente: a cada meio minuto uma faixa da linha desliza e volta.
+   Duas cópias recortadas em bandas, deslocadas em sentidos opostos. */
+.masthead__line { position: relative; }
+.masthead__line::before,
+.masthead__line::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: var(--paper);
+  pointer-events: none;
+  opacity: 0;
+}
+.masthead__line.tear::before {
+  opacity: 1;
+  clip-path: inset(26% 0 48% 0);
+  animation: tear-a 180ms steps(2, end) 1;
+}
+.masthead__line.tear::after {
+  opacity: 1;
+  clip-path: inset(64% 0 12% 0);
+  animation: tear-b 180ms steps(2, end) 1;
+}
+@keyframes tear-a {
+  0%, 100% { transform: translateX(0); }
+  50%      { transform: translateX(-9px); }
+}
+@keyframes tear-b {
+  0%, 100% { transform: translateX(0); }
+  50%      { transform: translateX(6px); }
+}
+
+.hero__role {
+  margin-top: 0;
+  font-family: var(--font-mono);
+  /* a Space Mono é larga: 0.14em nesta linha longa empurrava ela pra duas */
+  font-size: clamp(12px, 1.5vw, 14px);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.hero__desc { margin-top: 20px; }
+.hero__cta { margin-top: 32px; display: flex; flex-wrap: wrap; gap: 12px; }
+/* 6.1.3 ficha - a coluna da esquerda acabava muito antes do painel e sobrava
+   um buraco. Quatro linhas de metadado resolvem o vazio e são conteúdo real. */
+.ficha {
+  margin: clamp(30px, 4vw, 44px) 0 0;
+  border-top: 2px solid var(--ink);
+}
+.ficha > div {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px 16px;
+  padding: 11px 10px;
+  margin-inline: -10px;
+  border-bottom: 1px solid var(--rule-soft);
+  transition: background-color 140ms steps(2, end);
+}
+.ficha > div:hover { background-color: var(--paper-2); }
+.ficha dt {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+/* o rótulo é mono miúdo, então o valor precisa de peso pra segurar a linha */
+.ficha dd { margin: 0; text-align: right; font-weight: 500; }
+
+.hero__figure { min-width: 0; }
+.hero__canvas-wrap {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  background: var(--paper);
+  overflow: hidden;
+}
+.hero__canvas-wrap canvas {
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+  cursor: crosshair;
+  touch-action: none;
+}
+.hero__cap {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 10px;
+  border-top: 2px solid var(--ink);
+  color: var(--ink-2);
+}
+
+/* 6.2 sobre */
+.about__grid {
+  display: grid;
+  gap: clamp(28px, 4vw, 48px);
+  grid-template-columns: minmax(0, 1fr);
+}
+.spec-row {
+  display: flex;
+  gap: 14px;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--rule-soft);
+}
+.spec-row:last-child { border-bottom: 0; }
+.spec-row dt {
+  flex: none;
+  width: 104px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+.spec-row dd { margin: 0; flex: 1 1 auto; }
+
+/* 6.3 skills */
+.grid-skills {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  gap: clamp(14px, 2vw, 20px);
+}
+.skill {
+  position: relative;
+  border: 2px solid var(--ink);
+  background: var(--paper);
+  padding: 18px;
+  transition: box-shadow 120ms steps(2, end);
+}
+/* a retícula inunda o card da esquerda para a direita em seis degraus, a mesma
+   ideia do `varrer` dos títulos. O ::before entra antes no DOM e os filhos são
+   `position: relative`, então a textura fica atrás do texto sem precisar de
+   z-index. O card continua sem levantar: não é clicável, e um card que se
+   comporta como botão sem ser um é mentira de interface. */
+.skill::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: var(--paper-2);
+  background-image: radial-gradient(var(--ink) 0.8px, transparent 0.9px);
+  background-size: 9px 9px;
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 300ms steps(6, end);
+}
+.skill:hover { box-shadow: var(--shadow); }
+.skill:hover::before { clip-path: inset(0 0 0 0); }
+
+.skill__bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.skill__swatch {
+  flex: none;
+  width: 26px;
+  height: 26px;
+  border: 2px solid var(--ink);
+  transition: background-position 240ms steps(4, end),
+              background-color 240ms steps(2, end);
+}
+/* a amostra vai no sentido contrário do resto: o card ganha pontos, ela troca
+   de polaridade. Densidade que sobe de um lado e inverte do outro é o que dá o
+   estalo de 1 bit. */
+.skill:hover .skill__swatch {
+  --dot: var(--paper);
+  background-position: 4px 4px;
+  background-color: var(--ink);
+}
+.skill p { position: relative; color: var(--ink-2); font-size: 15px; }
+
+/* 5.6.1 a órbita da stack ------------------------------------------------
+   Círculos inteiros, centrados na esfera. A primeira versão cortava tudo na
+   borda de baixo para virar horizonte, e o que saía era um nascer do sol.
+
+   Nada aqui gira liso. O anel anda em 60 degraus, um pulo de 6 graus por vez:
+   é a mesma regra do resto do site, e é o que separa isto de um carrossel. O
+   chip roda ao contrário na mesma cadência para o rótulo nunca ficar de
+   cabeça para baixo.
+
+   O ângulo fixo de cada braço mora na propriedade `rotate` e o giro animado em
+   `transform`. São propriedades independentes e se compõem, o que dispensa
+   guardar o ângulo inicial numa variável só para a keyframe somá-lo de volta. */
+.orb {
+  --h: clamp(300px, 46vw, 520px);
+  position: relative;
+  height: var(--h);
+  margin-top: clamp(34px, 5vw, 60px);
+}
+/* tudo parado até o módulo 16 dizer que a órbita está em cena. Sem JS fica um
+   diagrama estático, que é uma degradação honesta. */
+.orb :is(.orb__ring, .orb__node) { animation-play-state: paused; }
+.orb.is-girando :is(.orb__ring, .orb__node) { animation-play-state: running; }
+
+/* o sprite dos glifos não desenha nada sozinho, só guarda os <g> */
+.orb__defs { position: absolute; width: 0; height: 0; }
+
+/* o globo é a esfera do módulo 5 - mesmo canvas, mesma paleta, mesma erosão
+   por scroll. Não vale reescrever partícula nenhuma: já está no arquivo. */
+.orb__globo,
+.orb__ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--d);
+  height: var(--d);
+  margin: calc(var(--d) / -2) 0 0 calc(var(--d) / -2);
+  border-radius: 50%;
+}
+/* o canvas é pintado num buffer de ~40x40 e esticado. Sem `pixelated` o browser
+   interpola e a esfera vira mancha; sem tirar o `border-radius` sobra um recorte
+   redondo suavizado por cima de pixels duros. A silhueta redonda já vem pintada. */
+.orb__globo {
+  --d: calc(var(--h) * 0.30);
+  border-radius: 0;
+  image-rendering: pixelated;
+}
+
+/* o aro é um ::before, não o próprio anel: `mask-image` recorta o elemento E
+   todos os descendentes, então a máscara em cima do anel comia os chips e
+   deixava só a lasca que cruzava a faixa de 3px. */
+.orb__ring { pointer-events: none; animation: orbitar var(--dur) steps(60, end) infinite; }
+.orb__ring::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background-image: repeating-conic-gradient(
+    var(--ink) 0 calc(var(--passo) / 2), transparent 0 var(--passo));
+  -webkit-mask-image: radial-gradient(closest-side, transparent calc(100% - 4px), #000 calc(100% - 4px));
+          mask-image: radial-gradient(closest-side, transparent calc(100% - 4px), #000 calc(100% - 4px));
+}
+/* o anel do meio corre ao contrário: dois sentidos numa composição só já dão a
+   sensação de mecanismo, três dariam confusão.
+
+   `--passo` é o período do tracejado em graus e sempre divide os 6deg de cada
+   degrau do steps(60). Isso é o conserto do borrão: antes o aro era uma grade
+   quadrada de 3px girando junto, e grade quadrada em rotação nunca cai em cima
+   do pixel - reamostrava a cada quadro e virava cinza. Tracejado angular que fecha
+   um número inteiro de períodos por degrau desenha exatamente igual sempre. */
+.orb__ring--1 { --d: calc(var(--h) * 0.42); --dur: 26s; --passo: 6deg; }
+.orb__ring--2 { --d: calc(var(--h) * 0.66); --dur: 34s; --passo: 3deg; animation-name: contragiro; }
+.orb__ring--3 { --d: calc(var(--h) * 0.90); --dur: 46s; --passo: 2deg; }
+
+.orb__braco {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 0;
+  height: 50%;
+  transform-origin: bottom center;
+  rotate: var(--a);
+}
+.orb__node {
+  position: absolute;
+  top: 0;
+  left: 0;
+  translate: -50% -50%;
+  rotate: calc(-1 * var(--a));
+  animation: contragiro var(--dur) steps(60, end) infinite;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 10px;
+  border: 2px solid var(--ink);
+  background: var(--paper);
+  box-shadow: 3px 3px 0 var(--ink);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.orb__ring--2 .orb__node { animation-name: orbitar; }
+
+/* traço de 2px sem antialias: o glifo fica com a mesma dureza do resto */
+.orb__ico {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  shape-rendering: crispEdges;
+}
+
+@keyframes orbitar    { to { transform: rotate(360deg); } }
+@keyframes contragiro { to { transform: rotate(-360deg); } }
+
+@media (max-width: 640px) {
+  .orb { --h: clamp(280px, 78vw, 400px); }
+  .orb__node { gap: 5px; padding: 4px 7px; font-size: 9px; box-shadow: 2px 2px 0 var(--ink); }
+  .orb__ico { width: 13px; height: 13px; }
+}
+
+/* 6.4 contato */
+.contact__grid {
+  display: grid;
+  gap: clamp(28px, 4vw, 48px);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/* 6.5 inversão local - o ritmo do board de referência (tokens no bloco 1) */
+.invert {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+/* 6.6 ilhós - os painéis da referência são pendurados, não flutuam */
+.pinned { position: relative; }
+.pinned::before,
+.pinned::after {
+  content: '';
+  position: absolute;
+  top: 10px;
+  width: 7px;
+  height: 7px;
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  background: var(--paper);
+  z-index: 2;
+}
+.pinned::before { left: 13px; }
+.pinned::after  { right: 13px; }
+
+/* 6.7 página de detalhe */
+.detail__hero {
+  aspect-ratio: 16 / 9;
+  border: 2px solid var(--ink);
+  box-shadow: var(--shadow);
+}
+.gallery {
+  display: grid;
+  gap: clamp(14px, 2vw, 22px);
+  grid-template-columns: minmax(0, 1fr);
+}
+.gallery__cell {
+  aspect-ratio: 4 / 3;
+  border: 2px solid var(--ink);
+  display: grid;
+  place-items: end start;
+  padding: 10px;
+}
+.pager {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  justify-content: space-between;
+  border-top: 2px solid var(--ink);
+  padding-top: 22px;
+}
+
+/* 6.8 o retrato - vive no canto do hero e é o interruptor de luz ---------- */
+/* ponytail: sem seção nem rótulo próprio - a cara dele é o único gatilho de
+   tema do site. Achar é parte da graça; o title= dá a dica só no hover. */
+.hero__me {
+  position: absolute;
+  left: 14px;
+  bottom: 14px;
+  z-index: 3;
+  display: block;
+  width: min(30%, 120px);            /* 120px = largura nativa do frame */
+  padding: 0;
+  background-color: var(--face-paper);
+  cursor: pointer;
+  transition: transform 110ms steps(2, end), box-shadow 110ms steps(2, end);
+}
+.hero__me:hover  { transform: translate(-3px, -3px); box-shadow: 7px 7px 0 var(--ink); }
+.hero__me:active { transform: translate(3px, 3px);   box-shadow: 0 0 0 var(--ink); }
+
+/* barra de paciência: enche a cada cutucada e estoura na quinta */
+.hero__me::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 4px;
+  background: var(--ink);
+  transform: scaleX(calc(var(--pokes, 0) / 5));
+  transform-origin: left;
+  transition: transform 120ms steps(2, end);
+}
+
+/* cada cutucada dá um empurrão seco; a quinta chama o flinch inteiro */
+@keyframes poke {
+  0%   { transform: translate(0, 0); }
+  45%  { transform: translate(2px, 2px); }
+  100% { transform: translate(0, 0); }
+}
+.hero__me.poke { animation: poke 140ms steps(2, end) 1; }
+
+/* tira de 22 frames ditherizados, avançada por steps() - sem GIF, sem vídeo.
+   O arquivo é uma máscara de alfa (tinta opaca, papel furado), não um bitmap
+   colorido: assim o retrato assume a paleta do tema em vez de ficar preso nos
+   tons em que foi assado. A cor sai de --face-ink, que não inverte.
+   ponytail: a máscara não respeita image-rendering, então o desenho suaviza um
+   fio quando não cai em 1:1 - por isso o .hero__me trava em 120px, a largura
+   nativa do frame. Se um dia precisar de outro tamanho, assar de novo. */
+.film {
+  --frames: 22;
+  --film-dur: 760ms;
+  display: block;
+  width: 100%;
+  aspect-ratio: 120 / 200;
+  background-color: var(--face-ink);
+  -webkit-mask-image: url('../assets/luan-film-mask.png');
+          mask-image: url('../assets/luan-film-mask.png');
+  -webkit-mask-repeat: no-repeat;
+          mask-repeat: no-repeat;
+  -webkit-mask-size: calc(var(--frames) * 100%) 100%;
+          mask-size: calc(var(--frames) * 100%) 100%;
+  -webkit-mask-position: 100% 0;       /* frame 21: sem óculos = escuro */
+          mask-position: 100% 0;
+}
+:root[data-theme='light'] .film {      /* frame 0: de óculos */
+  -webkit-mask-position: 0% 0;
+          mask-position: 0% 0;
+}
+
+@keyframes film-strip {
+  from { -webkit-mask-position: 0% 0;   mask-position: 0% 0; }
+  to   { -webkit-mask-position: 100% 0; mask-position: 100% 0; }
+}
+/* claro → escuro: ele tira os óculos (tira para frente) */
+.film.play-off { animation: film-strip var(--film-dur) steps(22, jump-none) 1 both; }
+/* escuro → claro: a luz incomoda, ele põe os óculos (tira ao contrário) */
+.film.play-on  { animation: film-strip var(--film-dur) steps(22, jump-none) 1 reverse both; }
+
+/* o susto com a luz acesa: deslocamentos secos, sem interpolação */
+@keyframes flinch {
+  0%   { transform: translate(0, 0); }
+  18%  { transform: translate(-3px, 2px); }
+  36%  { transform: translate(3px, -2px); }
+  54%  { transform: translate(-2px, -2px); }
+  72%  { transform: translate(2px, 1px); }
+  100% { transform: translate(0, 0); }
+}
+.hero__me.flinch { animation: flinch 260ms steps(1, end) 1; }
+
+/* revelação ao rolar. A subida continua contínua - é entrada, não reação - mas
+   a opacidade pula em quatro quadros: um sistema de 1 bit não tem meio-tom, e
+   o fade liso era a única coisa no site que desmentia isso.
+   O --i vem do módulo 6 e escalona irmãos do mesmo pai, teto de 5. */
+.reveal { opacity: 0; transform: translateY(18px); }
+.reveal.is-in {
+  opacity: 1;
+  transform: none;
+  transition: opacity 380ms steps(4, end), transform 420ms ease-out;
+  transition-delay: calc(var(--i, 0) * 60ms);
+}
+/* na linha do tempo a entrada vem do lado, no sentido do próprio trilho */
+.tl__item.reveal { transform: translateX(-18px); }
+
+/* o título de seção é varrido, na mesma direção da cortina do tema. Sem
+   fill-mode na saída de propósito: quando a animação acaba o clip deixa de
+   existir, e nada fica recortado depois. */
+@keyframes varrer { from { clip-path: inset(0 100% 0 0); } }
+.sec__head.is-in .kicker { animation: varrer 320ms steps(6, end) backwards; }
+.sec__head.is-in .h2     { animation: varrer 520ms steps(9, end) 120ms backwards; }
+
+/* o trilho da linha do tempo se desenha sozinho: uma tira de papel da largura
+   da borda recua de baixo para cima e a linha aparece atrás dela. É cobertura,
+   não a linha em si - sem JS a borda continua inteira, como sempre foi. */
+.tl { position: relative; }
+/* o .tl entra no observador só para disparar o trilho: quem aparece são os
+   itens dele, não o bloco inteiro */
+.tl.reveal { opacity: 1; transform: none; }
+@keyframes destracar { to { transform: scaleY(0); } }
+.tl.is-in::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -2px;
+  width: 2px;
+  background: var(--paper);
+  transform-origin: bottom;
+  animation: destracar 820ms steps(14, end) forwards;
+}
+/* os marcadores nascem depois de o trilho passar por eles */
+@keyframes marcar { from { transform: scale(0); } }
+.tl__item.is-in::before {
+  animation: marcar 240ms steps(3, end) calc(200ms + var(--i, 0) * 160ms) backwards;
+}
+
+/* thumb e amostra entram erodindo - mesmo gesto da rampa, mesma keyframe */
+.card.is-in .card__thumb,
+.skill.is-in .skill__swatch {
+  animation: erodir 560ms steps(4, end) calc(var(--i, 0) * 60ms) backwards;
+}
+
+/* ---------- 7. RESPONSIVO ------------------------------------------------ */
+@media (min-width: 700px) {
+  .about__grid  { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); }
+  .contact__grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); }
+}
+
+@media (min-width: 900px) {
+  .nav__links  { display: flex; }
+  .nav__toggle { display: none; }
+  .nav__panel  { display: none !important; }
+  .hero__grid  { grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); }
+}
+
+@media (min-width: 1180px) {
+  .hero__grid { gap: 72px; }
+}
+
+/* aparelho de toque: o que só existe para o ponteiro sai do caminho, e o que
+   pesa no scroll de celular fica mais barato. Consulta por capacidade, não por
+   largura - um notebook estreito continua com o site inteiro. */
+@media (hover: none) {
+  /* a retícula acesa nunca acende sem ponteiro fino (módulo 9); sem isso ela
+     fica de camada fixa em cima do fundo, repintando à toa */
+  .grid-glow { display: none; }
+  /* sem hover, o :active é a única resposta ao toque - e o realce do sistema
+     por cima dele desmancha a pancada 1-bit */
+  a, button, summary, label, [role='switch'] { -webkit-tap-highlight-color: transparent; }
+  /* o alvo de toque do menu chega aos 48px do botão */
+  .nav__panel a { padding-block: 17px; }
+  /* o dedo mora onde o cursor passaria: o thumb entrega a textura ralada no
+     toque, já que o :hover nunca vai chegar */
+  .card:active .card__thumb { background-position: 6px 6px; }
+}
+
+/* ---------- 7b. PÁGINA DE CASE ------------------------------------------- */
+/* Estava inline no projeto.html. Saiu de lá quando o segundo case nasceu:
+   oito páginas carregando o mesmo bloco de estilo é o mesmo CSS oito vezes. */
+.case__head { padding-block: clamp(36px, 6vw, 68px) clamp(24px, 4vw, 40px); }
+.case__title { margin-top: 16px; font-size: clamp(30px, 5.4vw, 56px); }
+.case__lead { margin-top: 18px; }
+.case__meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr));
+  gap: 0;
+  border: 2px solid var(--ink);
+  box-shadow: var(--shadow);
+  margin-top: clamp(26px, 4vw, 38px);
+}
+.case__meta > div { padding: 16px 18px; border-bottom: 1px solid var(--rule-soft); }
+.case__meta dt {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  margin-bottom: 6px;
+}
+.case__meta dd { margin: 0; }
+.case__shot { aspect-ratio: 16 / 9; border: 2px solid var(--ink); box-shadow: var(--shadow); }
+.case__body { display: grid; gap: clamp(30px, 4vw, 44px); margin-top: var(--bay); }
+.case__block h2 { margin-bottom: 14px; }
+.case__gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  gap: clamp(14px, 2vw, 20px);
+  margin-top: clamp(26px, 4vw, 38px);
+}
+.case__gallery > div { aspect-ratio: 4 / 3; border: 2px solid var(--ink); }
+.case__nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: space-between;
+  border-top: 2px solid var(--ink);
+  margin-top: var(--bay);
+  padding-top: 26px;
+}
+/* números do case: a escala do sistema dita de uma vez, sem virar parágrafo */
+.case__nums {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr));
+  gap: clamp(14px, 2vw, 18px);
+  margin-top: clamp(22px, 3vw, 30px);
+}
+.case__num { border: 2px solid var(--ink); padding: 16px 18px; box-shadow: var(--shadow); }
+.case__num b {
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(26px, 3.4vw, 38px);
+  line-height: 1;
+  font-weight: 400;
+  /* enquanto sobe, o número troca de dígito a cada quadro: sem largura fixa de
+     algarismo ele tremeria de lado a lado até parar */
+  font-variant-numeric: tabular-nums;
+}
+.case__num span {
+  display: block;
+  margin-top: 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+@media (min-width: 820px) {
+  .case__meta > div { border-bottom: 0; border-right: 1px solid var(--rule-soft); }
+  .case__meta > div:last-child { border-right: 0; }
+  .case__body { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .case__block--wide { grid-column: 1 / -1; }
+}
+
+/* ---------- 7c. MÍDIA DE CASE (print, gif e captura de tela) ------------- */
+/* O slot existe antes do arquivo. Vazio, ele é a retícula e reserva o buraco em
+   16:9 - a página não pula de layout no dia em que a captura entrar. Com mídia
+   dentro, a altura passa a ser a do arquivo e a retícula fica escondida atrás.
+   Publicar uma captura é acrescentar UMA linha; nada de trocar classe. */
+.shot {
+  position: relative;
+  margin: 0;
+  border: 2px solid var(--ink);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.shot:not(:has(img, video)) { aspect-ratio: 16 / 9; }
+.shot--tall:not(:has(img, video)) { aspect-ratio: 4 / 3; }
+
+.shot > img,
+.shot > video {
+  display: block;
+  width: 100%;
+  height: auto;
+  /* captura de tela é colorida e o sistema aqui é de 1 bit: a página mostra o
+     print dessaturado, e devolve a cor real no hover/foco. Prova que o produto
+     existe sem que a paleta dele brigue com a do portfólio. */
+  filter: grayscale(1) contrast(1.06);
+  transition: filter 0.45s ease;
+}
+.shot:hover > img,
+.shot:hover > video,
+.shot:focus-within > img,
+.shot:focus-within > video { filter: none; }
+
+.shot figcaption {
+  border-top: 2px solid var(--ink);
+  background: var(--paper-2);
+  padding: 10px 14px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  justify-content: space-between;
+}
+/* a legenda diz o que olhar; a dica de cor só faz sentido onde existe hover */
+.shot__cor { display: none; }
+@media (hover: hover) {
+  .shot:has(img, video) .shot__cor { display: inline; }
+}
+
+/* ---------- 8. ACESSIBILIDADE / MOTION ----------------------------------- */
+:where(a, button, input, textarea, [tabindex]):focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+    /* sem zerar o atraso, a escada do --i deixaria elemento invisível por meio
+       segundo mesmo com a animação já cortada */
+    animation-delay: 0.001ms !important;
+    transition-delay: 0.001ms !important;
+  }
+  .reveal { opacity: 1; transform: none; }
+}
+
+@media print {
+  /* no papel a polaridade inverte: tinta escura sobre branco */
+  :root, :root[data-theme='light'] {
+    --paper: #fff; --paper-2: #f0f0ee; --ink: #111; --ink-2: #555;
+    --rule: #111; --rule-soft: #bbb; --accent: #111;
+  }
+  .nav, .nav__panel, .hero__figure, .grid-glow, .wipe { display: none !important; }
+  body { background: #fff; background-image: none; }
+  /* o corpo do masthead vem do JS, medido em pixel de tela - no papel não serve */
+  .masthead__line { font-size: 38px !important; margin-right: 0; }
+  .card, .panel, .detail__hero, .case__meta, .case__shot { box-shadow: none; }
+  .invert { background: #f0f0ee; }
+}

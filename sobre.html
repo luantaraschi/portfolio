@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<script>(function(){var t=null;try{t=localStorage.getItem('lt-tema')}catch(e){}
+if(!t)t=window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';
+if(t==='light')document.documentElement.setAttribute('data-theme','light')
+try{history.scrollRestoration="manual"}catch(e){}})()</script>
+<title>A história inteira · Luan Taraschi</title>
+<meta name="description" content="De um mod de Minecraft aos dez anos até agentes de IA em produção: a trajetória de Luan Taraschi, desenvolvedor full stack em Salvador." />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'><rect width='8' height='8' fill='%231a1917'/><g fill='%23fce4a6'><rect width='4' height='4'/><rect x='4' y='4' width='4' height='4'/></g></svg>" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Space+Grotesk:wght@300..700&family=Space+Mono:wght@400;700&display=swap" />
+<link rel="stylesheet" href="css/style.css" />
+<style>
+  /* A vida não cabe em cards de tamanho igual. Cada bloco é uma faixa da largura
+     inteira: título à esquerda, texto à direita em medida legível. Some o buraco
+     que sobrava quando dois blocos de alturas diferentes dividiam a linha, e o
+     movimento vem do título que fica preso enquanto o texto rola por baixo. */
+  .case__head { padding-block: clamp(36px, 6vw, 68px) clamp(30px, 5vw, 52px); }
+  .case__title { margin-top: 16px; }
+  .case__head .lead { max-width: 34ch; }
+
+  .case__body { counter-reset: bloco; margin-top: 0; }
+
+  .case__block {
+    counter-increment: bloco;
+    border-top: 1px solid var(--rule-soft);
+    padding-block: clamp(28px, 4.5vw, 52px);
+  }
+  .case__block:first-child { border-top-width: 2px; border-top-color: var(--ink); }
+  /* São dez títulos: em Silkscreen viravam dez blocos de pixel disputando a
+     página, e "LurramAdventures" numa palavra só passava por cima do texto da
+     direita. Aqui a voz é a Space Grotesk pesada em caixa alta, apertada. A
+     bitmap fica só no h1 lá em cima, que é onde ela ainda é a marca. */
+  .case__block h2 {
+    margin: 0 0 14px;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: clamp(21px, 2.4vw, 31px);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    text-transform: uppercase;
+  }
+  .case__block .body-text { max-width: 64ch; }
+  .case__block .body-text + .body-text { margin-top: 14px; }
+
+  /* o número é decoração de ritmo, não conteúdo: fora da árvore de leitura */
+  .bloco__n {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--ink-2);
+    margin-bottom: 10px;
+  }
+  .bloco__n::before { content: counter(bloco, decimal-leading-zero); }
+
+  /* ao entrar na tela o número gira de 00 até o valor, em 4 degraus. O contador
+     de exibição é um segundo contador alimentado por uma propriedade animada; o
+     `bloco` continua sendo a fonte da verdade e o estado de repouso.
+     ponytail: o JS só põe a classe e o --n onde registerProperty existe. Fora
+     disso a regra nem entra e o contador normal segue valendo. */
+  @property --conta { syntax: '<integer>'; initial-value: 0; inherits: false; }
+  @keyframes contar { from { --conta: 0; } to { --conta: var(--n, 0); } }
+  .bloco__n.is-contando {
+    counter-reset: mostra var(--conta);
+    /* `both`, não `backwards`: sem segurar o fim, --conta voltava ao valor
+       inicial quando a animação acabava e o número parava em 00 */
+    animation: contar 150ms steps(4, end) both;
+  }
+  .bloco__n.is-contando::before { content: counter(mostra, decimal-leading-zero); }
+
+  /* fecho: o único bloco que inverte a polaridade, porque é onde ele fala com você */
+  .fecho {
+    border: 2px solid var(--ink);
+    box-shadow: var(--shadow);
+    padding: clamp(26px, 4vw, 42px);
+    margin-top: clamp(34px, 5vw, 56px);
+  }
+  .fecho .body-text { max-width: 52ch; }
+
+  .cursos {
+    list-style: none;
+    margin: 18px 0 0;
+    padding: 0;
+    max-width: 64ch;
+  }
+  .cursos li {
+    padding: 9px 0;
+    border-bottom: 1px solid var(--rule-soft);
+    font-family: var(--font-mono);
+    font-size: 13px;
+  }
+
+  .case__nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: space-between;
+    border-top: 2px solid var(--ink);
+    margin-top: var(--bay);
+    padding-top: 26px;
+  }
+
+  @media (min-width: 880px) {
+    .case__block {
+      display: grid;
+      grid-template-columns: minmax(0, 7fr) minmax(0, 13fr);
+      gap: clamp(24px, 4vw, 56px);
+      align-items: start;
+    }
+    /* 76px = altura da barra fixa; o título acompanha o próprio texto e para lá */
+    .case__block > h2 { position: sticky; top: 76px; }
+    .cursos { columns: 2; column-gap: clamp(24px, 4vw, 48px); }
+    .cursos li { break-inside: avoid; }
+    .fecho { padding-inline: clamp(34px, 6vw, 72px); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .case__block > h2 { position: static; }
+  }
+</style>
+</head>
+<body>
+
+<a class="skip" href="#conteudo">Pular para o conteúdo</a>
+<div class="grid-glow" data-glow aria-hidden="true"></div>
+<div class="wipe" data-wipe aria-hidden="true"></div>
+
+<header class="nav" data-od-id="nav">
+  <div class="wrap nav__inner">
+    <a class="nav__mark" href="index.html">
+      <span class="nav__glyph" aria-hidden="true"></span>
+      Luan Taraschi
+    </a>
+    <nav class="nav__links" aria-label="Seções do site">
+      <a class="nav__link" href="index.html#sobre" aria-current="page">Sobre</a>
+      <a class="nav__link" href="index.html#projetos">Projetos</a>
+      <a class="nav__link" href="index.html#games">Games</a>
+      <a class="nav__link" href="index.html#skills">Stack</a>
+      <a class="nav__link" href="index.html#experiencia">Experiência</a>
+      <a class="nav__link" href="index.html#contato">Contato</a>
+    </nav>
+    <button class="lamp" type="button" role="switch" aria-checked="false"
+            data-theme-toggle title="Luz da página"
+            aria-label="Alternar entre modo escuro e claro">
+      <span class="lamp__track" aria-hidden="true"><span class="lamp__knob"></span></span>
+    </button>
+
+    <button class="nav__toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="menu-mobile">
+      Menu
+    </button>
+  </div>
+  <div class="nav__panel" id="menu-mobile" data-nav-panel hidden>
+    <a href="index.html#sobre">Sobre</a>
+    <a href="index.html#projetos">Projetos</a>
+    <a href="index.html#games">Games</a>
+    <a href="index.html#skills">Stack</a>
+    <a href="index.html#experiencia">Experiência</a>
+    <a href="index.html#contato">Contato</a>
+  </div>
+</header>
+
+<main id="conteudo">
+  <article class="wrap" data-od-id="vida">
+
+    <header class="case__head">
+      <span class="kicker">sobre/ · a versão longa</span>
+      <h1 class="h1 case__title" style="font-size: clamp(30px, 5.4vw, 56px);">
+        Eu tinha dez anos
+      </h1>
+      <p class="lead" style="margin-top:18px;">
+        Quando tentei criar meu primeiro mod de Minecraft. Não deu em nada, mas
+        eu não ia desistir de seguir aquele rumo.
+      </p>
+    </header>
+
+    <div class="case__body">
+
+      <section class="case__block">
+        <h2 class="h2"><span class="bloco__n" aria-hidden="true"></span>LurramAdventures</h2>
+        <div class="bloco__txt">
+          <p class="body-text">
+          Eu passava as tardes jogando com os amigos e vendo vídeo de mod feito
+          por desenvolvedor. Achava aquilo a coisa mais legal do mundo. Meu
+          favorito era o OresPawn, e um dia decidi que ia fazer o meu.
+        </p>
+        <p class="body-text">
+          Botei meu nick no nome, LurramAdventures, porque eu já me imaginava
+          vendo alguém jogar aquilo. Só que era muito mais complexo do que eu
+          imaginava: era preciso configurar tudo, das funções às texturas e ao
+          comportamento. O LurramAdventures não deu em nada. O rumo ficou.
+        </p>
+        </div>
+      </section>
+
+      <section class="case__block">
+        <h2 class="h2"><span class="bloco__n" aria-hidden="true"></span>Troquei de escola por um laboratório</h2>
+        <div class="bloco__txt">
+          <p class="body-text">
+          Saí da escola onde eu estudava desde os cinco anos porque tinha chegado
+          uma nova na região, com robótica e programação na grade. Deixei todos os
+          meus amigos para trás para ir atrás disso.
+        </p>
+        <p class="body-text">
+          No primeiro ano montei um time, ganhei o campeonato regional e fui
+          selecionado para a equipe oficial da escola, a que representava a cidade
+          dali em diante. Foi um ano inteiro trancado no laboratório de robótica
+          todas as tardes até chegarmos ao estadual, na FIRST LEGO LEAGUE 2019, em
+          Salvador. Eu era o programador: robô de Lego montado para completar um
+          circuito complexo e muito código ajustado no detalhe para ele fazer
+          exatamente o que precisava fazer. Não passamos de fase. Valeu demais.
+        </p>
+        </div>
+      </section>
+
+      <section class="case__block">
+        <h2 class="h2"><span class="bloco__n" aria-hidden="true"></span>A pandemia foi a melhor escola que eu tive</h2>
+        <div class="bloco__txt">
+          <p class="body-text">
+          Aproveitei o tempo parado para me aprofundar de vez. Passei boa parte
+          daquele período vendo curso de programação, um atrás do outro, e foi uma
+          das épocas mais produtivas da minha vida. Foi ali que comecei a programar
+          para valer, aprendendo linguagem de verdade e aplicando na prática,
+          construindo coisa útil na web. E foi ali que decidi que era aquilo que eu
+          queria fazer pelo resto da vida.
+        </p>
+        <p class="body-text">
+          Pouco depois do Ensino Médio entrei em Engenharia de Software, com
+          formatura prevista para 2027. Sendo sincero: umas poucas aulas por semana
+          nunca deram conta do meu ritmo. A maior parte do que eu sei hoje eu
+          aprendi estudando por fora, por vontade própria, do mesmo jeito que na
+          pandemia. Os cursos que fiz nesse ritmo:
+        </p>
+        <ul class="cursos">
+          <li>Front-End</li>
+          <li>UX/UI Design</li>
+          <li>PostgreSQL</li>
+          <li>IA Generativa para Devs</li>
+          <li>IA e Aplicações com LLMs</li>
+          <li>ChatGPT e Engenharia de Prompt para Devs</li>
+        </ul>
+        </div>
+      </section>
+
+      <section class="case__block">
+        <h2 class="h2"><span class="bloco__n" aria-hidden="true"></span>IA na mão de quem sabe o que está fazendo</h2>
+        <div class="bloco__txt">
+          <p class="body-text">
+          Com a chegada das IAs, o uso de LLM no desenvolvimento virou meu assunto
+          favorito. Usada do jeito certo, na mão de um desenvolvedor que sabe o que
+          está fazendo, uma IA é um aliado valiosíssimo. Foi para esse lado que eu
+          me especializei e é onde me sinto mais forte hoje. Também não paro de
+          correr atrás de tecnologia nova para aplicar no dia a dia.
+        </p>
+        </div>
+      </section>
+
+      <section class="case__block">
+        <h2 class="h2"><span class="bloco__n" aria-hidden="true"></span>Sair do modo projeto pessoal</h2>
+        <div class="bloco__txt">
+          <p class="body-text">
+          Meu primeiro contato com o mercado foi um ano de estágio de
+          desenvolvimento na TecnoTRENDS. Foi onde eu saí do modo projeto pessoal e
+          aprendi a trabalhar em código do qual outras pessoas dependiam. É uma
+          mudança de postura que não dá para aprender sozinho em casa.
+        </p>
+        </div>
+      </section>
+
+      <section class="case__block">
+        <h2 class="h2"><span class="bloco__n" aria-hidden="true"></span>A outra metade do trabalho: automação</h2>
+        <div class="bloco__txt">
+          <p class="body-text">
+          Na JVB Advocacia eu descobri o que virou a outra metade do meu trabalho.
+          Comecei com coisa simples: relatório semanal, resumo de notícia,
+          compilado de e-mail, andamento de processo. Conforme fui aprendendo, fui
+          conseguindo fazer coisa cada vez mais complexa e mais útil.
+        </p>
+        </div>
+      </section>
+
+      <section class="case__block">
+        <h2 class="h2"><span class="bloco__n" aria-hidden="true"></span>JVB Kanban</h2>
+        <div class="bloco__txt">
+          <p class="body-text">
+          Desse processo nasceu o JVB Kanban, um sistema de gestão de casos que
+          acabou tomando conta da rotina do escritório inteiro. Hoje ele toca mais
+          de 300 processos e tirou umas 10 horas de trabalho manual por semana de
+          cima da equipe.
+        </p>
+        <p class="body-text">
+          Roda em PostgreSQL na Railway e tem integração via MCP, então a própria
+          IA consulta o andamento dos casos e delega tarefa dentro do sistema. É
+          exatamente o tipo de coisa que eu gosto de construir. Quando a parceria
+          terminou, eu já tinha aquilo validado e rodando em produção, e o apoio do
+          meu antigo chefe para buscar cliente novo.
+        </p>
+        </div>
+      </section>
+
+      <section class="case__block">
+        <h2 class="h2"><span class="bloco__n" aria-hidden="true"></span>Hoje eu trabalho por conta</h2>
+        <div class="bloco__txt">
+          <p class="body-text">
+          Construo software sob medida. Já são cinco clientes atendidos, entre
+          escritórios de advocacia e agência de viagem, com dois sistemas em
+          produção que eu mantenho e evoluo. O maior deles é um CRM de WhatsApp que
+          passa das mil conversas por mês, com a triagem inteira automatizada, de
+          forma que só o lead já qualificado chega no atendente humano.
+        </p>
+        </div>
+      </section>
+
+      <section class="case__block">
+        <h2 class="h2"><span class="bloco__n" aria-hidden="true"></span>O design eu nunca vou largar</h2>
+        <div class="bloco__txt">
+          <p class="body-text">
+          Web design e design gráfico não são meu foco no momento, mas são uma
+          coisa que eu nunca vou deixar de amar. Aquele site que a pessoa abre e
+          solta um uau antes mesmo de entender o que ele faz. Espero ter arrancado
+          uma boa impressão neste aqui, hehe.
+        </p>
+        <p class="body-text">
+          Estou sempre criando interface nova, testando ideia de layout, e mesmo
+          quando o projeto é inteiro no backend eu acabo puxando esse cuidado para
+          dentro dele.
+        </p>
+        </div>
+      </section>
+
+      <section class="case__block">
+        <h2 class="h2"><span class="bloco__n" aria-hidden="true"></span>Tempo livre não existe</h2>
+        <div class="bloco__txt">
+          <p class="body-text">
+          Todo tempo livre que eu tenho minha cabeça já começa a pensar em projeto
+          novo, interface nova, o que dá para construir. Às vezes é só pela diversão
+          mesmo, como o SUS, um jogo web que eu fiz em uma semana para jogar em call
+          com os amigos.
+        </p>
+        </div>
+      </section>
+
+      <section class="fecho invert">
+        <h2 class="h2">E eu sinto que estou só no começo</h2>
+        <p class="body-text">
+          Só de pensar nas tecnologias que ainda vão aparecer para ajudar no
+          desenvolvimento eu já fico animado com o que vem pela frente.
+        </p>
+        <p class="body-text" style="margin-top:14px;">
+          Se você leu até aqui, provavelmente tem alguma coisa para ser construída.
+          Me chama. ;)
+        </p>
+        <p style="margin-top: clamp(20px, 3vw, 28px);">
+          <a class="btn btn--primary" href="index.html#contato">Falar comigo ›</a>
+        </p>
+      </section>
+
+    </div>
+
+    <nav class="case__nav" aria-label="Navegação">
+      <a class="btn btn--ghost" href="index.html#sobre">‹ Voltar para a home</a>
+      <a class="btn" href="index.html#projetos">Ver os projetos ›</a>
+    </nav>
+
+  </article>
+</main>
+
+<footer class="foot" data-od-id="footer">
+  <div class="wrap foot__inner">
+    <span class="mono-caps">Luan Taraschi · MMXXVI</span>
+    <span class="mono-caps">feito por mim, com muito amor</span>
+  </div>
+</footer>
+
+<script src="js/app.js" defer></script>
+</body>
+</html>

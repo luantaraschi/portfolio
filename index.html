@@ -1,0 +1,550 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<script>(function(){var t=null;try{t=localStorage.getItem('lt-tema')}catch(e){}
+if(!t)t=window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';
+if(t==='light')document.documentElement.setAttribute('data-theme','light')
+try{history.scrollRestoration="manual"}catch(e){}})()</script>
+<title>Luan Taraschi · Desenvolvedor Full Stack e Agentes de IA</title>
+<meta name="description" content="Portfólio de Luan Taraschi, desenvolvedor full stack em Salvador (BA). SaaS, automações e agentes de IA em produção com React, Next.js, Node.js, PostgreSQL e Docker." />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'><rect width='8' height='8' fill='%231a1917'/><g fill='%23fce4a6'><rect width='4' height='4'/><rect x='4' y='4' width='4' height='4'/></g></svg>" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&family=Silkscreen:wght@400;700&family=Space+Grotesk:wght@300..700&family=Space+Mono:wght@400;700&display=swap" />
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<a class="skip" href="#conteudo">Pular para o conteúdo</a>
+<div class="grid-glow" data-glow aria-hidden="true"></div>
+<div class="wipe" data-wipe aria-hidden="true"></div>
+
+<!-- ===== navegação ===== -->
+<header class="nav" data-od-id="nav">
+  <div class="wrap nav__inner">
+    <!-- âncora, não recarga: recarregar reaplicava o tema do zero e voltava pro escuro -->
+    <a class="nav__mark" href="#inicio">
+      <span class="nav__glyph" aria-hidden="true"></span>
+      Luan Taraschi
+    </a>
+
+    <nav class="nav__links" aria-label="Seções do site">
+      <a class="nav__link" href="#sobre">Sobre</a>
+      <a class="nav__link" href="#projetos">Projetos</a>
+      <a class="nav__link" href="#games">Games</a>
+      <a class="nav__link" href="#skills">Stack</a>
+      <a class="nav__link" href="#experiencia">Experiência</a>
+      <a class="nav__link" href="#contato">Contato</a>
+    </nav>
+
+    <button class="lamp" type="button" role="switch" aria-checked="false"
+            data-theme-toggle title="Luz da página"
+            aria-label="Alternar entre modo escuro e claro">
+      <span class="lamp__track" aria-hidden="true"><span class="lamp__knob"></span></span>
+    </button>
+
+    <button class="nav__toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="menu-mobile">
+      Menu
+    </button>
+  </div>
+  <div class="nav__panel" id="menu-mobile" data-nav-panel hidden>
+    <a href="#sobre">Sobre</a>
+    <a href="#projetos">Projetos</a>
+    <a href="#games">Games</a>
+    <a href="#skills">Stack</a>
+    <a href="#experiencia">Experiência</a>
+    <a href="#contato">Contato</a>
+  </div>
+</header>
+
+<main id="conteudo">
+
+  <!-- ===== hero ===== -->
+  <section class="hero" id="inicio" data-od-id="hero">
+    <div class="wrap"><span class="kicker">portfolio/2026</span><span
+      class="kicker kicker--barra" data-progresso aria-hidden="true"></span></div>
+
+    <!-- encosta nas duas bordas da coluna: o JS mede a linha e ajusta o corpo.
+         O .wrap é o que segura o tamanho - sem ele o nome sangra a tela. -->
+    <div class="wrap">
+      <h1 class="h1 masthead">
+        <span class="masthead__line" data-fit data-glitch data-text="Luan"><span
+          class="ch">L</span><span class="ch">u</span><span class="ch">a</span><span
+          class="ch">n</span></span>
+        <span class="masthead__line" data-fit data-glitch data-text="Taraschi"><span
+          class="ch">T</span><span class="ch">a</span><span class="ch">r</span><span
+          class="ch">a</span><span class="ch">s</span><span class="ch">c</span><span
+          class="ch">h</span><span class="ch">i</span></span>
+      </h1>
+    </div>
+
+    <div class="wrap hero__grid">
+      <div>
+        <p class="hero__role">Desenvolvedor full stack · automações e agentes de IA</p>
+        <p class="lead hero__desc">
+          Construo SaaS e automação de ponta a ponta e coloco agentes de IA para
+          trabalhar em operação real: CRMs de WhatsApp e fluxos de atendimento
+          que processam cerca de mil conversas por mês.
+        </p>
+        <div class="hero__cta">
+          <a class="btn btn--primary" href="#projetos">Ver projetos</a>
+          <a class="btn btn--ghost" href="#contato">Falar comigo</a>
+          <!-- `download` já é do HTML: baixa em vez de abrir no leitor do
+               browser, e o valor força o nome do arquivo salvo. Sem JS. -->
+          <a class="btn btn--ghost" href="assets/luan-taraschi-cv.pdf"
+             download="luan-taraschi-cv.pdf">Baixar CV ↓</a>
+        </div>
+
+        <!-- preenche a coluna até a altura do painel e já é conteúdo de verdade -->
+        <dl class="ficha">
+          <div>
+            <dt>Base</dt>
+            <dd>Salvador, BA (Brasil)</dd>
+          </div>
+          <div>
+            <dt>Disponível</dt>
+            <dd>freela e efetivo</dd>
+          </div>
+          <div>
+            <dt>Hoje mexendo com</dt>
+            <dd>LangGraph, MCP e Claude Code</dd>
+          </div>
+          <div>
+            <dt>Escrevendo código desde</dt>
+            <dd>2019</dd>
+          </div>
+        </dl>
+      </div>
+
+      <figure class="hero__figure panel pinned">
+        <figcaption class="panel__bar">
+          <span class="panel__box" aria-hidden="true"></span>
+          <span class="panel__title">retrato.bmp</span>
+        </figcaption>
+        <div class="hero__canvas-wrap">
+          <canvas data-dither role="img"
+            aria-label="Esfera renderizada com dithering Bayer de 1 bit que reage ao movimento do cursor"></canvas>
+
+          <button class="hero__me panel" type="button"
+                  data-stage title="cutuca"
+                  aria-label="Cutucar o retrato">
+            <span class="film" data-film role="img"
+                  aria-label="Retrato de Luan Taraschi em 1 bit, sem óculos escuros."></span>
+          </button>
+        </div>
+        <p class="hero__cap mono-caps">
+          <span>1-bit · bayer 8×8</span>
+          <span>mova o cursor</span>
+        </p>
+      </figure>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <div class="ramp reveal" aria-hidden="true">
+      <span class="dither-50"></span><span class="dither-25"></span><span class="dither-12"></span>
+    </div>
+  </div>
+
+  <!-- ===== sobre ===== -->
+  <section class="sec invert" id="sobre" data-od-id="sobre">
+    <div class="wrap">
+      <div class="sec__head reveal">
+        <span class="kicker">sobre.txt</span>
+        <h2 class="h2">Como eu trabalho</h2>
+      </div>
+
+      <div class="about__grid">
+        <div class="reveal">
+          <p class="body-text">
+            Sou desenvolvedor full stack e estudante de Engenharia de Software na
+            UCSAL, com conclusão prevista para 2027.2. Trabalho desde o primeiro
+            semestre da graduação, sem interrupção: hoje construo SaaS e automação
+            com React, Next.js, Node.js, PostgreSQL e Docker.
+          </p>
+          <p class="body-text">
+            Já são cinco clientes atendidos, entre escritórios de advocacia e
+            agência de viagem, e eu faço o ciclo inteiro: levantamento de requisitos,
+            arquitetura, modelagem de banco, integrações, deploy e suporte em
+            produção. Prefiro entregar o fluxo que resolve o problema do cliente a
+            entregar tecnologia bonita que ninguém usa.
+          </p>
+          <p class="body-text">
+            A parte que mais me interessa agora é orquestração de agentes: fazer a IA
+            assumir a triagem repetitiva e devolver para o humano só o que exige
+            julgamento. É o que estou construindo em produção com LangGraph, MCP e
+            integrações via API.
+          </p>
+          <p style="margin-top: clamp(22px, 3vw, 32px);">
+            <a class="btn btn--primary" href="sobre.html">A história inteira ›</a>
+          </p>
+        </div>
+
+        <div class="panel reveal">
+          <div class="panel__bar">
+            <span class="panel__box" aria-hidden="true"></span>
+            <span class="panel__title">ficha.txt</span>
+          </div>
+          <dl class="panel__body">
+            <div class="spec-row"><dt>Função</dt><dd>Desenvolvedor full stack</dd></div>
+            <div class="spec-row"><dt>Base</dt><dd>Salvador / BA</dd></div>
+            <div class="spec-row"><dt>Foco</dt><dd>SaaS, automação e agentes de IA</dd></div>
+            <div class="spec-row"><dt>Formação</dt><dd>Eng. de Software, UCSAL (2027.2)</dd></div>
+            <div class="spec-row"><dt>Status</dt><dd>aberto a projetos</dd></div>
+            <div class="spec-row"><dt>Idiomas</dt><dd>Português nativo · Inglês fluente</dd></div>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== projetos ===== -->
+  <section class="sec" id="projetos" data-od-id="projetos">
+    <div class="wrap">
+      <div class="sec__head reveal">
+        <span class="kicker">projetos/ · 05 itens</span>
+        <h2 class="h2">O que eu construí</h2>
+        <p class="lead">Sistema com usuário do outro lado, que precisa acordar funcionando toda manhã.</p>
+      </div>
+
+      <div class="grid-projects">
+
+        <a class="card reveal" href="projeto-jvb.html">
+          <div class="card__thumb dither-50 dither-fade"><span class="card__idx">01</span></div>
+          <div class="card__body">
+            <h3 class="h3">JVB — ERP jurídico sob medida</h3>
+            <p class="mono">Um escritório inteiro rodava em planilha e WhatsApp; hoje roda num sistema só. 124 tabelas, 881 endpoints tipados, 3.500 testes — desenvolvedor único.</p>
+            <div class="card__tags"><span class="tag">TypeScript</span><span class="tag">tRPC</span><span class="tag">PostgreSQL</span><span class="tag">em produção</span></div>
+          </div>
+        </a>
+
+        <a class="card reveal" href="projeto-triagem.html">
+          <div class="card__thumb dither-25 dither-fade"><span class="card__idx">02</span></div>
+          <div class="card__body">
+            <h3 class="h3">Triagem por IA no WhatsApp</h3>
+            <p class="mono">Cerca de mil conversas por mês, 100% triadas por agente antes de chegar a alguém. Com guardrail: o bot nunca dá consultoria jurídica.</p>
+            <div class="card__tags"><span class="tag">Agentes de IA</span><span class="tag">WhatsApp</span><span class="tag">guardrails</span><span class="tag">em produção</span></div>
+          </div>
+        </a>
+
+        <a class="card reveal" href="https://dev-tools-xi-beige.vercel.app/" target="_blank" rel="noopener">
+          <div class="card__thumb dither-12 dither-fade"><span class="card__idx">03</span></div>
+          <div class="card__body">
+            <h3 class="h3">Dev Tools</h3>
+            <p class="mono">Quinze utilitários de dev num painel só: OCR, remoção de fundo, QR, conversão de imagem, gerador de CSS. Roda no navegador.</p>
+            <div class="card__tags"><span class="tag">Next.js 15</span><span class="tag">React 19</span><span class="tag">ao vivo ↗</span></div>
+          </div>
+        </a>
+
+        <a class="card reveal" href="https://github.com/luantaraschi/Hand-Gestures" target="_blank" rel="noopener">
+          <div class="card__thumb dither-50 dither-fade"><span class="card__idx">04</span></div>
+          <div class="card__body">
+            <h3 class="h3">Gesture AI Desk</h3>
+            <p class="mono">Controlar o computador com a mão pela webcam: 21 pontos por mão a 30fps, sete gestos, tudo offline e sem API nenhuma.</p>
+            <div class="card__tags"><span class="tag">Python</span><span class="tag">MediaPipe</span><span class="tag">WebSocket</span><span class="tag">código ↗</span></div>
+          </div>
+        </a>
+
+        <a class="card reveal" href="https://github.com/luantaraschi/seamless-ai-dub" target="_blank" rel="noopener">
+          <div class="card__thumb dither-25 dither-fade"><span class="card__idx">05</span></div>
+          <div class="card__body">
+            <h3 class="h3">Seamless AI Dub</h3>
+            <p class="mono">Vídeo em inglês entra, vídeo dublado em português sai: Whisper transcreve, o modelo traduz, o TTS fala e o corte volta sincronizado.</p>
+            <div class="card__tags"><span class="tag">Python</span><span class="tag">Whisper</span><span class="tag">FFmpeg</span><span class="tag">código ↗</span></div>
+          </div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== party games =====
+       Bloco invertido de propósito: eles não disputam com os projetos de
+       produção, ocupam outra prateleira. É onde mora a parte técnica que
+       sistema de escritório não tem - estado sincronizado entre estranhos, em
+       tempo real, com gente entrando e caindo no meio da rodada. -->
+  <section class="sec invert" id="games" data-od-id="games">
+    <div class="wrap">
+      <div class="sec__head reveal">
+        <span class="kicker">games/ · 03 itens</span>
+        <h2 class="h2">Party games de navegador</h2>
+        <p class="lead">
+          Não são projetos sérios: são jogos pra abrir numa call com os amigos, sem
+          instalar nada. Mas é aqui que está o problema técnico mais difícil que eu
+          resolvo — manter dezenas de pessoas vendo a mesma partida ao mesmo tempo,
+          com quem entra atrasado e quem cai no meio.
+        </p>
+      </div>
+
+      <div class="grid-projects">
+
+        <a class="card reveal" href="https://github.com/luantaraschi/SOMS" target="_blank" rel="noopener">
+          <div class="card__thumb dither-50 dither-fade"><span class="card__idx">06</span></div>
+          <div class="card__body">
+            <h3 class="h3">SOMS</h3>
+            <p class="mono">Toca um trecho de música e todo mundo corre pra acertar o título antes dos outros. No fim, card de estatística pra jogar no grupo.</p>
+            <div class="card__tags"><span class="tag">Socket.IO</span><span class="tag">Next.js 15</span><span class="tag">Neon</span><span class="tag">código ↗</span></div>
+          </div>
+        </a>
+
+        <a class="card reveal" href="https://github.com/luantaraschi/SUS" target="_blank" rel="noopener">
+          <div class="card__thumb dither-25 dither-fade"><span class="card__idx">07</span></div>
+          <div class="card__body">
+            <h3 class="h3">SUS</h3>
+            <p class="mono">O jogo do impostor: todo mundo recebe a mesma palavra, menos um. Conversa, blefe e votação — em três modos diferentes.</p>
+            <div class="card__tags"><span class="tag">Convex</span><span class="tag">Next.js</span><span class="tag">tempo real</span><span class="tag">código ↗</span></div>
+          </div>
+        </a>
+
+        <a class="card reveal" href="https://github.com/luantaraschi/POV" target="_blank" rel="noopener">
+          <div class="card__thumb dither-12 dither-fade"><span class="card__idx">08</span></div>
+          <div class="card__body">
+            <h3 class="h3">POV</h3>
+            <p class="mono">O mais recente da prateleira, e o único fora do React: Svelte com Convex atrás.</p>
+            <div class="card__tags"><span class="tag">Svelte</span><span class="tag">Convex</span><span class="tag">código ↗</span></div>
+          </div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== stack ===== -->
+  <section class="sec sec--tight" id="skills" data-od-id="skills">
+    <div class="wrap">
+      <div class="sec__head reveal">
+        <span class="kicker">stack.cfg</span>
+        <h2 class="h2">Ferramentas de trabalho</h2>
+      </div>
+
+      <div class="grid-skills">
+        <article class="skill reveal">
+          <div class="skill__bar">
+            <span class="skill__swatch dither-50" aria-hidden="true"></span>
+            <h3 class="h3">Front-end</h3>
+          </div>
+          <p>React · Next.js · JavaScript · HTML · CSS</p>
+        </article>
+
+        <article class="skill reveal">
+          <div class="skill__bar">
+            <span class="skill__swatch dither-25" aria-hidden="true"></span>
+            <h3 class="h3">Back-end</h3>
+          </div>
+          <p>Node.js · Python · Java · consumo e integração de APIs</p>
+        </article>
+
+        <article class="skill reveal">
+          <div class="skill__bar">
+            <span class="skill__swatch dither-12" aria-hidden="true"></span>
+            <h3 class="h3">Dados &amp; infra</h3>
+          </div>
+          <p>PostgreSQL · Docker · Git · deploy e manutenção em produção</p>
+        </article>
+
+        <article class="skill reveal">
+          <div class="skill__bar">
+            <span class="skill__swatch dither-50" aria-hidden="true"></span>
+            <h3 class="h3">IA &amp; automação</h3>
+          </div>
+          <p>LangChain · LangGraph · Agno · Hermes · n8n · Claude Code</p>
+        </article>
+      </div>
+
+      <!-- a órbita: o mesmo desenho da esfera do hero, agora com a stack
+           girando em volta. Decorativa de propósito - tudo que está nos chips
+           já está escrito nos cartões acima, então o leitor de tela pula.
+
+           Os glifos são desenhados aqui, num grid de 16, em traço de 2px sem
+           antialias. São símbolos de ofício (cilindro de dados, grafo, prompt,
+           contêiner), não marcas de terceiros: logo colorido de empresa num
+           sistema de 1 bit briga com a paleta, e reduzido a 24px em duas cores
+           vira borrão. -->
+      <svg class="orb__defs" aria-hidden="true" focusable="false"><defs>
+        <!-- o miolo é um círculo minúsculo traçado, não preenchido: `fill` no
+             atributo perderia para o `fill: none` da classe -->
+        <g id="i-atomo"><circle cx="8" cy="8" r="6"/><circle cx="8" cy="8" r="0.5"/></g>
+        <g id="i-hex"><path d="M8 1.5 14 5v6l-6 3.5L2 11V5z"/></g>
+        <g id="i-degrau"><path d="M2 13h4V8h4V3h4"/></g>
+        <g id="i-cilindro"><ellipse cx="8" cy="4" rx="6" ry="2"/><path d="M2 4v8c0 1.1 2.7 2 6 2s6-.9 6-2V4"/><path d="M2 8c0 1.1 2.7 2 6 2s6-.9 6-2"/></g>
+        <g id="i-caixas"><path d="M2 10h12v4H2z"/><path d="M4 5h3.5v5H4z"/><path d="M9 5h3.5v5H9z"/></g>
+        <g id="i-play"><path d="M4.5 2 13 8l-8.5 6z"/></g>
+        <g id="i-grafo"><circle cx="8" cy="3" r="1.8"/><circle cx="3" cy="13" r="1.8"/><circle cx="13" cy="13" r="1.8"/><path d="M6.8 4.6 4.2 11.4M9.2 4.6l2.6 6.8M4.8 13h6.4"/></g>
+        <g id="i-prompt"><path d="M3 4l4 4-4 4"/><path d="M9 13h5"/></g>
+      </defs></svg>
+
+      <div class="orb reveal" data-orb aria-hidden="true">
+        <canvas class="orb__globo" data-dither></canvas>
+
+        <div class="orb__ring orb__ring--1">
+          <span class="orb__braco" style="--a: -50deg"><span class="orb__node"><svg class="orb__ico" viewBox="0 0 16 16"><use href="#i-atomo"/></svg>React</span></span>
+          <span class="orb__braco" style="--a: 70deg"><span class="orb__node"><svg class="orb__ico" viewBox="0 0 16 16"><use href="#i-hex"/></svg>Node.js</span></span>
+          <span class="orb__braco" style="--a: 190deg"><span class="orb__node"><svg class="orb__ico" viewBox="0 0 16 16"><use href="#i-degrau"/></svg>Python</span></span>
+        </div>
+
+        <div class="orb__ring orb__ring--2">
+          <span class="orb__braco" style="--a: -110deg"><span class="orb__node"><svg class="orb__ico" viewBox="0 0 16 16"><use href="#i-cilindro"/></svg>PostgreSQL</span></span>
+          <span class="orb__braco" style="--a: 60deg"><span class="orb__node"><svg class="orb__ico" viewBox="0 0 16 16"><use href="#i-caixas"/></svg>Docker</span></span>
+        </div>
+
+        <div class="orb__ring orb__ring--3">
+          <span class="orb__braco" style="--a: -40deg"><span class="orb__node"><svg class="orb__ico" viewBox="0 0 16 16"><use href="#i-play"/></svg>Next.js</span></span>
+          <span class="orb__braco" style="--a: 85deg"><span class="orb__node"><svg class="orb__ico" viewBox="0 0 16 16"><use href="#i-grafo"/></svg>LangGraph</span></span>
+          <span class="orb__braco" style="--a: 205deg"><span class="orb__node"><svg class="orb__ico" viewBox="0 0 16 16"><use href="#i-prompt"/></svg>Claude Code</span></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <div class="ramp reveal" aria-hidden="true">
+      <span class="dither-50"></span><span class="dither-25"></span><span class="dither-12"></span>
+    </div>
+  </div>
+
+  <!-- ===== experiência ===== -->
+  <section class="sec invert" id="experiencia" data-od-id="experiencia">
+    <div class="wrap">
+      <div class="sec__head reveal">
+        <span class="kicker">experiencia.log</span>
+        <h2 class="h2">Linha do tempo</h2>
+      </div>
+
+      <div class="tl-grid">
+      <div class="tl">
+        <div class="tl__item reveal">
+          <p class="tl__year">2025 · até hoje</p>
+          <h3 class="h3 tl__role">Desenvolvedor Full Stack · Freelancer</h3>
+          <p class="body-text">
+            Software sob medida para cinco clientes, entre escritórios de advocacia
+            e agência de viagem, com dois sistemas em produção que eu mantenho e
+            evoluo. No maior deles o CRM processa cerca de mil conversas por mês, com 100% da
+            triagem feita por IA. O agente classifica por perfil e intenção, e só o
+            lead qualificado chega ao humano. Faço o ciclo completo, da descoberta ao
+            suporte, e também a ponta comercial: proposta, apresentação e relacionamento.
+          </p>
+        </div>
+
+        <div class="tl__item reveal">
+          <p class="tl__year">2024 a 2025 · 6 meses</p>
+          <h3 class="h3 tl__role">Orquestrador de Automações · JVB Advocacia</h3>
+          <p class="body-text">
+            Comecei com automação simples: relatório semanal, resumo de notícia,
+            compilado de e-mail, andamento de processo. Conforme fui aprendendo,
+            fui fazendo coisa cada vez mais complexa, até nascer dali o JVB Kanban,
+            sistema de gestão de casos que tomou conta da rotina do escritório
+            inteiro. Hoje ele toca mais de 300 processos e tirou umas 10 horas de
+            trabalho manual por semana de cima da equipe. Roda em PostgreSQL na
+            Railway, com integração via MCP: a própria IA consulta o andamento dos
+            casos e delega tarefa dentro do sistema.
+          </p>
+        </div>
+
+        <div class="tl__item reveal">
+          <p class="tl__year">2023 a 2024 · 1 ano</p>
+          <h3 class="h3 tl__role">Estagiário de Desenvolvimento · TecnoTRENDS</h3>
+          <p class="body-text">
+            Meu primeiro contato com o mercado. Um ano de desenvolvimento e
+            manutenção de aplicações web, front e back, e a mudança de postura que
+            não dá para aprender sozinho em casa: sair do modo projeto pessoal e
+            trabalhar em código do qual outras pessoas dependiam.
+          </p>
+        </div>
+      </div>
+
+        <!-- a coluna que sobrava: mesmo Bayer 8x8 da esfera, forma de
+             redemoinho, e o olho dele acompanha o cursor -->
+        <div class="tl__aside" aria-hidden="true">
+          <canvas class="tl__swirl" data-dither="swirl"></canvas>
+          <p class="mono-caps tl__cap"><span>bayer 8×8 · swirl</span><span>mova o cursor</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== contato ===== -->
+  <section class="sec" id="contato" data-od-id="contato">
+    <div class="wrap">
+      <div class="sec__head reveal">
+        <span class="kicker">contato.form</span>
+        <h2 class="h2">Bora conversar</h2>
+        <p class="lead">Conta o que você quer construir. Respondo em português ou inglês.</p>
+      </div>
+
+      <div class="contact__grid">
+        <div class="reveal">
+          <div class="contact-row">
+            <span class="contact-row__key">E-mail</span>
+            <a class="contact-row__val" data-email
+               href="mailto:luantaraschi@gmail.com">luantaraschi@gmail.com</a>
+            <button class="btn btn--tiny" type="button" data-copy>copiar</button>
+          </div>
+          <div class="contact-row">
+            <span class="contact-row__key">GitHub</span>
+            <a class="contact-row__val" href="https://github.com/luantaraschi"
+               target="_blank" rel="noopener">github.com/luantaraschi</a>
+          </div>
+          <div class="contact-row">
+            <span class="contact-row__key">LinkedIn</span>
+            <a class="contact-row__val" href="https://www.linkedin.com/in/luantaraschi/"
+               target="_blank" rel="noopener">linkedin.com/in/luantaraschi</a>
+          </div>
+          <div class="contact-row">
+            <span class="contact-row__key">Telefone</span>
+            <a class="contact-row__val" href="tel:+5571984675555">(71) 98467-5555</a>
+          </div>
+          <div class="contact-row">
+            <span class="contact-row__key">Base</span>
+            <span class="contact-row__val">Salvador, BA · remoto ou presencial</span>
+          </div>
+          <div class="contact-row">
+            <span class="contact-row__key">Currículo</span>
+            <a class="contact-row__val" href="assets/luan-taraschi-cv.pdf"
+               download="luan-taraschi-cv.pdf">luan-taraschi-cv.pdf ↓</a>
+          </div>
+        </div>
+
+        <form class="panel reveal" data-form novalidate>
+          <div class="panel__bar">
+            <span class="panel__box" aria-hidden="true"></span>
+            <span class="panel__title">nova mensagem</span>
+            <span class="panel__conta" data-conta-msg aria-hidden="true"></span>
+          </div>
+          <div class="panel__body">
+            <div class="field">
+              <label for="f-nome">Nome</label>
+              <input id="f-nome" name="nome" type="text" autocomplete="name" />
+              <p class="field__err" data-err="nome" role="alert"></p>
+            </div>
+            <div class="field">
+              <label for="f-email">E-mail</label>
+              <input id="f-email" name="email" type="email" autocomplete="email" />
+              <p class="field__err" data-err="email" role="alert"></p>
+            </div>
+            <div class="field">
+              <label for="f-msg">Mensagem</label>
+              <textarea id="f-msg" name="mensagem"></textarea>
+              <p class="field__err" data-err="mensagem" role="alert"></p>
+            </div>
+            <button class="btn" type="submit">Enviar mensagem</button>
+            <p class="form__status" data-status role="status"></p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot" data-od-id="footer">
+  <div class="wrap foot__inner">
+    <span class="mono-caps">Luan Taraschi · MMXXVI</span>
+    <span class="mono-caps">feito por mim, com muito amor</span>
+  </div>
+</footer>
+
+<script src="js/app.js" defer></script>
+</body>
+</html>
