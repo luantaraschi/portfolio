@@ -1354,10 +1354,7 @@ a { color: inherit; }
   position: absolute;
   top: 0;
   left: 0;
-  /* --dx/--dy são o deslocamento do arrasto. `translate` é propriedade separada
-     de `transform`, então somar aqui não briga com a animação de contragiro que
-     roda em `transform` - é o mesmo motivo de `rotate` morar solto logo abaixo. */
-  translate: calc(-50% + var(--dx, 0px)) calc(-50% + var(--dy, 0px));
+  translate: -50% -50%;
   rotate: calc(-1 * var(--a));
   animation: contragiro var(--dur) steps(60, end) infinite;
   display: flex;
@@ -1380,42 +1377,36 @@ a { color: inherit; }
 }
 .orb__ring--2 .orb__node { animation-name: orbitar; }
 
-/* o anel inteiro é `pointer-events: none` para a máscara não roubar o mouse, e
-   isso desce pros filhos: sem devolver aqui, o chip nunca receberia o ponteiro.
-   `touch-action: none` porque no celular arrastar o chip não pode virar rolagem. */
+/* o chip responde ao mouse. O anel inteiro é `pointer-events: none` para a
+   máscara do aro não roubar o ponteiro, e isso desce pros filhos: sem devolver
+   aqui, o chip nunca receberia hover nenhum.
+
+   Tudo isto é CSS puro e sem estado - foi de propósito. A versão que deixava
+   arrastar o chip para fora dependia de congelar a órbita, medir o encaixe e
+   desenhar uma corda entre os dois, e bastava um ponteiro perdido no meio para
+   a corda ficar esticada na tela sem chip nenhum na ponta. */
 .orb__node {
   pointer-events: auto;
-  touch-action: none;
   -webkit-user-select: none;
           user-select: none;
-  cursor: var(--seta-inv) 1 1, grab;
-  transition: box-shadow 90ms steps(2, end);
+  transition: translate 90ms steps(2, end), box-shadow 90ms steps(2, end);
 }
-.orb__node:hover { box-shadow: 5px 5px 0 var(--ink); }
-.orb__node[data-preso] {
-  cursor: var(--seta-inv-press) 1 1, grabbing;
+/* a elevação vai em `translate`, não em `transform`: o contragiro do chip roda
+   em `transform`, e mexer lá derrubaria a rotação que mantém o rótulo de pé */
+.orb__node:hover {
+  translate: calc(-50% - 2px) calc(-50% - 2px);
   box-shadow: 6px 6px 0 var(--ink);
-  z-index: 2;
 }
-
-/* a corda: enquanto o chip está fora do lugar, uma linha tracejada liga ele de
-   volta ao ponto de onde saiu. Mora solta dentro de .orb, e não dentro do chip,
-   porque o chip vive num referencial já girado duas vezes - medir o ângulo lá
-   dentro seria desfazer rotação de anel e de contragiro a cada quadro. */
-.orb__corda {
-  position: absolute;
-  left: 0;
-  top: 0;
-  height: 2px;
-  transform-origin: 0 50%;
-  pointer-events: none;
-  opacity: 0;
-  /* traço mais longo que o pontilhado dos anéis de propósito: encostada num
-     aro, uma corda com o mesmo period sumia dentro dele */
-  background-image: repeating-linear-gradient(90deg,
-    var(--ink) 0 5px, transparent 5px 9px);
+/* no clique afunda e troca de polaridade, igual a todo botão do site */
+.orb__node:active {
+  translate: calc(-50% + 2px) calc(-50% + 2px);
+  box-shadow: 0 0 0 var(--ink);
+  background: var(--ink);
+  color: var(--paper);
 }
-.orb__corda[data-esticada] { opacity: 1; }
+/* alvo em movimento é alvo difícil: com o cursor num chip, a órbita inteira
+   para. Especificidade acima da regra do .is-girando, senão nada acontece. */
+.orb:has(.orb__node:hover) :is(.orb__ring, .orb__node) { animation-play-state: paused; }
 
 /* traço de 2px sem antialias: o glifo fica com a mesma dureza do resto */
 .orb__ico {
