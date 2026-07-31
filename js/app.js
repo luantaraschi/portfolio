@@ -8,7 +8,8 @@
    11 rastro do clique · 12 o cursor rala o dither do thumb
    13 kicker virando barra de rolagem em ASCII · 14 números da sobre contando
    15 a órbita da stack só gira em cena · 16 números do case subindo
-   17 o recado de quem abre o console
+   17 o recado de quem abre o console · 18 a guia lateral de seção
+   19 arrastar a tecnologia para fora da órbita
    ========================================================================== */
 (function () {
   'use strict';
@@ -316,14 +317,22 @@
       var r = canvas.getBoundingClientRect();
       var cx = (e.touches ? e.touches[0].clientX : e.clientX) - r.left;
       var cy = (e.touches ? e.touches[0].clientY : e.clientY) - r.top;
-      tx = (cx / r.width) * 2 - 1;
-      ty = (cy / r.height) * 2 - 1;
+      // a área de escuta é maior que o canvas na órbita, então isto passa de 1.
+      // Um teto largo mantém a luz rasante sem deixar a normal degenerar.
+      tx = trava((cx / r.width) * 2 - 1);
+      ty = trava((cy / r.height) * 2 - 1);
       canvas.dataset.hot = '1';
     }
+    function trava(v) { return v < -1.6 ? -1.6 : v > 1.6 ? 1.6 : v; }
 
-    canvas.addEventListener('pointermove', pointer);
-    canvas.addEventListener('touchmove', function (e) { pointer(e); }, { passive: true });
-    canvas.addEventListener('pointerleave', function () { delete canvas.dataset.hot; });
+    // O globo da órbita ouve o container inteiro, não só a si mesmo: ele ocupa
+    // 30% de uma área de 500px, e exigir o cursor em cima dele fazia a esfera
+    // ignorar quem já estava dentro dos anéis. Nos outros canvas a área de
+    // escuta continua sendo o próprio canvas.
+    var area = canvas.closest('[data-orb]') || canvas;
+    area.addEventListener('pointermove', pointer);
+    area.addEventListener('touchmove', function (e) { pointer(e); }, { passive: true });
+    area.addEventListener('pointerleave', function () { delete canvas.dataset.hot; });
 
     // qualquer sinal de vida na página acorda a esfera, não só sobre o canvas
     function acordar(e) {
@@ -667,7 +676,9 @@
   if (orb && !reduced && 'IntersectionObserver' in window) {
     new IntersectionObserver(function (entries) {
       entries.forEach(function (en) {
-        orb.classList.toggle('is-girando', en.isIntersecting);
+        // enquanto alguém segura um chip a órbita fica congelada de propósito
+        // (módulo 19); entrar e sair de cena não pode religar o giro por baixo.
+        orb.classList.toggle('is-girando', en.isIntersecting && !orb.dataset.arrastando);
       });
     }, { threshold: 0.05 }).observe(orb);
   }
@@ -722,4 +733,146 @@
       'font-family:monospace;font-size:12px;line-height:1.5'
     );
   } catch (_) {}
+
+  /* ---- 18. a guia lateral ------------------------------------------------ */
+  // Um traço por seção, encostado na direita, na altura do meio da tela.
+  //
+  // A seção ativa é a última cujo topo já passou da linha do meio, e não a de
+  // maior área visível: com seções de alturas muito diferentes o critério de
+  // área troca de vencedor no meio da rolagem e a guia fica pulando pra trás.
+  // A linha é a mesma altura em que a guia mora, então o traço aceso sempre
+  // aponta pro que está literalmente ao lado dele.
+  var guia = document.querySelector('[data-guia]');
+  if (guia) {
+    var elos = Array.prototype.slice.call(guia.querySelectorAll('a'));
+    var secoes = elos.map(function (a) {
+      return document.getElementById(a.getAttribute('href').slice(1));
+    });
+    var pedidoGuia = 0, ativoAntes = -1;
+
+    var pintarGuia = function () {
+      pedidoGuia = 0;
+      var linha = window.innerHeight * 0.5;
+      var i = 0;
+      for (var n = 0; n < secoes.length; n++) {
+        if (secoes[n] && secoes[n].getBoundingClientRect().top <= linha) i = n;
+      }
+      var sec = secoes[i];
+      if (!sec) return;
+
+      // o traço aceso não é só posição, é régua: enche conforme a seção passa
+      var r = sec.getBoundingClientRect();
+      var p = r.height > 0 ? (linha - r.top) / r.height : 0;
+      elos[i].style.setProperty('--p',
+        Math.round((p < 0 ? 0 : p > 1 ? 1 : p) * 100) + '%');
+
+      if (i === ativoAntes) return;
+      if (elos[ativoAntes]) {
+        elos[ativoAntes].removeAttribute('aria-current');
+        elos[ativoAntes].style.removeProperty('--p');
+      }
+      elos[i].setAttribute('aria-current', 'true');
+      ativoAntes = i;
+      // a guia é fixa e atravessa seções de polaridades opostas: ela veste os
+      // tokens da que está passando por baixo dela, senão some no fundo areia
+      guia.classList.toggle('guia--inv', sec.classList.contains('invert'));
+    };
+
+    window.addEventListener('scroll', function () {
+      if (!pedidoGuia) pedidoGuia = requestAnimationFrame(pintarGuia);
+    }, { passive: true });
+    window.addEventListener('resize', pintarGuia);
+    pintarGuia();
+  }
+
+  /* ---- 19. arrastar a tecnologia para fora da órbita --------------------- */
+  // O chip sai do lugar enquanto você segura e volta puxado quando você solta.
+  //
+  // Três decisões que valem a linha:
+  //
+  // 1. Enquanto alguém segura, a órbita inteira congela. Sem isso o encaixe
+  //    seguia girando por baixo do dedo e o chip fugia sozinho da mão.
+  // 2. O deslocamento vai em --dx/--dy, lidos pelo `translate` do chip.
+  //    `translate` é propriedade separada de `transform`, então ela convive com
+  //    a animação de contragiro sem que uma sobrescreva a outra.
+  // 3. A corda é um elemento solto dentro de .orb, e não um ::before do chip:
+  //    o chip vive num referencial já girado pelo braço e pelo contragiro, e
+  //    medir o ângulo lá dentro seria desfazer duas rotações a cada quadro.
+  var orbArea = document.querySelector('[data-orb]');
+  var corda = document.querySelector('[data-corda]');
+  if (orbArea && corda && window.PointerEvent) {
+    var LEASH = 150;   // até onde a corda deixa ir
+    var GRAO = 5;      // o arrasto anda de 5 em 5 px: nada aqui é liso
+
+    Array.prototype.forEach.call(orbArea.querySelectorAll('.orb__node'), function (chip) {
+      var x0 = 0, y0 = 0, dx = 0, dy = 0, cx0 = 0, cy0 = 0, rafMola = 0;
+
+      function por(vx, vy) {
+        vx = Math.round(vx / GRAO) * GRAO;
+        vy = Math.round(vy / GRAO) * GRAO;
+        chip.style.setProperty('--dx', vx + 'px');
+        chip.style.setProperty('--dy', vy + 'px');
+        var d = Math.sqrt(vx * vx + vy * vy);
+        if (d < GRAO) { delete corda.dataset.esticada; return; }
+        corda.dataset.esticada = '1';
+        corda.style.left = cx0 + 'px';
+        corda.style.top = (cy0 - 1) + 'px';   // a corda tem 2px: -1 centraliza
+        corda.style.width = d + 'px';
+        corda.style.rotate = Math.atan2(vy, vx) + 'rad';
+      }
+
+      function destravar() {
+        delete orbArea.dataset.arrastando;
+        delete corda.dataset.esticada;
+        if (!reduced) orbArea.classList.add('is-girando');
+      }
+
+      chip.addEventListener('pointerdown', function (e) {
+        if (e.button) return;                 // só o botão principal
+        cancelAnimationFrame(rafMola);
+        try { chip.setPointerCapture(e.pointerId); } catch (_) {}
+        chip.dataset.preso = '1';
+        orbArea.dataset.arrastando = '1';
+        orbArea.classList.remove('is-girando');
+        x0 = e.clientX; y0 = e.clientY;
+        dx = dy = 0;
+        // o encaixe: onde o chip está parado agora, em coordenadas de .orb.
+        // Medido uma vez só, porque daqui pra frente a órbita está congelada.
+        var ro = orbArea.getBoundingClientRect(), rc = chip.getBoundingClientRect();
+        cx0 = rc.left + rc.width / 2 - ro.left;
+        cy0 = rc.top + rc.height / 2 - ro.top;
+        e.preventDefault();
+      });
+
+      chip.addEventListener('pointermove', function (e) {
+        if (!chip.dataset.preso) return;
+        var vx = e.clientX - x0, vy = e.clientY - y0;
+        var d = Math.sqrt(vx * vx + vy * vy);
+        if (d > LEASH) { vx *= LEASH / d; vy *= LEASH / d; }   // a corda tem fim
+        dx = vx; dy = vy;
+        por(dx, dy);
+      });
+
+      function soltar(e) {
+        if (!chip.dataset.preso) return;
+        delete chip.dataset.preso;
+        try { chip.releasePointerCapture(e.pointerId); } catch (_) {}
+        if (reduced) { por(0, 0); destravar(); return; }
+        // a volta é uma oscilação amortecida: passa do ponto, corrige e assenta.
+        // O `por` acima arredonda tudo em 5 px, então a mola é física de verdade
+        // mas o desenho dela sai em degrau, igual ao resto do site.
+        var ix = dx, iy = dy, t0 = 0, DUR = 560;
+        rafMola = requestAnimationFrame(function passo(t) {
+          if (!t0) t0 = t;
+          var p = (t - t0) / DUR;
+          if (p >= 1) { por(0, 0); destravar(); return; }
+          var f = Math.exp(-5.2 * p) * Math.cos(p * 7.6);
+          por(ix * f, iy * f);
+          rafMola = requestAnimationFrame(passo);
+        });
+      }
+      chip.addEventListener('pointerup', soltar);
+      chip.addEventListener('pointercancel', soltar);
+    });
+  }
 })();

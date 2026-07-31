@@ -32,8 +32,12 @@
   --shadow:     4px 4px 0 #fce4a6;
 }
 
-/* areia - painel invertido dentro da página carvão */
-.invert {
+/* areia - painel invertido dentro da página carvão.
+   `.guia--inv` entra junto porque a guia é fixa e passa por cima de seções de
+   polaridades diferentes: ela precisa dos mesmos tokens que a seção embaixo
+   dela, mas não do `background` que a regra .invert lá de baixo pinta. */
+.invert,
+.guia--inv {
   --paper:      #fce4a6;
   --paper-2:    #f3d792;
   --ink:        #1a1917;
@@ -61,7 +65,8 @@
 }
 
 /* solarized escuro - painel invertido dentro da página clara */
-:root[data-theme='light'] .invert {
+:root[data-theme='light'] .invert,
+:root[data-theme='light'] .guia--inv {
   --paper:      #002b36;   /* base03 */
   --paper-2:    #073642;   /* base02 */
   --ink:        #eee8d5;
@@ -901,6 +906,137 @@ a { color: inherit; }
   align-items: baseline;
 }
 
+/* 5.9 redes - o glifo mora no CSS, não no HTML.
+   São três ícones em quatro páginas: inline dariam doze blocos de <svg> pra
+   manter em sincronia. Como máscara, o desenho existe uma vez só e o
+   `background: currentColor` faz ele acompanhar tema e polaridade de graça.
+   Tudo em retângulo de grade 16, sem curva nenhuma: é a mesma regra dos glifos
+   da órbita, marca de terceiro colorida não sobrevive a dois tons. */
+.social {
+  list-style: none;
+  display: flex;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  /* o rodapé alinha por baseline; o chip tem 7px de respiro em cima, então pela
+     baseline ele subia esses 7px em relação às duas legendas ao lado */
+  align-self: center;
+}
+.social__l {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 11px;
+  border: 2px solid transparent;
+  color: var(--ink-2);
+  text-decoration: none;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: transform 90ms steps(2, end), box-shadow 90ms steps(2, end);
+}
+.social__l::before {
+  content: '';
+  flex: none;
+  width: 17px;
+  height: 17px;
+  background: currentColor;
+  -webkit-mask: var(--ic) center / contain no-repeat;
+          mask: var(--ic) center / contain no-repeat;
+}
+.social__l:hover,
+.social__l:focus-visible {
+  color: var(--ink);
+  border-color: var(--ink);
+  background: var(--paper-2);
+  transform: translate(-2px, -2px);
+  box-shadow: 3px 3px 0 var(--ink);
+}
+.social__l:active { transform: translate(1px, 1px); box-shadow: 0 0 0 var(--ink); }
+
+/* ramo do git: dois nós na esquerda, um na direita, e o galho que sai */
+.social__l--gh {
+  --ic: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cg fill='%23000'%3E%3Crect x='2' y='2' width='4' height='4'/%3E%3Crect x='2' y='10' width='4' height='4'/%3E%3Crect x='10' y='2' width='4' height='4'/%3E%3Crect x='3' y='6' width='2' height='4'/%3E%3Crect x='5' y='7' width='6' height='2'/%3E%3Crect x='11' y='6' width='2' height='2'/%3E%3C/g%3E%3C/svg%3E");
+}
+/* quadro com "in" em bitmap */
+.social__l--li {
+  --ic: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cg fill='%23000'%3E%3Crect x='1' y='1' width='14' height='2'/%3E%3Crect x='1' y='13' width='14' height='2'/%3E%3Crect x='1' y='1' width='2' height='14'/%3E%3Crect x='13' y='1' width='2' height='14'/%3E%3Crect x='4' y='4' width='2' height='2'/%3E%3Crect x='4' y='7' width='2' height='5'/%3E%3Crect x='8' y='7' width='2' height='5'/%3E%3Crect x='10' y='7' width='2' height='2'/%3E%3Crect x='10' y='9' width='2' height='3'/%3E%3C/g%3E%3C/svg%3E");
+}
+/* 5.10 a guia lateral - onde você está na página, sem pedir atenção.
+   Um traço por seção, encostado na direita. O da seção em que você está cresce
+   e enche da esquerda pra direita conforme a seção passa, então o traço ativo é
+   ao mesmo tempo posição e progresso. O nome só aparece no traço ativo ou
+   quando o cursor chega perto; parado, a guia é sete risquinhos e mais nada.
+
+   Ela é <nav> de verdade com âncora de verdade: sem JS continua sendo um índice
+   funcional, só sem saber qual é a seção atual. Só aparece com folga de sobra
+   na lateral, senão brigaria com o texto. */
+.guia {
+  display: none;
+  position: fixed;
+  right: clamp(16px, 2.4vw, 34px);
+  top: 50%;
+  translate: 0 -50%;
+  z-index: 40;
+}
+@media (min-width: 1180px) { .guia { display: block; } }
+@media print { .guia { display: none; } }
+
+.guia__lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 15px;
+}
+.guia a {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  color: var(--ink-2);
+  text-decoration: none;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+/* o traço. Fora da seção ativa é sólido e curto; na ativa ele cresce e o
+   `background-image` de duas paradas duras vira a régua de progresso - sem
+   gradiente macio, é corte seco, igual ao resto. */
+.guia a::after {
+  content: '';
+  flex: none;
+  width: 14px;
+  height: 2px;
+  background-color: currentColor;
+  transition: width 160ms steps(4, end);
+}
+.guia a:hover { color: var(--ink); }
+.guia a:hover::after { width: 24px; }
+.guia a[aria-current] { color: var(--ink); }
+.guia a[aria-current]::after {
+  width: 34px;
+  background-image: linear-gradient(90deg,
+    var(--ink) 0 var(--p, 0%), var(--rule-soft) var(--p, 0%) 100%);
+}
+/* o nome entra deslizando da direita, em três degraus */
+.guia a > span {
+  opacity: 0;
+  translate: 8px 0;
+  transition: opacity 140ms steps(3, end), translate 140ms steps(3, end);
+}
+.guia a[aria-current] > span,
+.guia:hover a > span,
+.guia a:focus-visible > span { opacity: 1; translate: 0 0; }
+
+/* câmera: moldura, lente e a luz no canto */
+.social__l--ig {
+  --ic: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cg fill='%23000'%3E%3Crect x='1' y='1' width='14' height='2'/%3E%3Crect x='1' y='13' width='14' height='2'/%3E%3Crect x='1' y='1' width='2' height='14'/%3E%3Crect x='13' y='1' width='2' height='14'/%3E%3Crect x='5' y='5' width='6' height='2'/%3E%3Crect x='5' y='9' width='6' height='2'/%3E%3Crect x='5' y='5' width='2' height='6'/%3E%3Crect x='9' y='5' width='2' height='6'/%3E%3Crect x='10' y='3' width='2' height='1'/%3E%3C/g%3E%3C/svg%3E");
+}
+
 /* ---------- 6. SEÇÕES ---------------------------------------------------- */
 
 /* 6.1 hero */
@@ -1218,7 +1354,10 @@ a { color: inherit; }
   position: absolute;
   top: 0;
   left: 0;
-  translate: -50% -50%;
+  /* --dx/--dy são o deslocamento do arrasto. `translate` é propriedade separada
+     de `transform`, então somar aqui não briga com a animação de contragiro que
+     roda em `transform` - é o mesmo motivo de `rotate` morar solto logo abaixo. */
+  translate: calc(-50% + var(--dx, 0px)) calc(-50% + var(--dy, 0px));
   rotate: calc(-1 * var(--a));
   animation: contragiro var(--dur) steps(60, end) infinite;
   display: flex;
@@ -1240,6 +1379,43 @@ a { color: inherit; }
   width: max-content;
 }
 .orb__ring--2 .orb__node { animation-name: orbitar; }
+
+/* o anel inteiro é `pointer-events: none` para a máscara não roubar o mouse, e
+   isso desce pros filhos: sem devolver aqui, o chip nunca receberia o ponteiro.
+   `touch-action: none` porque no celular arrastar o chip não pode virar rolagem. */
+.orb__node {
+  pointer-events: auto;
+  touch-action: none;
+  -webkit-user-select: none;
+          user-select: none;
+  cursor: var(--seta-inv) 1 1, grab;
+  transition: box-shadow 90ms steps(2, end);
+}
+.orb__node:hover { box-shadow: 5px 5px 0 var(--ink); }
+.orb__node[data-preso] {
+  cursor: var(--seta-inv-press) 1 1, grabbing;
+  box-shadow: 6px 6px 0 var(--ink);
+  z-index: 2;
+}
+
+/* a corda: enquanto o chip está fora do lugar, uma linha tracejada liga ele de
+   volta ao ponto de onde saiu. Mora solta dentro de .orb, e não dentro do chip,
+   porque o chip vive num referencial já girado duas vezes - medir o ângulo lá
+   dentro seria desfazer rotação de anel e de contragiro a cada quadro. */
+.orb__corda {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 2px;
+  transform-origin: 0 50%;
+  pointer-events: none;
+  opacity: 0;
+  /* traço mais longo que o pontilhado dos anéis de propósito: encostada num
+     aro, uma corda com o mesmo period sumia dentro dele */
+  background-image: repeating-linear-gradient(90deg,
+    var(--ink) 0 5px, transparent 5px 9px);
+}
+.orb__corda[data-esticada] { opacity: 1; }
 
 /* traço de 2px sem antialias: o glifo fica com a mesma dureza do resto */
 .orb__ico {
