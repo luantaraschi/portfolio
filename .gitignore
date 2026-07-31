@@ -21,3 +21,6 @@ desktop.ini
 
 # Cache de ferramenta local
 .impeccable/
+
+# Prints soltos jogados na raiz para eu pegar; o que vale mora em assets/shots/
+Captura de tela *.png
