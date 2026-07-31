@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- A barra do browser no celular veste a cor da página. Uma meta só, sem
+     media query: quem trocou o tema no interruptor esperava que a barra
+     acompanhasse a escolha dele, e não o que o sistema operacional acha. Os
+     dois valores são o --paper de cada tema no style.css, e ela fica acima do
+     script de propósito: o script logo abaixo precisa alcançá-la. -->
+<meta name="theme-color" content="#1a1917" />
+<script>(function(){var t=null;try{t=localStorage.getItem('lt-tema')}catch(e){}
+if(!t)t=window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';
+if(t==='light')document.documentElement.setAttribute('data-theme','light')
+var m=document.querySelector('meta[name=theme-color]');if(m)m.content=t==='light'?'#eee8d5':'#1a1917'
+try{history.scrollRestoration="manual"}catch(e){}})()</script>
+<title>404 · página não encontrada · Luan Taraschi</title>
+<meta name="description" content="Esta página não existe no portfólio de Luan Taraschi." />
+<!-- página de erro não entra em índice de busca, e não tem canonical: ela
+     responde por qualquer caminho errado, então não existe "o" URL dela -->
+<meta name="robots" content="noindex" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='16' height='16' fill='%231a1917'/><g fill='%23fce4a6' shape-rendering='crispEdges'><rect x='2' y='4' width='2' height='8'/><rect x='2' y='10' width='5' height='2'/><rect x='9' y='4' width='6' height='2'/><rect x='11' y='4' width='2' height='8'/></g></svg>" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&family=Silkscreen:wght@400;700&family=Space+Grotesk:wght@300..700&family=Space+Mono:wght@400;700&display=swap" />
+<!-- Caminhos absolutos daqui pra baixo, ao contrário das outras páginas: o 404
+     responde por /qualquer/coisa/funda, e "css/style.css" resolveria contra o
+     caminho que errou, não contra a raiz. A página ficaria sem estilo bem na
+     hora em que o estilo é a única coisa dizendo que o site está de pé. -->
+<link rel="stylesheet" href="/css/style.css" />
+<style>
+  /* o 404 não tem seções para rolar, então a guia lateral e a barra de
+     progresso não têm o que medir - fora daqui */
+  .erro { min-height: 62vh; display: grid; align-content: center; }
+  .erro__code {
+    font-family: var(--font-display);
+    font-size: clamp(64px, 18vw, 190px);
+    line-height: 0.85;
+    letter-spacing: 0.04em;
+  }
+  .erro__acoes { display: flex; flex-wrap: wrap; gap: 12px; margin-top: clamp(26px, 4vw, 38px); }
+  .erro__grid { display: grid; gap: clamp(30px, 5vw, 56px); align-items: center; }
+  @media (min-width: 820px) { .erro__grid { grid-template-columns: minmax(0, 1fr) minmax(0, 0.72fr); } }
+  .erro__canvas { width: 100%; aspect-ratio: 1; display: block; }
+</style>
+</head>
+<body>
+
+<a class="skip" href="#conteudo">Pular para o conteúdo</a>
+<div class="grid-glow" data-glow aria-hidden="true"></div>
+<div class="wipe" data-wipe aria-hidden="true"></div>
+
+<header class="nav" data-od-id="nav">
+  <div class="wrap nav__inner">
+    <a class="nav__mark" href="/">
+      <span class="nav__glyph" aria-hidden="true"></span>
+      Luan Taraschi
+    </a>
+    <nav class="nav__links" aria-label="Seções do site">
+      <a class="nav__link" href="/#sobre">Sobre</a>
+      <a class="nav__link" href="/#projetos">Projetos</a>
+      <a class="nav__link" href="/#games">Games</a>
+      <a class="nav__link" href="/#skills">Stack</a>
+      <a class="nav__link" href="/#experiencia">Experiência</a>
+      <a class="nav__link" href="/#contato">Contato</a>
+    </nav>
+    <button class="lamp" type="button" role="switch" aria-checked="false"
+            data-theme-toggle title="Luz da página"
+            aria-label="Alternar entre modo escuro e claro">
+      <span class="lamp__track" aria-hidden="true"><span class="lamp__knob"></span></span>
+    </button>
+
+    <button class="nav__toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="menu-mobile">
+      Menu
+    </button>
+  </div>
+  <div class="nav__panel" id="menu-mobile" data-nav-panel hidden>
+    <a href="/#sobre">Sobre</a>
+    <a href="/#projetos">Projetos</a>
+    <a href="/#games">Games</a>
+    <a href="/#skills">Stack</a>
+    <a href="/#experiencia">Experiência</a>
+    <a href="/#contato">Contato</a>
+  </div>
+</header>
+
+<main id="conteudo">
+  <section class="sec erro">
+    <div class="wrap erro__grid">
+      <div>
+        <span class="kicker">erro/404</span>
+        <p class="erro__code">404</p>
+        <h1 class="h2" style="margin-top: 18px">Esta página não existe</h1>
+        <p class="lead" style="margin-top: 14px; max-width: 40ch">
+          Ou o endereço veio torto, ou eu mudei alguma coisa de lugar e o link
+          velho ficou apontando pro vazio. Nos dois casos a culpa é minha.
+        </p>
+        <div class="erro__acoes">
+          <a class="btn btn--primary" href="/">Voltar ao início</a>
+          <a class="btn btn--ghost" href="/#projetos">Ver os projetos</a>
+          <a class="btn btn--ghost" href="/#contato">Me avisar do link quebrado</a>
+        </div>
+      </div>
+
+      <figure class="panel pinned">
+        <figcaption class="panel__bar">
+          <span class="panel__box" aria-hidden="true"></span>
+          <span class="panel__title">vazio.bmp</span>
+        </figcaption>
+        <!-- o mesmo pintor Bayer das outras páginas; o app.js acha pelo
+             [data-dither] e a esfera segue o cursor aqui também -->
+        <canvas class="erro__canvas" data-dither role="img"
+          aria-label="Esfera renderizada com dithering Bayer de 1 bit que reage ao movimento do cursor"></canvas>
+        <p class="hero__cap mono-caps">
+          <span>1-bit · bayer 8×8</span>
+          <span>mova o cursor</span>
+        </p>
+      </figure>
+    </div>
+  </section>
+</main>
+
+<footer class="foot" data-od-id="footer">
+  <div class="wrap foot__inner">
+    <span class="mono-caps">Luan Taraschi · MMXXVI</span>
+    <ul class="social">
+      <li><a class="social__l social__l--gh" href="https://github.com/luantaraschi" target="_blank" rel="noopener">GitHub</a></li>
+      <li><a class="social__l social__l--li" href="https://www.linkedin.com/in/luantaraschi/" target="_blank" rel="noopener">LinkedIn</a></li>
+      <li><a class="social__l social__l--ig" href="https://www.instagram.com/luantaraschi/" target="_blank" rel="noopener">Instagram</a></li>
+    </ul>
+    <span class="mono-caps">feito por mim, com muito amor</span>
+  </div>
+</footer>
+
+<script src="/js/app.js" defer></script>
+</body>
+</html>

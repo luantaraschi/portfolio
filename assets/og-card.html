@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<!-- vai junto no deploy e fica alcançável em /assets/og-card.html; não é
+     página do site, então não entra em índice de busca -->
+<meta name="robots" content="noindex" />
+<!-- Fonte do assets/og.png, o cartão que aparece quando alguém cola o link do
+     site no WhatsApp, no LinkedIn ou no Slack. Não é uma página do site: nada
+     aponta pra cá, ela existe só para ser fotografada em 1200x630.
+
+     Para regerar depois de mexer na paleta ou no texto:
+       agent-browser open file:///.../assets/og-card.html
+       agent-browser set viewport 1200 630 2
+       agent-browser screenshot assets/og.png
+
+     Medidas em px cravado de propósito, sem clamp: o quadro tem sempre o mesmo
+     tamanho, então tipografia fluida aqui só serviria pra deixar o resultado
+     depender do viewport de quem tirou a foto. -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Space+Grotesk:wght@300..700&family=Space+Mono:wght@400;700&display=swap" />
+<link rel="stylesheet" href="../css/style.css" />
+<style>
+  html, body { width: 1200px; height: 630px; overflow: hidden; }
+  body { display: grid; place-items: center; }
+
+  .og {
+    width: 1200px; height: 630px;
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    align-items: center;
+    gap: 56px;
+    padding: 64px 72px;
+    /* a moldura do papel: mesma borda de 2px que separa as seções do site */
+    border: 2px solid var(--ink);
+  }
+  .og__nome {
+    font-family: var(--font-display);
+    font-size: 108px;
+    line-height: 0.86;
+    letter-spacing: 0.02em;
+    margin: 22px 0 26px;
+  }
+  .og__papel { font-size: 25px; line-height: 1.42; max-width: 26ch; color: var(--ink); }
+  .og__papel b { color: var(--accent); font-weight: inherit; }
+  .og__pe { display: flex; gap: 22px; margin-top: 32px; }
+  .og__canvas { width: 400px; height: 400px; display: block; }
+  .og__ramp { display: flex; height: 14px; margin-top: 30px; }
+  .og__ramp > span { flex: 1; }
+</style>
+</head>
+<body>
+  <div class="og">
+    <div>
+      <span class="kicker">luantaraschi.dev</span>
+      <p class="og__nome">Luan<br />Taraschi</p>
+      <p class="og__papel">
+        Desenvolvedor full stack. SaaS, automação e
+        <b>agentes de IA em produção</b>.
+      </p>
+      <p class="og__pe mono-caps">
+        <span>Salvador · BA</span><span>·</span><span>React · Node · LangGraph</span>
+      </p>
+      <div class="og__ramp" aria-hidden="true">
+        <span class="dither-50"></span><span class="dither-25"></span><span class="dither-12"></span>
+      </div>
+    </div>
+    <canvas class="og__canvas" data-dither></canvas>
+  </div>
+
+<script src="../js/app.js" defer></script>
+</body>
+</html>

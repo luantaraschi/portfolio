@@ -3,12 +3,39 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- A barra do browser no celular veste a cor da página. Uma meta só, sem
+     media query: quem trocou o tema no interruptor esperava que a barra
+     acompanhasse a escolha dele, e não o que o sistema operacional acha. Os
+     dois valores são o --paper de cada tema no style.css, e ela fica acima do
+     script de propósito: o script logo abaixo precisa alcançá-la. -->
+<meta name="theme-color" content="#1a1917" />
 <script>(function(){var t=null;try{t=localStorage.getItem('lt-tema')}catch(e){}
 if(!t)t=window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';
 if(t==='light')document.documentElement.setAttribute('data-theme','light')
+var m=document.querySelector('meta[name=theme-color]');if(m)m.content=t==='light'?'#eee8d5':'#1a1917'
 try{history.scrollRestoration="manual"}catch(e){}})()</script>
-<title>Luan Taraschi · Desenvolvedor Full Stack e Agentes de IA</title>
+<!-- curto de propósito: a aba corta em ~30 caracteres, e o que sobrava era o
+     nome espremido. Os termos que caíram daqui continuam na description e no
+     og:title, que é onde eles servem pra alguma coisa. -->
+<title>Luan Taraschi · Dev Full Stack</title>
 <meta name="description" content="Portfólio de Luan Taraschi, desenvolvedor full stack em Salvador (BA). SaaS, automações e agentes de IA em produção com React, Next.js, Node.js, PostgreSQL e Docker." />
+<link rel="canonical" href="https://luantaraschi.dev/" />
+
+
+<!-- Cartão de compartilhamento. Caminho absoluto de propósito: o WhatsApp e o
+     LinkedIn buscam a imagem do servidor deles, sem contexto da página. -->
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Luan Taraschi" />
+<meta property="og:locale" content="pt_BR" />
+<meta property="og:url" content="https://luantaraschi.dev/" />
+<meta property="og:title" content="Luan Taraschi · Desenvolvedor Full Stack e Agentes de IA" />
+<meta property="og:description" content="SaaS, automações e agentes de IA em produção. Cinco clientes, dois sistemas que eu mantenho de pé, cerca de mil conversas por mês triadas por IA." />
+<meta property="og:image" content="https://luantaraschi.dev/assets/og.png" />
+<meta property="og:image:width" content="2400" />
+<meta property="og:image:height" content="1260" />
+<meta property="og:image:alt" content="O nome Luan Taraschi em tipografia bitmap ao lado de uma esfera renderizada com dithering de 1 bit." />
+<meta name="twitter:card" content="summary_large_image" />
+
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='16' height='16' fill='%231a1917'/><g fill='%23fce4a6' shape-rendering='crispEdges'><rect x='2' y='4' width='2' height='8'/><rect x='2' y='10' width='5' height='2'/><rect x='9' y='4' width='6' height='2'/><rect x='11' y='4' width='2' height='8'/></g></svg>" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

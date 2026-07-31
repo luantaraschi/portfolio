@@ -20,22 +20,43 @@
   // ponytail: fonte única do e-mail - o link, o botão copiar e o form leem daqui.
   var EMAIL = 'luantaraschi@gmail.com';
 
+  // Endpoint do formulário. Crie um form em formspree.io (plano free dá conta
+  // de portfólio) e cole aqui o URL que ele mostra, no formato
+  // 'https://formspree.io/f/xxxxxxxx'.
+  //
+  // Enquanto isto for null o envio cai no mailto:, que é o que o site fazia
+  // antes - só que mailto: não abre nada em máquina sem cliente de e-mail
+  // configurado, que é a maioria das corporativas. Por isso o caminho de baixo
+  // é temporário: assim que a constante estiver preenchida, apague o ramo do
+  // mailto em `enviar` e a variável de mensagem que só ele usa.
+  var FORM_ENDPOINT = null;
+
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   /* ---- 1. menu mobile --------------------------------------------------- */
   var toggle = document.querySelector('[data-nav-toggle]');
   var panel = document.querySelector('[data-nav-panel]');
   if (toggle && panel) {
+    function fecharMenu(devolverFoco) {
+      panel.setAttribute('hidden', '');
+      toggle.setAttribute('aria-expanded', 'false');
+      // só no Escape: quem clicou num link está indo pra âncora, e roubar o
+      // foco de volta pro botão desfaria a navegação que a pessoa pediu.
+      if (devolverFoco) toggle.focus();
+    }
     toggle.addEventListener('click', function () {
       var open = panel.hasAttribute('hidden');
-      if (open) { panel.removeAttribute('hidden'); } else { panel.setAttribute('hidden', ''); }
-      toggle.setAttribute('aria-expanded', String(open));
+      if (!open) return fecharMenu(false);
+      panel.removeAttribute('hidden');
+      toggle.setAttribute('aria-expanded', 'true');
     });
     panel.addEventListener('click', function (e) {
-      if (e.target.tagName === 'A') {
-        panel.setAttribute('hidden', '');
-        toggle.setAttribute('aria-expanded', 'false');
-      }
+      if (e.target.tagName === 'A') fecharMenu(false);
+    });
+    // sem armadilha de foco: o painel é irmão do botão na ordem do DOM, então
+    // Tab já sai dele pelo caminho natural. O que faltava era a saída sem Tab.
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !panel.hasAttribute('hidden')) fecharMenu(true);
     });
   }
 
@@ -112,6 +133,11 @@
       });
     }
 
+    var botao = form.querySelector('button[type="submit"]');
+    var rotuloBotao = botao ? botao.textContent : '';
+
+    function dizer(texto) { if (status) status.textContent = texto; }
+
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       var firstBad = null;
@@ -120,15 +146,51 @@
       });
       if (firstBad) {
         firstBad.focus();
-        if (status) status.textContent = '› corrija os campos marcados acima.';
+        dizer('› corrija os campos marcados acima.');
         return;
       }
       var data = new FormData(form);
-      var url = 'mailto:' + EMAIL +
-        '?subject=' + encodeURIComponent('Contato do portfólio: ' + data.get('nome')) +
-        '&body=' + encodeURIComponent(data.get('mensagem') + '\n\n' + data.get('nome') + ' (' + data.get('email') + ')');
-      if (status) status.textContent = '› abrindo seu cliente de e-mail…';
-      window.location.href = url;
+
+      if (!FORM_ENDPOINT || !window.fetch) {
+        var url = 'mailto:' + EMAIL +
+          '?subject=' + encodeURIComponent('Contato do portfólio: ' + data.get('nome')) +
+          '&body=' + encodeURIComponent(data.get('mensagem') + '\n\n' + data.get('nome') + ' (' + data.get('email') + ')');
+        dizer('› abrindo seu cliente de e-mail…');
+        window.location.href = url;
+        return;
+      }
+
+      // trava o botão: dois cliques no envio viram duas mensagens iguais na
+      // caixa de entrada, e quem clicou não tem como saber que mandou duas
+      if (botao) { botao.disabled = true; botao.textContent = 'enviando…'; }
+      dizer('› enviando…');
+
+      function soltar() {
+        if (botao) { botao.disabled = false; botao.textContent = rotuloBotao; }
+      }
+      // o e-mail vai no corpo, então a resposta do Formspree chega já com o
+      // remetente certo em vez de cair como "sem assunto" de um anônimo
+      data.append('_subject', 'Contato do portfólio: ' + data.get('nome'));
+
+      fetch(FORM_ENDPOINT, {
+        method: 'POST',
+        body: data,
+        headers: { Accept: 'application/json' }
+      }).then(function (res) {
+        if (!res.ok) throw new Error(res.status);
+        form.reset();
+        Array.prototype.forEach.call(form.querySelectorAll('.field'), function (f) {
+          f.classList.remove('is-ok');
+        });
+        var conta = form.querySelector('[data-conta-msg]');
+        if (conta) conta.textContent = '';
+        soltar();
+        // [role=status] no HTML: o leitor de tela anuncia sozinho, sem foco
+        dizer('› recebido. Respondo em até um dia útil.');
+      }).catch(function () {
+        soltar();
+        dizer('› não consegui enviar. Me escreva direto em ' + EMAIL + '.');
+      });
     });
   }
 
@@ -424,9 +486,16 @@
     el.classList.add(cls);
   }
 
+  // os mesmos dois --paper que o <head> escreve na primeira pintura. Literais
+  // aqui e lá: getComputedStyle na hora da troca leria a cor antiga, porque o
+  // atributo data-theme só acabou de mudar.
+  var BARRA = { dark: '#1a1917', light: '#eee8d5' };
+
   function setTheme(theme) {
     root.setAttribute('data-theme', theme);
     try { localStorage.setItem(STORE, theme); } catch (_) {}
+    var metaBarra = document.querySelector('meta[name="theme-color"]');
+    if (metaBarra) metaBarra.setAttribute('content', BARRA[theme]);
     paintToggles(theme);
     document.dispatchEvent(new CustomEvent('themechange'));
   }
