@@ -1389,14 +1389,29 @@ a { color: inherit; }
   pointer-events: auto;
   -webkit-user-select: none;
           user-select: none;
+  color: var(--ink);
+  text-decoration: none;
   transition: translate 90ms steps(2, end), box-shadow 90ms steps(2, end);
 }
 /* a elevação vai em `translate`, não em `transform`: o contragiro do chip roda
    em `transform`, e mexer lá derrubaria a rotação que mantém o rótulo de pé */
-.orb__node:hover {
+.orb__node:hover,
+.orb__node:focus-visible {
   translate: calc(-50% - 2px) calc(-50% - 2px);
   box-shadow: 6px 6px 0 var(--ink);
 }
+/* a seta de link externo, mesma marca dos cartões de projeto. Some no repouso
+   por opacidade e não por display: assim ela já ocupa a largura dela desde
+   sempre e o chip não cresce um caractere na hora do hover. */
+.orb__node::after {
+  content: '↗';
+  margin-left: 1px;
+  opacity: 0;
+  transition: opacity 90ms steps(2, end);
+}
+.orb__node:hover::after,
+.orb__node:focus-visible::after { opacity: 1; }
+
 /* no clique afunda e troca de polaridade, igual a todo botão do site */
 .orb__node:active {
   translate: calc(-50% + 2px) calc(-50% + 2px);
@@ -1404,9 +1419,12 @@ a { color: inherit; }
   background: var(--ink);
   color: var(--paper);
 }
-/* alvo em movimento é alvo difícil: com o cursor num chip, a órbita inteira
-   para. Especificidade acima da regra do .is-girando, senão nada acontece. */
-.orb:has(.orb__node:hover) :is(.orb__ring, .orb__node) { animation-play-state: paused; }
+/* alvo em movimento é alvo difícil: com o cursor num chip - ou com o teclado
+   parado nele - a órbita inteira para. Sem o :focus-within, tabular pela órbita
+   seria perseguir um link que anda. Especificidade acima da regra do
+   .is-girando, senão nada acontece. */
+.orb:has(.orb__node:hover) :is(.orb__ring, .orb__node),
+.orb:focus-within :is(.orb__ring, .orb__node) { animation-play-state: paused; }
 
 /* traço de 2px sem antialias: o glifo fica com a mesma dureza do resto */
 .orb__ico {

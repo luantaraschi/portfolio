@@ -382,8 +382,8 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
       </div>
 
       <!-- a órbita: o mesmo desenho da esfera do hero, agora com a stack
-           girando em volta. Decorativa de propósito - tudo que está nos chips
-           já está escrito nos cartões acima, então o leitor de tela pula.
+           girando em volta. Os cartões acima contam o que eu faço com cada
+           ferramenta; aqui cada chip leva ao site oficial dela.
 
            Os glifos são desenhados aqui, num grid de 16, em traço de 2px sem
            antialias. São símbolos de ofício (cilindro de dados, grafo, prompt,
@@ -403,24 +403,30 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
         <g id="i-prompt"><path d="M3 4l4 4-4 4"/><path d="M9 13h5"/></g>
       </defs></svg>
 
-      <div class="orb reveal" data-orb aria-hidden="true">
-        <canvas class="orb__globo" data-dither></canvas>
+      <!-- os chips viraram link de verdade para o site oficial de cada
+           tecnologia, então a órbita deixou de ser `aria-hidden`: esconder o
+           bloco inteiro e deixar oito links focáveis lá dentro é o pior dos dois
+           mundos, o teclado chega neles e o leitor de tela nega que existam. O
+           que continua fora da árvore é só o canvas, que é desenho. O giro para
+           no `:focus-within` pelo mesmo motivo que para no hover. -->
+      <div class="orb reveal" data-orb>
+        <canvas class="orb__globo" data-dither aria-hidden="true"></canvas>
 
         <div class="orb__ring orb__ring--1">
-          <span class="orb__braco" style="--a: -50deg"><span class="orb__node"><svg class="orb__ico" viewBox="0 0 16 16"><use href="#i-atomo"/></svg>React</span></span>
-          <span class="orb__braco" style="--a: 70deg"><span class="orb__node"><svg class="orb__ico" viewBox="0 0 16 16"><use href="#i-hex"/></svg>Node.js</span></span>
-          <span class="orb__braco" style="--a: 190deg"><span class="orb__node"><svg class="orb__ico" viewBox="0 0 16 16"><use href="#i-degrau"/></svg>Python</span></span>
+          <span class="orb__braco" style="--a: -50deg"><a class="orb__node" href="https://react.dev" target="_blank" rel="noopener"><svg class="orb__ico" viewBox="0 0 16 16" aria-hidden="true"><use href="#i-atomo"/></svg>React</a></span>
+          <span class="orb__braco" style="--a: 70deg"><a class="orb__node" href="https://nodejs.org" target="_blank" rel="noopener"><svg class="orb__ico" viewBox="0 0 16 16" aria-hidden="true"><use href="#i-hex"/></svg>Node.js</a></span>
+          <span class="orb__braco" style="--a: 190deg"><a class="orb__node" href="https://www.python.org" target="_blank" rel="noopener"><svg class="orb__ico" viewBox="0 0 16 16" aria-hidden="true"><use href="#i-degrau"/></svg>Python</a></span>
         </div>
 
         <div class="orb__ring orb__ring--2">
-          <span class="orb__braco" style="--a: -110deg"><span class="orb__node"><svg class="orb__ico" viewBox="0 0 16 16"><use href="#i-cilindro"/></svg>PostgreSQL</span></span>
-          <span class="orb__braco" style="--a: 60deg"><span class="orb__node"><svg class="orb__ico" viewBox="0 0 16 16"><use href="#i-caixas"/></svg>Docker</span></span>
+          <span class="orb__braco" style="--a: -110deg"><a class="orb__node" href="https://www.postgresql.org" target="_blank" rel="noopener"><svg class="orb__ico" viewBox="0 0 16 16" aria-hidden="true"><use href="#i-cilindro"/></svg>PostgreSQL</a></span>
+          <span class="orb__braco" style="--a: 60deg"><a class="orb__node" href="https://www.docker.com" target="_blank" rel="noopener"><svg class="orb__ico" viewBox="0 0 16 16" aria-hidden="true"><use href="#i-caixas"/></svg>Docker</a></span>
         </div>
 
         <div class="orb__ring orb__ring--3">
-          <span class="orb__braco" style="--a: -40deg"><span class="orb__node"><svg class="orb__ico" viewBox="0 0 16 16"><use href="#i-play"/></svg>Next.js</span></span>
-          <span class="orb__braco" style="--a: 85deg"><span class="orb__node"><svg class="orb__ico" viewBox="0 0 16 16"><use href="#i-grafo"/></svg>LangGraph</span></span>
-          <span class="orb__braco" style="--a: 205deg"><span class="orb__node"><svg class="orb__ico" viewBox="0 0 16 16"><use href="#i-prompt"/></svg>Claude Code</span></span>
+          <span class="orb__braco" style="--a: -40deg"><a class="orb__node" href="https://nextjs.org" target="_blank" rel="noopener"><svg class="orb__ico" viewBox="0 0 16 16" aria-hidden="true"><use href="#i-play"/></svg>Next.js</a></span>
+          <span class="orb__braco" style="--a: 85deg"><a class="orb__node" href="https://www.langchain.com/langgraph" target="_blank" rel="noopener"><svg class="orb__ico" viewBox="0 0 16 16" aria-hidden="true"><use href="#i-grafo"/></svg>LangGraph</a></span>
+          <span class="orb__braco" style="--a: 205deg"><a class="orb__node" href="https://claude.com/product/claude-code" target="_blank" rel="noopener"><svg class="orb__ico" viewBox="0 0 16 16" aria-hidden="true"><use href="#i-prompt"/></svg>Claude Code</a></span>
         </div>
       </div>
     </div>
