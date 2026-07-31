@@ -59,13 +59,18 @@ dado fictício coerente parece produto.
 
 ### 01 · JVB — ERP jurídico (`projeto-jvb.html`)
 
-| Arquivo | Tela | O que prova |
-| --- | --- | --- |
-| `jvb-painel.png` | Painel do dia | Que é um sistema, não uma tela |
-| `jvb-processos.png` | Kanban de processos | Densidade de informação e domínio |
-| `jvb-prazos.png` | Agenda de prazos | O motor do CPC em uso — **mostre um prazo prorrogado**, conta a história sozinho |
-| `jvb-peticao.png` | Editor de petição com IA | IA aplicada, não IA de demo |
-| `jvb-permissoes.png` | Permissões e auditoria | Que você pensou em segurança, não só em feature |
+Capturado numa instância local com banco próprio (`kanban_shots`), populada só
+com dado inventado. Ver "Como capturar o JVB de novo" no fim deste arquivo.
+
+| Arquivo | Tela | O que prova | |
+| --- | --- | --- | --- |
+| `jvb-painel.png` | Central de comando | Que é um sistema, não uma tela | ✅ |
+| `jvb-processos.png` | Processos e casos | Densidade de informação e domínio | ✅ |
+| `jvb-prazos.png` | Cálculo de prazo | O motor do CPC mostrando o próprio raciocínio: prorroga para segunda e diz quais dias pulou | ✅ |
+| `jvb-prazos-lista.png` | Agenda de prazos | A agenda em uso, com contagem em dias úteis e corridos | ✅ |
+| `jvb-permissoes.png` | Log de auditoria | Que você pensou em segurança, não só em feature | ✅ |
+| `jvb-pessoas.png` | Equipe e papéis | Reserva: o log de auditoria é mais forte e ficou no lugar deste | ✅ |
+| `jvb-peticao.png` | Editor de petição com IA | IA aplicada, não IA de demo | falta |
 
 ### 02 · Triagem por IA no WhatsApp (`projeto-triagem.html`)
 
@@ -84,10 +89,10 @@ dado fictício coerente parece produto.
 
 ### 04 · dev-tools
 
-| Arquivo | Tela | O que prova |
-| --- | --- | --- |
-| `devtools-dash.png` | Dashboard com as 15 ferramentas | Escopo |
-| `devtools-uso.mp4` | Uma ferramenta ponta a ponta (OCR ou remoção de fundo) | Que é usável, não vitrine |
+| Arquivo | Tela | O que prova | |
+| --- | --- | --- | --- |
+| `devtools-dash.png` | Dashboard com as ferramentas | Escopo | ✅ |
+| `devtools-uso.mp4` | Compressor ponta a ponta: 146 KB entram, 58 KB saem, 60,5% de economia | Que é usável, não vitrine | ✅ |
 
 ### 05 · seamless-ai-dub
 
@@ -115,3 +120,32 @@ dado fictício coerente parece produto.
 | Arquivo | Tela | O que prova |
 | --- | --- | --- |
 | `pov-1.mp4` | *(definir quando o case for escrito)* | — |
+
+---
+
+## Como capturar o JVB de novo
+
+O banco de desenvolvimento (`kanban_dev`) **não serve para captura**: ele traz
+os sete nomes reais da equipe do escritório, semeados pelo `server/seed.mjs`, e
+eles aparecem em avatar, responsável de tarefa e seletor em quase toda tela.
+
+O que existe é um banco à parte, `kanban_shots`, no mesmo Postgres do Docker:
+
+```
+docker start jvb-postgres
+docker exec jvb-postgres psql -U postgres -c "CREATE DATABASE kanban_shots"
+cd C:\dev\jvb\jvb-kanban
+DATABASE_URL="postgres://postgres:postgres@localhost:5432/kanban_shots" pnpm drizzle-kit migrate
+DATABASE_URL="postgres://postgres:postgres@localhost:5432/kanban_shots" NODE_ENV=development node_modules/.bin/tsx server/_core/index.ts
+```
+
+Usuários fictícios já cadastrados: `marina` (gestora), `rafael` e `beatriz`
+(colaboradores). A senha de todos é a que estiver em `SEED_DEFAULT_PASSWORD`.
+
+Três coisas que custaram tempo e vão custar de novo:
+
+1. **Navegue clicando dentro do app.** Abrir a URL por fora derruba a sessão.
+2. **O tour de boas-vindas cobre qualquer tela.** Sai com o botão "Pular" e fica
+   fora pelo `localStorage` (`onboarding:visto:1`).
+3. **Prazo você cria pela UI, nunca por INSERT.** É o motor do CPC que calcula o
+   vencimento, e o valor dessa captura é justamente ele ter calculado sozinho.

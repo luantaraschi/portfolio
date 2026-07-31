@@ -1771,6 +1771,10 @@ a { color: inherit; }
   margin-top: clamp(26px, 4vw, 38px);
 }
 .case__gallery > div { aspect-ratio: 4 / 3; border: 2px solid var(--ink); }
+/* sem isto a grade estica todo quadro até a altura do mais alto, e o que sobra
+   embaixo dos menores é o dither de fundo do <figure> aparecendo por baixo da
+   legenda - lê como falha de carregamento, não como textura */
+.case__gallery > .shot { align-self: start; }
 .case__nav {
   display: flex;
   flex-wrap: wrap;

@@ -93,10 +93,11 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
       </dl>
     </header>
 
-    <!-- slot: assets/shots/jvb-painel.png · modelo da tag em SHOTS.md -->
     <figure class="shot dither-50">
+      <img src="assets/shots/jvb-painel.png" width="1440" height="900" loading="lazy"
+           alt="Central de comando do ERP: um prazo vencido e um vencendo hoje em destaque no topo, e abaixo os catorze módulos do sistema em cartões, de kanban de tarefas a limite de OAB." />
       <figcaption>
-        <span>painel do dia · o sistema inteiro numa tela</span>
+        <span>central de comando · o sistema inteiro numa tela</span>
         <span class="shot__cor">passe o cursor para ver em cor</span>
       </figcaption>
     </figure>
@@ -168,6 +169,17 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
           código mais testado do sistema: ninguém elogia código que conta feriado,
           mas se ele erra um dia o cliente perde o processo.
         </p>
+        <!-- o motor mostrando o próprio raciocínio: a captura vale mais que o
+             parágrafo acima, porque o vencimento e os dias pulados são o que ele
+             calculou de verdade quando este prazo foi cadastrado -->
+        <figure class="shot dither-25">
+          <img src="assets/shots/jvb-prazos.png" width="1262" height="568" loading="lazy"
+               alt="Cadastro de prazo: o sistema mostra a data fatal calculada em 17/08/2026, segunda-feira, avisa que começou a contar em 01/08 e lista os dois dias não úteis que pulou, o sábado 15/08 e o domingo 16/08." />
+          <figcaption>
+            <span>o prazo cai no sábado, então prorroga para segunda: ele diz qual dia pulou e por quê</span>
+            <span class="shot__cor">passe o cursor para ver em cor</span>
+          </figcaption>
+        </figure>
       </section>
 
       <section class="case__block">
@@ -203,13 +215,20 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
           processo eletrônico, a rotina do escritório, é metade do trabalho.
         </p>
         <div class="case__gallery">
-          <!-- slot: assets/shots/jvb-processos.png -->
           <figure class="shot shot--tall dither-25">
-            <figcaption><span>kanban de processos</span></figcaption>
+            <img src="assets/shots/jvb-processos.png" width="1440" height="900" loading="lazy"
+                 alt="Tela de processos e casos com seis processos do escritório, cada um com o número CNJ, as partes e uma etiqueta de situação: tratada pelo gestor, analisado, em análise ou pendente de análise." />
+            <figcaption><span>processos e casos</span></figcaption>
           </figure>
-          <!-- slot: assets/shots/jvb-prazos.png -->
           <figure class="shot shot--tall dither-12">
-            <figcaption><span>agenda: repare no prazo prorrogado</span></figcaption>
+            <img src="assets/shots/jvb-prazos-lista.png" width="1440" height="900" loading="lazy"
+                 alt="Agenda de prazos com cinco prazos em curso, cada um com a data fatal, o modo de contagem em dias úteis ou corridos, o processo e quantos dias faltam." />
+            <figcaption><span>agenda de prazos</span></figcaption>
+          </figure>
+          <figure class="shot shot--tall dither-50">
+            <img src="assets/shots/jvb-permissoes.png" width="1440" height="900" loading="lazy"
+                 alt="Log de auditoria do painel do gestor: cada linha traz hora, ação, usuário, alvo e IP, com registros de login e de criação de prazo." />
+            <figcaption><span>log de auditoria: quem fez o quê, quando e de onde</span></figcaption>
           </figure>
         </div>
       </section>
