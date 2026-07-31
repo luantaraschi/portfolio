@@ -735,11 +735,14 @@ a { color: inherit; }
   width: 100%;
   height: 100%;
   object-fit: cover;
+  /* padrão para captura de sistema: a informação que importa mora no topo, e
+     centralizar cortaria justamente o cabeçalho */
   object-position: top left;
-  /* escura o bastante para o repouso continuar lendo como textura: com o véu
-     ralo do .dither-12 a captura já aparecia inteira parada, e aí o hover não
-     revelava nada porque não havia o que revelar */
-  filter: grayscale(1) contrast(1.2) brightness(0.42);
+  /* escura o bastante para o véu ainda mandar na leitura, clara o bastante para
+     dar pra reconhecer que ali tem um sistema. Abaixo disto o repouso virava
+     retícula pura e o cartão não prometia nada; acima, o hover não revelava
+     nada porque já estava tudo à mostra. */
+  filter: grayscale(1) contrast(1.15) brightness(0.6);
   transition: filter 260ms steps(4, end);
 }
 .card:hover .card__shot,
@@ -751,7 +754,7 @@ a { color: inherit; }
    cinza sobre o papel, e o hover traz ela inteira - a mesma regra que o
    componente .shot das páginas de case já segue. */
 :root[data-theme='light'] .card__shot {
-  opacity: 0.2;
+  opacity: 0.32;
   filter: grayscale(1) contrast(1.1);
   transition: opacity 260ms steps(4, end);
 }
