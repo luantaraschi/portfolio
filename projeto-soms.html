@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- A barra do browser no celular veste a cor da página. Uma meta só, sem
+     media query: quem trocou o tema no interruptor esperava que a barra
+     acompanhasse a escolha dele, e não o que o sistema operacional acha. Os
+     dois valores são o --paper de cada tema no style.css, e ela fica acima do
+     script de propósito: o script logo abaixo precisa alcançá-la. -->
+<meta name="theme-color" content="#1a1917" />
+<script>(function(){var t=null;try{t=localStorage.getItem('lt-tema')}catch(e){}
+if(!t)t=window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';
+if(t==='light')document.documentElement.setAttribute('data-theme','light')
+var m=document.querySelector('meta[name=theme-color]');if(m)m.content=t==='light'?'#eee8d5':'#1a1917'
+try{history.scrollRestoration="manual"}catch(e){}})()</script>
+<title>SOMS · Luan Taraschi</title>
+<meta name="description" content="Estudo de caso: party game musical em tempo real. O problema difícil foram as URLs assinadas do Deezer, que morrem em 30 minutos." />
+<link rel="canonical" href="https://luantaraschi.dev/projeto-soms.html" />
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="Luan Taraschi" />
+<meta property="og:locale" content="pt_BR" />
+<meta property="og:url" content="https://luantaraschi.dev/projeto-soms.html" />
+<meta property="og:title" content="SOMS" />
+<meta property="og:description" content="Toca um trecho, todo mundo corre pra acertar o título. Com Socket.IO fora da Vercel e re-fetch de URL antes de cada partida." />
+<meta property="og:image" content="https://luantaraschi.dev/assets/og.png" />
+<meta property="og:image:width" content="2400" />
+<meta property="og:image:height" content="1260" />
+<meta property="og:image:alt" content="O nome Luan Taraschi em tipografia bitmap ao lado de uma esfera renderizada com dithering de 1 bit." />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='16' height='16' fill='%231a1917'/><g fill='%23fce4a6' shape-rendering='crispEdges'><rect x='2' y='4' width='2' height='8'/><rect x='2' y='10' width='5' height='2'/><rect x='9' y='4' width='6' height='2'/><rect x='11' y='4' width='2' height='8'/></g></svg>" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Space+Grotesk:wght@300..700&family=Space+Mono:wght@400;700&display=swap" />
+<link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+
+<a class="skip" href="#conteudo">Pular para o conteúdo</a>
+<div class="grid-glow" data-glow aria-hidden="true"></div>
+<div class="wipe" data-wipe aria-hidden="true"></div>
+
+<header class="nav" data-od-id="nav">
+  <div class="wrap nav__inner">
+    <a class="nav__mark" href="index.html">
+      <span class="nav__glyph" aria-hidden="true"></span>
+      Luan Taraschi
+    </a>
+    <nav class="nav__links" aria-label="Seções do site">
+      <a class="nav__link" href="index.html#sobre">Sobre</a>
+      <a class="nav__link" href="index.html#projetos" aria-current="page">Projetos</a>
+      <a class="nav__link" href="index.html#games">Games</a>
+      <a class="nav__link" href="index.html#skills">Stack</a>
+      <a class="nav__link" href="index.html#experiencia">Experiência</a>
+      <a class="nav__link" href="index.html#contato">Contato</a>
+    </nav>
+    <button class="lamp" type="button" role="switch" aria-checked="false"
+            data-theme-toggle title="Luz da página"
+            aria-label="Alternar entre modo escuro e claro">
+      <span class="lamp__track" aria-hidden="true"><span class="lamp__knob"></span></span>
+    </button>
+
+    <button class="nav__toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="menu-mobile">
+      Menu
+    </button>
+  </div>
+  <div class="nav__panel" id="menu-mobile" data-nav-panel hidden>
+    <a href="index.html#sobre">Sobre</a>
+    <a href="index.html#projetos">Projetos</a>
+    <a href="index.html#games">Games</a>
+    <a href="index.html#skills">Stack</a>
+    <a href="index.html#experiencia">Experiência</a>
+    <a href="index.html#contato">Contato</a>
+  </div>
+</header>
+
+<main id="conteudo">
+  <article class="wrap" data-od-id="case">
+
+    <header class="case__head">
+      <span class="kicker">projetos/06 · games</span>
+      <h1 class="h1 case__title">SOMS</h1>
+      <p class="lead case__lead">
+        Toca um trecho de música e todo mundo corre pra acertar título, artista e feat antes dos outros. No fim, um card de estatística pra jogar no grupo.
+      </p>
+
+      <dl class="case__meta invert">
+        <div><dt>Ano</dt><dd>2026</dd></div>
+        <div><dt>Papel</dt><dd>Sozinho, do PRD ao deploy</dd></div>
+        <div><dt>Stack</dt><dd>Next.js 15 · Fastify + Socket.IO · Prisma · Neon · Upstash · Deezer</dd></div>
+        <div><dt>Link</dt><dd><a href="https://github.com/luantaraschi/SOMS" target="_blank" rel="noopener">código no GitHub ↗</a></dd></div>
+      </dl>
+    </header>
+
+    <figure class="shot dither-50">
+      <img src="assets/shots/soms-home.png" width="1200" height="900" loading="lazy"
+           alt="Tela inicial do SOMS: o nome do jogo em letras grossas, o mote todo mundo acha que sabe logo abaixo, e um cartão perguntando qual seu apelido." />
+      <figcaption>
+        <span>a porta de entrada: apelido, código da sala e pronto</span>
+        <span class="shot__cor">passe o cursor para ver em cor</span>
+      </figcaption>
+    </figure>
+
+    <div class="case__body">
+      <section class="case__block">
+        <h2 class="h2">O problema</h2>
+        <p class="body-text">
+          Todo mundo já jogou de adivinhar música numa mesa de bar, e todo mundo já viu isso desandar: um fala antes, ninguém sabe quem acertou primeiro, e a discussão sobre quem falou antes dura mais que a rodada.
+        </p>
+        <p class="body-text">
+          Um placar automático resolve. Mas só se ele conseguir dizer, sem dúvida, quem chegou primeiro.
+        </p>
+      </section>
+
+      <section class="case__block">
+        <h2 class="h2">A decisão</h2>
+        <p class="body-text">
+          O servidor de tempo real vive fora da Vercel. Funções serverless não seguram conexão TCP longa, e existem contornos pagos pra isso — mas um Fastify com Socket.IO num container da Railway custa uns cinco dólares por mês quando passa do plano gratuito e me dá controle total do protocolo. O site continua na Vercel; só o jogo mora noutro lugar.
+        </p>
+        <p class="body-text">
+          Toda pontuação é decidida no servidor. Ele é o único que sabe a hora em que cada resposta chegou, então ele é o único que pode dizer quem foi primeiro.
+        </p>
+      </section>
+
+      <section class="case__block case__block--wide">
+        <h2 class="h2">As URLs morrem em trinta minutos</h2>
+        <p class="body-text">
+          O trecho de cada música vem do Deezer, e a URL dele não é um endereço estável: é um link assinado com validade embutida, no padrão de token da Akamai. Guardar essa URL no banco funciona lindamente nos testes e falha em produção umas horas depois, que é a pior combinação possível.
+        </p>
+        <p class="body-text">
+          Eu medi em vez de chutar: de vinte faixas cacheadas, doze respondiam 403 quarenta minutos depois. Sessenta por cento da partida seria silêncio.
+        </p>
+        <p class="body-text">
+          A correção foi separar o que dura do que não dura. O banco guarda a metadata da faixa, que é estável; a URL do trecho é buscada de novo, em lote, no instante em que a sala começa a partida — antes da contagem regressiva, com um controle de vazão pra nunca estourar o limite da API. Se alguma faixa sumiu do catálogo no meio do caminho, ela é descartada ali e substituída antes de qualquer jogador perceber. O “Preparando partida...” que aparece na tela não é enfeite: é esse lote acontecendo.
+        </p>
+        <div class="case__nums">
+          <div class="case__num"><b>~30min</b><span>de validade na URL assinada</span></div>
+          <div class="case__num"><b>12 de 20</b><span>faixas mortas depois de 40min</span></div>
+          <div class="case__num"><b>0</b><span>rodadas em silêncio depois da correção</span></div>
+        </div>
+      </section>
+
+      <section class="case__block">
+        <h2 class="h2">Acertar “quase” ainda é acertar</h2>
+        <p class="body-text">
+          Ninguém digita o nome da música exatamente como está no catálogo, com acento, com o “(Remastered 2011)” no fim e com o feat na ordem certa. Então a resposta passa por normalização e por uma tabela de apelidos antes de ser comparada, e o placar aceita a forma como as pessoas de fato escrevem.
+        </p>
+      </section>
+
+      <section class="case__block">
+        <h2 class="h2">O que eu levo daqui</h2>
+        <p class="body-text">
+          Que integração com API de terceiro não se testa em desenvolvimento, se testa no relógio. O bug das URLs assinadas passaria por qualquer suíte de testes: no minuto zero está tudo verde. Ele só existe depois de meia hora, e só na máquina de quem está jogando.
+        </p>
+      </section>
+
+    </div>
+
+    <nav class="case__nav" aria-label="Navegação entre projetos">
+      <a class="btn btn--ghost" href="projeto-dub.html">‹ Anterior: Seamless AI Dub</a>
+      <a class="btn" href="projeto-sus.html">Próximo: SUS ›</a>
+    </nav>
+
+  </article>
+</main>
+
+<footer class="foot" data-od-id="footer">
+  <div class="wrap foot__inner">
+    <span class="mono-caps">Luan Taraschi · MMXXVI</span>
+    <ul class="social">
+      <li><a class="social__l social__l--gh" href="https://github.com/luantaraschi" target="_blank" rel="noopener">GitHub</a></li>
+      <li><a class="social__l social__l--li" href="https://www.linkedin.com/in/luantaraschi/" target="_blank" rel="noopener">LinkedIn</a></li>
+      <li><a class="social__l social__l--ig" href="https://www.instagram.com/luantaraschi/" target="_blank" rel="noopener">Instagram</a></li>
+    </ul>
+    <span class="mono-caps">feito por mim, com muito amor</span>
+  </div>
+</footer>
+
+<script src="js/app.js" defer></script>
+</body>
+</html>
+

@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- A barra do browser no celular veste a cor da página. Uma meta só, sem
+     media query: quem trocou o tema no interruptor esperava que a barra
+     acompanhasse a escolha dele, e não o que o sistema operacional acha. Os
+     dois valores são o --paper de cada tema no style.css, e ela fica acima do
+     script de propósito: o script logo abaixo precisa alcançá-la. -->
+<meta name="theme-color" content="#1a1917" />
+<script>(function(){var t=null;try{t=localStorage.getItem('lt-tema')}catch(e){}
+if(!t)t=window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';
+if(t==='light')document.documentElement.setAttribute('data-theme','light')
+var m=document.querySelector('meta[name=theme-color]');if(m)m.content=t==='light'?'#eee8d5':'#1a1917'
+try{history.scrollRestoration="manual"}catch(e){}})()</script>
+<title>Gesture AI Desk · Luan Taraschi</title>
+<meta name="description" content="Estudo de caso: controlar o computador com a mão pela webcam. 21 pontos por mão a 30fps, sete gestos, tudo offline." />
+<link rel="canonical" href="https://luantaraschi.dev/projeto-gesture.html" />
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="Luan Taraschi" />
+<meta property="og:locale" content="pt_BR" />
+<meta property="og:url" content="https://luantaraschi.dev/projeto-gesture.html" />
+<meta property="og:title" content="Gesture AI Desk" />
+<meta property="og:description" content="Sete gestos, 21 pontos por mão, 30 quadros por segundo. Nenhuma imagem sai da máquina." />
+<meta property="og:image" content="https://luantaraschi.dev/assets/og.png" />
+<meta property="og:image:width" content="2400" />
+<meta property="og:image:height" content="1260" />
+<meta property="og:image:alt" content="O nome Luan Taraschi em tipografia bitmap ao lado de uma esfera renderizada com dithering de 1 bit." />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='16' height='16' fill='%231a1917'/><g fill='%23fce4a6' shape-rendering='crispEdges'><rect x='2' y='4' width='2' height='8'/><rect x='2' y='10' width='5' height='2'/><rect x='9' y='4' width='6' height='2'/><rect x='11' y='4' width='2' height='8'/></g></svg>" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Space+Grotesk:wght@300..700&family=Space+Mono:wght@400;700&display=swap" />
+<link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+
+<a class="skip" href="#conteudo">Pular para o conteúdo</a>
+<div class="grid-glow" data-glow aria-hidden="true"></div>
+<div class="wipe" data-wipe aria-hidden="true"></div>
+
+<header class="nav" data-od-id="nav">
+  <div class="wrap nav__inner">
+    <a class="nav__mark" href="index.html">
+      <span class="nav__glyph" aria-hidden="true"></span>
+      Luan Taraschi
+    </a>
+    <nav class="nav__links" aria-label="Seções do site">
+      <a class="nav__link" href="index.html#sobre">Sobre</a>
+      <a class="nav__link" href="index.html#projetos" aria-current="page">Projetos</a>
+      <a class="nav__link" href="index.html#games">Games</a>
+      <a class="nav__link" href="index.html#skills">Stack</a>
+      <a class="nav__link" href="index.html#experiencia">Experiência</a>
+      <a class="nav__link" href="index.html#contato">Contato</a>
+    </nav>
+    <button class="lamp" type="button" role="switch" aria-checked="false"
+            data-theme-toggle title="Luz da página"
+            aria-label="Alternar entre modo escuro e claro">
+      <span class="lamp__track" aria-hidden="true"><span class="lamp__knob"></span></span>
+    </button>
+
+    <button class="nav__toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="menu-mobile">
+      Menu
+    </button>
+  </div>
+  <div class="nav__panel" id="menu-mobile" data-nav-panel hidden>
+    <a href="index.html#sobre">Sobre</a>
+    <a href="index.html#projetos">Projetos</a>
+    <a href="index.html#games">Games</a>
+    <a href="index.html#skills">Stack</a>
+    <a href="index.html#experiencia">Experiência</a>
+    <a href="index.html#contato">Contato</a>
+  </div>
+</header>
+
+<main id="conteudo">
+  <article class="wrap" data-od-id="case">
+
+    <header class="case__head">
+      <span class="kicker">projetos/04 · roda na sua máquina</span>
+      <h1 class="h1 case__title">Gesture AI Desk</h1>
+      <p class="lead case__lead">
+        Controlar o computador com a mão pela webcam: pausar música, mudar volume, tirar print. Sem teclado, sem mouse e sem mandar um único quadro pra internet.
+      </p>
+
+      <dl class="case__meta invert">
+        <div><dt>Ano</dt><dd>2026</dd></div>
+        <div><dt>Papel</dt><dd>Sozinho, backend e interface</dd></div>
+        <div><dt>Stack</dt><dd>Python · MediaPipe · OpenCV · FastAPI · WebSocket</dd></div>
+        <div><dt>Link</dt><dd><a href="https://github.com/luantaraschi/Hand-Gestures" target="_blank" rel="noopener">código no GitHub ↗</a></dd></div>
+      </dl>
+    </header>
+
+    <figure class="shot dither-50">
+      <img src="assets/shots/gesture-landmarks.png" width="688" height="516" loading="lazy"
+           alt="Painel do Gesture AI Desk com a imagem da webcam e, sobre a mão, o esqueleto de 21 pontos ligados por linhas. Ao lado, o gesto detectado e o anel de progresso do hold." />
+      <figcaption>
+        <span>os 21 pontos que o MediaPipe devolve, desenhados por cima da mão em tempo real</span>
+        <span class="shot__cor">passe o cursor para ver em cor</span>
+      </figcaption>
+    </figure>
+
+    <div class="case__body">
+      <section class="case__block">
+        <h2 class="h2">O problema</h2>
+        <p class="body-text">
+          Começou como uma pergunta prática: dá pra pausar uma música com a mão suja de farinha? Mas a pergunta interessante não é detectar a mão. Bibliotecas fazem isso há anos e fazem bem.
+        </p>
+        <p class="body-text">
+          A pergunta difícil é a de sempre em interface por gesto: como o computador sabe que você quis, e não que você só passou a mão na frente da câmera coçando o nariz.
+        </p>
+      </section>
+
+      <section class="case__block">
+        <h2 class="h2">A decisão</h2>
+        <p class="body-text">
+          Tudo offline. Nenhuma API, nenhum serviço de visão na nuvem, nenhum quadro saindo da máquina. Isso não é só postura de privacidade: uma webcam ligada mandando imagem pra fora é exatamente o tipo de coisa que a pessoa desinstala no segundo dia. O modelo do MediaPipe roda local, e o navegador só conversa com o meu próprio processo por WebSocket.
+        </p>
+      </section>
+
+      <section class="case__block case__block--wide">
+        <h2 class="h2">Três travas entre a mão e a ação</h2>
+        <p class="body-text">
+          A 30 quadros por segundo, um detector ingênuo dispara trinta vezes por segundo. Você faz sinal de positivo por um segundo e o volume sobe trinta vezes. O que separa um brinquedo de uma ferramenta usável são as camadas que vieram depois da detecção.
+        </p>
+        <p class="body-text">
+          Primeiro o estado dos dedos vira um número de cinco bits, um por dedo, e o gesto é uma consulta numa tabela: barato o bastante pra caber no orçamento de cada quadro. Depois um estabilizador só aceita a mudança quando o mesmo gesto aparece em cinco quadros seguidos, o que mata o tremor de detecção. Em cima disso, um temporizador exige meio segundo de gesto mantido antes de disparar, com um anel de progresso na tela pra você ver que está carregando e poder desistir. E depois de disparar, um segundo de descanso em que aquele gesto simplesmente não conta.
+        </p>
+        <p class="body-text">
+          Nenhuma dessas quatro camadas é esperta sozinha. Juntas, elas transformam um fluxo barulhento em uma ação intencional.
+        </p>
+        <div class="case__nums">
+          <div class="case__num"><b>21</b><span>pontos por mão</span></div>
+          <div class="case__num"><b>30</b><span>quadros por segundo</span></div>
+          <div class="case__num"><b>5→0,5s→1s</b><span>estabilizar, segurar, descansar</span></div>
+        </div>
+      </section>
+
+      <section class="case__block">
+        <h2 class="h2">A interface que eu tive que reconstruir</h2>
+        <p class="body-text">
+          O repositório tinha uma pasta de frontend que na verdade era um ponteiro quebrado de submodule: o painel em React nunca esteve versionado ali. Descobri isso tentando rodar o projeto do zero, que é exatamente o que qualquer pessoa que clona faria.
+        </p>
+        <p class="body-text">
+          Reescrevi como um arquivo HTML único, sem build e sem dependência: câmera, gesto atual com o anel de hold, lista de comandos, estado da conexão e log de ações disparadas. O esqueleto da mão é desenhado num canvas por cima da imagem, com as coordenadas normalizadas que o backend manda. Ficou mais simples de manter do que o que existia antes, e agora clonar e rodar funciona de verdade.
+        </p>
+      </section>
+
+      <section class="case__block">
+        <h2 class="h2">O que eu levo daqui</h2>
+        <p class="body-text">
+          Que a parte difícil quase nunca é a que dá nome ao projeto. “Detecção de gestos” foi um dia de trabalho porque o MediaPipe faz o peso. O resto do tempo foi decidir quando ignorar o que ele detectou.
+        </p>
+      </section>
+
+    </div>
+
+    <nav class="case__nav" aria-label="Navegação entre projetos">
+      <a class="btn btn--ghost" href="projeto-devtools.html">‹ Anterior: Dev Tools</a>
+      <a class="btn" href="projeto-dub.html">Próximo: Seamless AI Dub ›</a>
+    </nav>
+
+  </article>
+</main>
+
+<footer class="foot" data-od-id="footer">
+  <div class="wrap foot__inner">
+    <span class="mono-caps">Luan Taraschi · MMXXVI</span>
+    <ul class="social">
+      <li><a class="social__l social__l--gh" href="https://github.com/luantaraschi" target="_blank" rel="noopener">GitHub</a></li>
+      <li><a class="social__l social__l--li" href="https://www.linkedin.com/in/luantaraschi/" target="_blank" rel="noopener">LinkedIn</a></li>
+      <li><a class="social__l social__l--ig" href="https://www.instagram.com/luantaraschi/" target="_blank" rel="noopener">Instagram</a></li>
+    </ul>
+    <span class="mono-caps">feito por mim, com muito amor</span>
+  </div>
+</footer>
+
+<script src="js/app.js" defer></script>
+</body>
+</html>
+

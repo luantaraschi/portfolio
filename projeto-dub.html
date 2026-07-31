@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- A barra do browser no celular veste a cor da página. Uma meta só, sem
+     media query: quem trocou o tema no interruptor esperava que a barra
+     acompanhasse a escolha dele, e não o que o sistema operacional acha. Os
+     dois valores são o --paper de cada tema no style.css, e ela fica acima do
+     script de propósito: o script logo abaixo precisa alcançá-la. -->
+<meta name="theme-color" content="#1a1917" />
+<script>(function(){var t=null;try{t=localStorage.getItem('lt-tema')}catch(e){}
+if(!t)t=window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';
+if(t==='light')document.documentElement.setAttribute('data-theme','light')
+var m=document.querySelector('meta[name=theme-color]');if(m)m.content=t==='light'?'#eee8d5':'#1a1917'
+try{history.scrollRestoration="manual"}catch(e){}})()</script>
+<title>Seamless AI Dub · Luan Taraschi</title>
+<meta name="description" content="Estudo de caso: pipeline em Python que recebe vídeo em inglês e devolve dublado em português, com sincronia por segmento." />
+<link rel="canonical" href="https://luantaraschi.dev/projeto-dub.html" />
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="Luan Taraschi" />
+<meta property="og:locale" content="pt_BR" />
+<meta property="og:url" content="https://luantaraschi.dev/projeto-dub.html" />
+<meta property="og:title" content="Seamless AI Dub" />
+<meta property="og:description" content="Vídeo em inglês entra, dublado em português sai. Whisper transcreve, o modelo traduz, o TTS fala e o corte volta no tempo." />
+<meta property="og:image" content="https://luantaraschi.dev/assets/og.png" />
+<meta property="og:image:width" content="2400" />
+<meta property="og:image:height" content="1260" />
+<meta property="og:image:alt" content="O nome Luan Taraschi em tipografia bitmap ao lado de uma esfera renderizada com dithering de 1 bit." />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='16' height='16' fill='%231a1917'/><g fill='%23fce4a6' shape-rendering='crispEdges'><rect x='2' y='4' width='2' height='8'/><rect x='2' y='10' width='5' height='2'/><rect x='9' y='4' width='6' height='2'/><rect x='11' y='4' width='2' height='8'/></g></svg>" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Space+Grotesk:wght@300..700&family=Space+Mono:wght@400;700&display=swap" />
+<link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+
+<a class="skip" href="#conteudo">Pular para o conteúdo</a>
+<div class="grid-glow" data-glow aria-hidden="true"></div>
+<div class="wipe" data-wipe aria-hidden="true"></div>
+
+<header class="nav" data-od-id="nav">
+  <div class="wrap nav__inner">
+    <a class="nav__mark" href="index.html">
+      <span class="nav__glyph" aria-hidden="true"></span>
+      Luan Taraschi
+    </a>
+    <nav class="nav__links" aria-label="Seções do site">
+      <a class="nav__link" href="index.html#sobre">Sobre</a>
+      <a class="nav__link" href="index.html#projetos" aria-current="page">Projetos</a>
+      <a class="nav__link" href="index.html#games">Games</a>
+      <a class="nav__link" href="index.html#skills">Stack</a>
+      <a class="nav__link" href="index.html#experiencia">Experiência</a>
+      <a class="nav__link" href="index.html#contato">Contato</a>
+    </nav>
+    <button class="lamp" type="button" role="switch" aria-checked="false"
+            data-theme-toggle title="Luz da página"
+            aria-label="Alternar entre modo escuro e claro">
+      <span class="lamp__track" aria-hidden="true"><span class="lamp__knob"></span></span>
+    </button>
+
+    <button class="nav__toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="menu-mobile">
+      Menu
+    </button>
+  </div>
+  <div class="nav__panel" id="menu-mobile" data-nav-panel hidden>
+    <a href="index.html#sobre">Sobre</a>
+    <a href="index.html#projetos">Projetos</a>
+    <a href="index.html#games">Games</a>
+    <a href="index.html#skills">Stack</a>
+    <a href="index.html#experiencia">Experiência</a>
+    <a href="index.html#contato">Contato</a>
+  </div>
+</header>
+
+<main id="conteudo">
+  <article class="wrap" data-od-id="case">
+
+    <header class="case__head">
+      <span class="kicker">projetos/05 · pipeline</span>
+      <h1 class="h1 case__title">Seamless AI Dub</h1>
+      <p class="lead case__lead">
+        Vídeo em inglês entra, vídeo dublado em português sai. Sem edição manual em nenhum ponto do caminho.
+      </p>
+
+      <dl class="case__meta invert">
+        <div><dt>Ano</dt><dd>2026</dd></div>
+        <div><dt>Papel</dt><dd>Sozinho, do pipeline ao empacotamento</dd></div>
+        <div><dt>Stack</dt><dd>Python · Whisper · OpenRouter · Edge-TTS / ElevenLabs · MoviePy · FFmpeg</dd></div>
+        <div><dt>Link</dt><dd><a href="https://github.com/luantaraschi/seamless-ai-dub" target="_blank" rel="noopener">código no GitHub ↗</a></dd></div>
+      </dl>
+    </header>
+
+    <figure class="shot dither-25">
+      <!-- o único vídeo do site com controles e sem autoplay: aqui a prova é a
+           faixa de áudio, e vídeo que toca sozinho toca mudo. Dar play é uma
+           decisão de quem está lendo, não uma que a página toma por ele. -->
+      <video src="assets/shots/dub-dublado.mp4" width="960" height="542"
+             controls preload="metadata"
+             aria-label="Trecho de um vídeo técnico sobre um instrumento de alinhamento, com a interface do aparelho em inglês na tela e narração em português."></video>
+      <figcaption>
+        <span>vinte e seis segundos da saída real do pipeline — dê play com som, a prova aqui é a voz</span>
+      </figcaption>
+    </figure>
+
+    <div class="case__body">
+      <section class="case__block">
+        <h2 class="h2">O problema</h2>
+        <p class="body-text">
+          Muito material técnico bom só existe em inglês. Legenda resolve em parte, mas legenda compete com a tela: num vídeo em que você precisa olhar o que a mão da pessoa está fazendo, ler embaixo custa caro.
+        </p>
+        <p class="body-text">
+          Dublar à mão é caro de outro jeito. Uma hora de vídeo vira um dia de estúdio.
+        </p>
+      </section>
+
+      <section class="case__block">
+        <h2 class="h2">A decisão</h2>
+        <p class="body-text">
+          Montar o caminho inteiro como pipeline, sem passo manual no meio: o áudio sai do vídeo, o Whisper transcreve em segmentos com marca de tempo, cada segmento é traduzido, a voz é sintetizada, os cortes voltam posicionados pelo timestamp original e o vídeo final é renderizado. Se algum passo precisasse de humano, o projeto não teria valor nenhum: viraria um editor de vídeo pior que os que existem.
+        </p>
+      </section>
+
+      <section class="case__block case__block--wide">
+        <h2 class="h2">Português é mais longo que inglês</h2>
+        <p class="body-text">
+          Esse é o problema de verdade, e só aparece quando você roda pela primeira vez. A tradução de uma frase inglesa costuma ficar mais comprida em português, e a voz sintetizada dela não cabe no espaço de tempo do segmento original. Cada segmento vaza alguns décimos pro seguinte, e no minuto três a dublagem está falando de uma coisa que apareceu na tela há muito tempo. O erro acumula.
+        </p>
+        <p class="body-text">
+          A saída foi acelerar cada corte de voz individualmente, só o quanto ele precisa pra caber, sem deixar o pitch subir a ponto de virar desenho animado. O sincronismo é recuperado segmento a segmento em vez de esticar o vídeo ou cortar tradução. E o áudio original fica embaixo, bem baixo: mantém o ambiente da cena e dá uma referência de que aquilo não é uma faixa solta por cima.
+        </p>
+      </section>
+
+      <section class="case__block">
+        <h2 class="h2">Dois provedores de voz, um fallback</h2>
+        <p class="body-text">
+          A síntese usa ElevenLabs quando tem chave configurada e cai pro Edge-TTS quando não tem. Não é abstração especulativa: um cobra por caractere e o outro é gratuito, então a escolha é econômica e muda no meio do uso. Quem só quer ver o pipeline rodando não precisa botar cartão em lugar nenhum.
+        </p>
+      </section>
+
+      <section class="case__block">
+        <h2 class="h2">O que eu levo daqui</h2>
+        <p class="body-text">
+          O vídeo aqui em cima é conteúdo técnico de outra pessoa, e está nesta página como demonstração curta do que o pipeline produz, não como material meu. Ele existe aqui por um motivo específico: esse é o único projeto do portfólio em que print nenhum prova nada. A qualidade está inteira na faixa de áudio.
+        </p>
+      </section>
+
+    </div>
+
+    <nav class="case__nav" aria-label="Navegação entre projetos">
+      <a class="btn btn--ghost" href="projeto-gesture.html">‹ Anterior: Gesture AI Desk</a>
+      <a class="btn" href="projeto-soms.html">Próximo: SOMS ›</a>
+    </nav>
+
+  </article>
+</main>
+
+<footer class="foot" data-od-id="footer">
+  <div class="wrap foot__inner">
+    <span class="mono-caps">Luan Taraschi · MMXXVI</span>
+    <ul class="social">
+      <li><a class="social__l social__l--gh" href="https://github.com/luantaraschi" target="_blank" rel="noopener">GitHub</a></li>
+      <li><a class="social__l social__l--li" href="https://www.linkedin.com/in/luantaraschi/" target="_blank" rel="noopener">LinkedIn</a></li>
+      <li><a class="social__l social__l--ig" href="https://www.instagram.com/luantaraschi/" target="_blank" rel="noopener">Instagram</a></li>
+    </ul>
+    <span class="mono-caps">feito por mim, com muito amor</span>
+  </div>
+</footer>
+
+<script src="js/app.js" defer></script>
+</body>
+</html>
+

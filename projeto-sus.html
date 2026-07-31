@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- A barra do browser no celular veste a cor da página. Uma meta só, sem
+     media query: quem trocou o tema no interruptor esperava que a barra
+     acompanhasse a escolha dele, e não o que o sistema operacional acha. Os
+     dois valores são o --paper de cada tema no style.css, e ela fica acima do
+     script de propósito: o script logo abaixo precisa alcançá-la. -->
+<meta name="theme-color" content="#1a1917" />
+<script>(function(){var t=null;try{t=localStorage.getItem('lt-tema')}catch(e){}
+if(!t)t=window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';
+if(t==='light')document.documentElement.setAttribute('data-theme','light')
+var m=document.querySelector('meta[name=theme-color]');if(m)m.content=t==='light'?'#eee8d5':'#1a1917'
+try{history.scrollRestoration="manual"}catch(e){}})()</script>
+<title>SUS · Luan Taraschi</title>
+<meta name="description" content="Estudo de caso: jogo do impostor em tempo real com Convex. Entra sem conta, joga pelo celular, três modos." />
+<link rel="canonical" href="https://luantaraschi.dev/projeto-sus.html" />
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="Luan Taraschi" />
+<meta property="og:locale" content="pt_BR" />
+<meta property="og:url" content="https://luantaraschi.dev/projeto-sus.html" />
+<meta property="og:title" content="SUS" />
+<meta property="og:description" content="Todo mundo recebe a mesma palavra, menos um. Conversa, blefe e votação em tempo real, sem instalar nada." />
+<meta property="og:image" content="https://luantaraschi.dev/assets/og.png" />
+<meta property="og:image:width" content="2400" />
+<meta property="og:image:height" content="1260" />
+<meta property="og:image:alt" content="O nome Luan Taraschi em tipografia bitmap ao lado de uma esfera renderizada com dithering de 1 bit." />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='16' height='16' fill='%231a1917'/><g fill='%23fce4a6' shape-rendering='crispEdges'><rect x='2' y='4' width='2' height='8'/><rect x='2' y='10' width='5' height='2'/><rect x='9' y='4' width='6' height='2'/><rect x='11' y='4' width='2' height='8'/></g></svg>" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Space+Grotesk:wght@300..700&family=Space+Mono:wght@400;700&display=swap" />
+<link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+
+<a class="skip" href="#conteudo">Pular para o conteúdo</a>
+<div class="grid-glow" data-glow aria-hidden="true"></div>
+<div class="wipe" data-wipe aria-hidden="true"></div>
+
+<header class="nav" data-od-id="nav">
+  <div class="wrap nav__inner">
+    <a class="nav__mark" href="index.html">
+      <span class="nav__glyph" aria-hidden="true"></span>
+      Luan Taraschi
+    </a>
+    <nav class="nav__links" aria-label="Seções do site">
+      <a class="nav__link" href="index.html#sobre">Sobre</a>
+      <a class="nav__link" href="index.html#projetos" aria-current="page">Projetos</a>
+      <a class="nav__link" href="index.html#games">Games</a>
+      <a class="nav__link" href="index.html#skills">Stack</a>
+      <a class="nav__link" href="index.html#experiencia">Experiência</a>
+      <a class="nav__link" href="index.html#contato">Contato</a>
+    </nav>
+    <button class="lamp" type="button" role="switch" aria-checked="false"
+            data-theme-toggle title="Luz da página"
+            aria-label="Alternar entre modo escuro e claro">
+      <span class="lamp__track" aria-hidden="true"><span class="lamp__knob"></span></span>
+    </button>
+
+    <button class="nav__toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="menu-mobile">
+      Menu
+    </button>
+  </div>
+  <div class="nav__panel" id="menu-mobile" data-nav-panel hidden>
+    <a href="index.html#sobre">Sobre</a>
+    <a href="index.html#projetos">Projetos</a>
+    <a href="index.html#games">Games</a>
+    <a href="index.html#skills">Stack</a>
+    <a href="index.html#experiencia">Experiência</a>
+    <a href="index.html#contato">Contato</a>
+  </div>
+</header>
+
+<main id="conteudo">
+  <article class="wrap" data-od-id="case">
+
+    <header class="case__head">
+      <span class="kicker">projetos/07 · no ar</span>
+      <h1 class="h1 case__title">SUS</h1>
+      <p class="lead case__lead">
+        Todo mundo recebe a mesma palavra, menos um. A partir daí é conversa, blefe e votação — e o impostor tem que fingir que sabe do que estão falando.
+      </p>
+
+      <dl class="case__meta invert">
+        <div><dt>Ano</dt><dd>2026 · no ar</dd></div>
+        <div><dt>Papel</dt><dd>Sozinho, do jogo à hospedagem</dd></div>
+        <div><dt>Stack</dt><dd>Next.js · Convex · TypeScript · tempo real</dd></div>
+        <div><dt>Link</dt><dd><a href="https://sus-wine.vercel.app/" target="_blank" rel="noopener">jogar agora ↗</a></dd></div>
+      </dl>
+    </header>
+
+    <figure class="shot dither-25">
+      <img src="assets/shots/sus-home.png" width="1200" height="900" loading="lazy"
+           alt="Tela inicial do SUS em roxo, com o título, o subtítulo o jogo de quem é o impostor, um avatar sorteado, campos de apelido e código, e os botões criar sala, entrar e como jogar." />
+      <figcaption>
+        <span>a entrada inteira em uma tela: apelido, código, avatar sorteado e começar</span>
+        <span class="shot__cor">passe o cursor para ver em cor</span>
+      </figcaption>
+    </figure>
+
+    <div class="case__body">
+      <section class="case__block">
+        <h2 class="h2">O problema</h2>
+        <p class="body-text">
+          Jogo de impostor é ótimo numa mesa e péssimo em grupo de WhatsApp. Alguém precisa distribuir as palavras no privado, alguém precisa lembrar quem é quem, e quem chegou atrasado quebra tudo.
+        </p>
+        <p class="body-text">
+          E a maior parte dos apps que resolvem isso pede cadastro antes de deixar você jogar, que é exatamente onde a chamada com os amigos morre.
+        </p>
+      </section>
+
+      <section class="case__block">
+        <h2 class="h2">A decisão</h2>
+        <p class="body-text">
+          Zero atrito na porta. Você abre o link, o apelido já vem preenchido, o avatar já vem sorteado, você digita o código da sala e está dentro. A conta existe, mas é opcional e serve pra guardar histórico — nunca é pedágio pra entrar. Numa call de sexta à noite, cada campo de formulário a mais custa um jogador.
+        </p>
+      </section>
+
+      <section class="case__block case__block--wide">
+        <h2 class="h2">O segredo tem que morar no servidor</h2>
+        <p class="body-text">
+          É o mesmo problema de todo jogo de informação oculta: se o cliente recebe a palavra de todo mundo e só esconde na tela, o jogo acaba no primeiro que abrir o inspetor. Não adianta esconder com CSS o que já chegou na máquina.
+        </p>
+        <p class="body-text">
+          Então o que cada jogador recebe é recortado no servidor, por jogador: o impostor recebe uma coisa, os outros recebem outra, e a palavra completa só vira pública na revelação. É uma regra chata de manter porque ela aparece em toda consulta nova que você escreve, e basta esquecer uma vez.
+        </p>
+      </section>
+
+      <section class="case__block">
+        <h2 class="h2">Quem cai no meio da rodada</h2>
+        <p class="body-text">
+          Sala em tempo real é fácil enquanto ninguém sai. O caso real é o celular que bloqueia a tela, o metrô que entra no túnel, a aba que recarrega. O estado vive no servidor e a tela é só um reflexo dele, então voltar significa reassinar a consulta e reaparecer na mesma rodada, no mesmo lugar. É o problema que mais aparece em todos os jogos daqui, e por isso o que eu mais aprendi a resolver.
+        </p>
+      </section>
+
+      <section class="case__block">
+        <h2 class="h2">O que eu levo daqui</h2>
+        <p class="body-text">
+          Que quase todo problema de jogo multijogador é uma pergunta sobre autoridade: quem é dono dessa informação. Quando eu respondo isso primeiro, o resto do código se escreve sozinho. Quando eu deixo pra depois, vira remendo em cima de remendo.
+        </p>
+      </section>
+
+    </div>
+
+    <nav class="case__nav" aria-label="Navegação entre projetos">
+      <a class="btn btn--ghost" href="projeto-soms.html">‹ Anterior: SOMS</a>
+      <a class="btn" href="projeto-pov.html">Próximo: POV ›</a>
+    </nav>
+
+  </article>
+</main>
+
+<footer class="foot" data-od-id="footer">
+  <div class="wrap foot__inner">
+    <span class="mono-caps">Luan Taraschi · MMXXVI</span>
+    <ul class="social">
+      <li><a class="social__l social__l--gh" href="https://github.com/luantaraschi" target="_blank" rel="noopener">GitHub</a></li>
+      <li><a class="social__l social__l--li" href="https://www.linkedin.com/in/luantaraschi/" target="_blank" rel="noopener">LinkedIn</a></li>
+      <li><a class="social__l social__l--ig" href="https://www.instagram.com/luantaraschi/" target="_blank" rel="noopener">Instagram</a></li>
+    </ul>
+    <span class="mono-caps">feito por mim, com muito amor</span>
+  </div>
+</footer>
+
+<script src="js/app.js" defer></script>
+</body>
+</html>
+

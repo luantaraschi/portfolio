@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- A barra do browser no celular veste a cor da página. Uma meta só, sem
+     media query: quem trocou o tema no interruptor esperava que a barra
+     acompanhasse a escolha dele, e não o que o sistema operacional acha. Os
+     dois valores são o --paper de cada tema no style.css, e ela fica acima do
+     script de propósito: o script logo abaixo precisa alcançá-la. -->
+<meta name="theme-color" content="#1a1917" />
+<script>(function(){var t=null;try{t=localStorage.getItem('lt-tema')}catch(e){}
+if(!t)t=window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';
+if(t==='light')document.documentElement.setAttribute('data-theme','light')
+var m=document.querySelector('meta[name=theme-color]');if(m)m.content=t==='light'?'#eee8d5':'#1a1917'
+try{history.scrollRestoration="manual"}catch(e){}})()</script>
+<title>POV · Luan Taraschi</title>
+<meta name="description" content="Estudo de caso: party game de percepção em Svelte e Convex, com um medidor que tem que parecer peça mecânica." />
+<link rel="canonical" href="https://luantaraschi.dev/projeto-pov.html" />
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="Luan Taraschi" />
+<meta property="og:locale" content="pt_BR" />
+<meta property="og:url" content="https://luantaraschi.dev/projeto-pov.html" />
+<meta property="og:title" content="POV" />
+<meta property="og:description" content="Um jogo onde você tenta acertar como outra pessoa enxerga o mundo. Svelte, Convex e um ponteiro com travas." />
+<meta property="og:image" content="https://luantaraschi.dev/assets/og.png" />
+<meta property="og:image:width" content="2400" />
+<meta property="og:image:height" content="1260" />
+<meta property="og:image:alt" content="O nome Luan Taraschi em tipografia bitmap ao lado de uma esfera renderizada com dithering de 1 bit." />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='16' height='16' fill='%231a1917'/><g fill='%23fce4a6' shape-rendering='crispEdges'><rect x='2' y='4' width='2' height='8'/><rect x='2' y='10' width='5' height='2'/><rect x='9' y='4' width='6' height='2'/><rect x='11' y='4' width='2' height='8'/></g></svg>" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Space+Grotesk:wght@300..700&family=Space+Mono:wght@400;700&display=swap" />
+<link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+
+<a class="skip" href="#conteudo">Pular para o conteúdo</a>
+<div class="grid-glow" data-glow aria-hidden="true"></div>
+<div class="wipe" data-wipe aria-hidden="true"></div>
+
+<header class="nav" data-od-id="nav">
+  <div class="wrap nav__inner">
+    <a class="nav__mark" href="index.html">
+      <span class="nav__glyph" aria-hidden="true"></span>
+      Luan Taraschi
+    </a>
+    <nav class="nav__links" aria-label="Seções do site">
+      <a class="nav__link" href="index.html#sobre">Sobre</a>
+      <a class="nav__link" href="index.html#projetos" aria-current="page">Projetos</a>
+      <a class="nav__link" href="index.html#games">Games</a>
+      <a class="nav__link" href="index.html#skills">Stack</a>
+      <a class="nav__link" href="index.html#experiencia">Experiência</a>
+      <a class="nav__link" href="index.html#contato">Contato</a>
+    </nav>
+    <button class="lamp" type="button" role="switch" aria-checked="false"
+            data-theme-toggle title="Luz da página"
+            aria-label="Alternar entre modo escuro e claro">
+      <span class="lamp__track" aria-hidden="true"><span class="lamp__knob"></span></span>
+    </button>
+
+    <button class="nav__toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="menu-mobile">
+      Menu
+    </button>
+  </div>
+  <div class="nav__panel" id="menu-mobile" data-nav-panel hidden>
+    <a href="index.html#sobre">Sobre</a>
+    <a href="index.html#projetos">Projetos</a>
+    <a href="index.html#games">Games</a>
+    <a href="index.html#skills">Stack</a>
+    <a href="index.html#experiencia">Experiência</a>
+    <a href="index.html#contato">Contato</a>
+  </div>
+</header>
+
+<main id="conteudo">
+  <article class="wrap" data-od-id="case">
+
+    <header class="case__head">
+      <span class="kicker">projetos/08 · no ar</span>
+      <h1 class="h1 case__title">POV</h1>
+      <p class="lead case__lead">
+        Uma carta com dois extremos, um alvo escondido na escala e uma dica curta. O resto da rodada é gente discutindo o que “caro” significa.
+      </p>
+
+      <dl class="case__meta invert">
+        <div><dt>Ano</dt><dd>2026 · no ar</dd></div>
+        <div><dt>Papel</dt><dd>Sozinho, do conceito ao deploy</dd></div>
+        <div><dt>Stack</dt><dd>Svelte · Convex · TypeScript · Vite</dd></div>
+        <div><dt>Link</dt><dd><a href="https://pov-beige.vercel.app/" target="_blank" rel="noopener">jogar agora ↗</a></dd></div>
+      </dl>
+    </header>
+
+    <figure class="shot dither-12">
+      <video src="assets/shots/pov-agulha.mp4" width="1440" height="900"
+             autoplay muted loop playsinline preload="metadata"
+             aria-label="O medidor do POV com a agulha girando pela escala entre dois extremos opostos."></video>
+      <figcaption>
+        <span>a agulha não desliza: ela passa por casas, e cada casa trava</span>
+        <span class="shot__cor">passe o cursor para ver em cor</span>
+      </figcaption>
+    </figure>
+
+    <div class="case__body">
+      <section class="case__block">
+        <h2 class="h2">O problema</h2>
+        <p class="body-text">
+          É o único projeto daqui que nasceu de uma frase antes de nascer de um requisito: um jogo onde você tenta acertar como outra pessoa enxerga o mundo. Não existe resposta certa absoluta — existe entender o ponto de vista de quem deu a dica.
+        </p>
+        <p class="body-text">
+          O que torna isso difícil de construir é que a diversão é quase toda sensorial. Um jogo assim com cara de formulário não é um jogo pior: é outra coisa, e uma coisa que ninguém quer jogar.
+        </p>
+      </section>
+
+      <section class="case__block">
+        <h2 class="h2">A decisão</h2>
+        <p class="body-text">
+          Perseguir a sensação de peça física antes de qualquer outra coisa. O medidor é o coração do jogo, e ele não podia se comportar como um slider de HTML. A referência não era um app: era um objeto de mesa, com dentes internos, tampa que desliza e trava sonora no encaixe.
+        </p>
+      </section>
+
+      <section class="case__block case__block--wide">
+        <h2 class="h2">A agulha não desliza, ela encaixa</h2>
+        <p class="body-text">
+          Um slider comum é contínuo e macio, e macio aqui é exatamente o defeito. A agulha do POV passa por casas discretas, com microtravamento em cada uma, feedback a cada passagem e um encaixe mais firme quando você solta. É mais código do que um input de intervalo e o resultado é, na descrição funcional, exatamente igual: um número entre dois extremos.
+        </p>
+        <p class="body-text">
+          Só que a descrição funcional é justamente o que não importa nesse projeto. Arrastar, sentir as travas, soltar e ouvir o encaixe é metade da rodada.
+        </p>
+      </section>
+
+      <section class="case__block">
+        <h2 class="h2">O alvo nunca chega no cliente errado</h2>
+        <p class="body-text">
+          Todo jogo de dica tem o mesmo ponto de ruptura: o alvo secreto é visível só pro Dono do POV. Se ele viajar pra todos os navegadores e ficar escondido na interface, o jogo tem uma trapaça de um clique de distância.
+        </p>
+        <p class="body-text">
+          Então a consulta que alimenta a tela decide, jogador por jogador, se aquele número pode ser enviado. Quem não é o Dono recebe o campo nulo até a fase de revelação. Não é esconder: é não mandar.
+        </p>
+      </section>
+
+      <section class="case__block">
+        <h2 class="h2">O que eu levo daqui</h2>
+        <p class="body-text">
+          É o único dos meus jogos fora do React, e escolher Svelte aqui não foi por moda: uma agulha com travas é estado que muda muitas vezes por segundo, e eu queria escrever isso sem pensar em memoização. Foi também o mais rápido de sair do papel, o que me diz alguma coisa sobre o custo de familiaridade contra o custo de fricção.
+        </p>
+      </section>
+
+    </div>
+
+    <nav class="case__nav" aria-label="Navegação entre projetos">
+      <a class="btn btn--ghost" href="projeto-sus.html">‹ Anterior: SUS</a>
+      <a class="btn" href="index.html#projetos">Todos os projetos ›</a>
+    </nav>
+
+  </article>
+</main>
+
+<footer class="foot" data-od-id="footer">
+  <div class="wrap foot__inner">
+    <span class="mono-caps">Luan Taraschi · MMXXVI</span>
+    <ul class="social">
+      <li><a class="social__l social__l--gh" href="https://github.com/luantaraschi" target="_blank" rel="noopener">GitHub</a></li>
+      <li><a class="social__l social__l--li" href="https://www.linkedin.com/in/luantaraschi/" target="_blank" rel="noopener">LinkedIn</a></li>
+      <li><a class="social__l social__l--ig" href="https://www.instagram.com/luantaraschi/" target="_blank" rel="noopener">Instagram</a></li>
+    </ul>
+    <span class="mono-caps">feito por mim, com muito amor</span>
+  </div>
+</footer>
+
+<script src="js/app.js" defer></script>
+</body>
+</html>
+
