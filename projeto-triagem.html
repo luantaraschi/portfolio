@@ -122,10 +122,10 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
         <h2 class="h2">A decisão</h2>
         <p class="body-text">
           Colocar a IA na triagem, não na resposta. O agente lê a conversa,
-          classifica por perfil e intenção e decide se aquilo vira lead; a partir daí
-          quem fala é o humano. É a parte do trabalho que é repetitiva de verdade, e
-          é a única em que errar sai barato: um lead mal classificado se corrige na
-          tela, uma resposta jurídica errada não.
+          classifica por perfil e intenção e decide se aquilo vira lead. A partir daí
+          quem fala é o humano. Triar é a parte repetitiva de verdade, e é também a
+          única em que errar sai barato: um lead mal classificado se corrige na tela em
+          dois cliques, enquanto uma resposta jurídica errada já saiu de casa.
         </p>
       </section>
 
@@ -133,11 +133,12 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
         <h2 class="h2">Guarda-corpo, não prompt</h2>
         <p class="body-text">
           Um assistente que responde no WhatsApp de um escritório de advocacia não
-          pode dar consultoria jurídica. Isso não é constrangimento de UX, é risco
-          disciplinar. Então a defesa não mora no prompt: é uma camada de guardrails
-          com escopo explícito (triar e coletar dado, nunca aconselhar), defesa contra
-          prompt injection, disjuntor de custo, e handoff que pausa o bot no instante
-          em que um advogado assume a conversa.
+          pode dar consultoria jurídica. O risco aqui é disciplinar, não é de
+          experiência de uso, então a defesa precisava ser mais dura que uma instrução
+          no prompt. Ela é uma camada de guardrails com escopo explícito (triar e
+          coletar dado, nunca aconselhar), defesa contra prompt injection, disjuntor de
+          custo, e handoff que pausa o bot no instante em que um advogado assume a
+          conversa.
         </p>
         <p class="body-text">
           A checagem roda antes do modelo. Uma pergunta de mérito jurídico nunca chega
@@ -158,9 +159,11 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
           conversas, com o histórico partido ao meio.
         </p>
         <p class="body-text">
-          A correção não foi mascarar na tela. Foi definir um identificador canônico e
-          casar as variantes já na entrada do webhook, antes de qualquer coisa tocar o
-          banco. Bug de domínio regional que documentação nenhuma avisa.
+          Mascarar na tela resolveria a aparência e deixaria o histórico partido do
+          mesmo jeito. A correção foi definir um identificador canônico e casar as
+          variantes já na entrada do webhook, antes de qualquer coisa tocar o banco. É o
+          tipo de armadilha regional que a documentação de nenhuma API estrangeira
+          avisa.
         </p>
       </section>
 
@@ -170,8 +173,9 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
           Hoje a triagem roda inteira por IA e só o lead qualificado chega à equipe.
           As conversas ficam amarradas ao processo dentro do próprio sistema, então o
           histórico deixou de morar no celular de alguém. Está em produção sob meu
-          suporte direto, e isso muda o trabalho: o que eu entrego não é uma entrega,
-          é um sistema que precisa acordar funcionando toda manhã.
+          suporte direto, e isso muda o tipo de trabalho: não existe data de entrega
+          depois da qual eu saio de cena, existe um sistema que precisa acordar
+          funcionando toda manhã.
         </p>
         <div class="case__gallery">
           <!-- slot: assets/shots/triagem-lead.mp4 · o gif de maior retorno da lista -->

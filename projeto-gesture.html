@@ -82,7 +82,7 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
       <span class="kicker">projetos/04 · roda na sua máquina</span>
       <h1 class="h1 case__title">Gesture AI Desk</h1>
       <p class="lead case__lead">
-        Controlar o computador com a mão pela webcam: pausar música, mudar volume, tirar print. Sem teclado, sem mouse e sem mandar um único quadro pra internet.
+        Controlar o computador com a mão pela webcam: pausar música, mudar volume, tirar print. Nenhum quadro sai da sua máquina em nenhum momento.
       </p>
 
       <dl class="case__meta invert">
@@ -106,17 +106,17 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
       <section class="case__block">
         <h2 class="h2">O problema</h2>
         <p class="body-text">
-          Começou como uma pergunta prática: dá pra pausar uma música com a mão suja de farinha? Mas a pergunta interessante não é detectar a mão. Bibliotecas fazem isso há anos e fazem bem.
+          Começou como uma pergunta prática: dá pra pausar uma música com a mão suja de farinha? Detectar a mão em si é problema resolvido, e bibliotecas fazem isso há anos.
         </p>
         <p class="body-text">
-          A pergunta difícil é a de sempre em interface por gesto: como o computador sabe que você quis, e não que você só passou a mão na frente da câmera coçando o nariz.
+          O que continua difícil em interface por gesto é saber a intenção: o computador precisa distinguir entre você querendo alguma coisa e você passando a mão na frente da câmera pra coçar o nariz.
         </p>
       </section>
 
       <section class="case__block">
         <h2 class="h2">A decisão</h2>
         <p class="body-text">
-          Tudo offline. Nenhuma API, nenhum serviço de visão na nuvem, nenhum quadro saindo da máquina. Isso não é só postura de privacidade: uma webcam ligada mandando imagem pra fora é exatamente o tipo de coisa que a pessoa desinstala no segundo dia. O modelo do MediaPipe roda local, e o navegador só conversa com o meu próprio processo por WebSocket.
+          Tudo offline: nenhuma API e nenhum serviço de visão na nuvem. Além da questão de privacidade, tem um motivo prático: uma webcam ligada mandando imagem pra fora é o tipo de coisa que a pessoa desinstala no segundo dia. O modelo do MediaPipe roda local, e o navegador só conversa com o meu próprio processo por WebSocket.
         </p>
       </section>
 
@@ -129,7 +129,7 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
           Primeiro o estado dos dedos vira um número de cinco bits, um por dedo, e o gesto é uma consulta numa tabela: barato o bastante pra caber no orçamento de cada quadro. Depois um estabilizador só aceita a mudança quando o mesmo gesto aparece em cinco quadros seguidos, o que mata o tremor de detecção. Em cima disso, um temporizador exige meio segundo de gesto mantido antes de disparar, com um anel de progresso na tela pra você ver que está carregando e poder desistir. E depois de disparar, um segundo de descanso em que aquele gesto simplesmente não conta.
         </p>
         <p class="body-text">
-          Nenhuma dessas quatro camadas é esperta sozinha. Juntas, elas transformam um fluxo barulhento em uma ação intencional.
+          Sozinha, cada uma dessas quatro camadas é bem burra. Empilhadas, elas dão conta de transformar um fluxo barulhento em uma ação que a pessoa quis fazer.
         </p>
         <div class="case__nums">
           <div class="case__num"><b>21</b><span>pontos por mão</span></div>
@@ -144,14 +144,14 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
           O repositório tinha uma pasta de frontend que na verdade era um ponteiro quebrado de submodule: o painel em React nunca esteve versionado ali. Descobri isso tentando rodar o projeto do zero, que é exatamente o que qualquer pessoa que clona faria.
         </p>
         <p class="body-text">
-          Reescrevi como um arquivo HTML único, sem build e sem dependência: câmera, gesto atual com o anel de hold, lista de comandos, estado da conexão e log de ações disparadas. O esqueleto da mão é desenhado num canvas por cima da imagem, com as coordenadas normalizadas que o backend manda. Ficou mais simples de manter do que o que existia antes, e agora clonar e rodar funciona de verdade.
+          Reescrevi como um arquivo HTML único, sem build e sem dependência: câmera, gesto atual com o anel de hold, lista de comandos, estado da conexão e log de ações disparadas. O esqueleto da mão é desenhado num canvas por cima da imagem, com as coordenadas normalizadas que o backend manda. Ficou mais simples de manter do que o que existia antes, e agora clonar o repositório e rodar funciona.
         </p>
       </section>
 
       <section class="case__block">
-        <h2 class="h2">O que eu levo daqui</h2>
+        <h2 class="h2">A parte difícil não era a do nome</h2>
         <p class="body-text">
-          Que a parte difícil quase nunca é a que dá nome ao projeto. “Detecção de gestos” foi um dia de trabalho porque o MediaPipe faz o peso. O resto do tempo foi decidir quando ignorar o que ele detectou.
+          A detecção de gestos, que é o que dá nome ao projeto, foi um dia de trabalho, porque o MediaPipe carrega o peso todo. O resto do tempo eu passei decidindo quando ignorar o que ele detectou, e essa parte não aparece em nenhuma demonstração.
         </p>
       </section>
 

@@ -109,49 +109,49 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
           Todo mundo já jogou de adivinhar música numa mesa de bar, e todo mundo já viu isso desandar: um fala antes, ninguém sabe quem acertou primeiro, e a discussão sobre quem falou antes dura mais que a rodada.
         </p>
         <p class="body-text">
-          Um placar automático resolve. Mas só se ele conseguir dizer, sem dúvida, quem chegou primeiro.
+          Um placar automático resolve isso, desde que ele consiga dizer sem dúvida quem chegou primeiro.
         </p>
       </section>
 
       <section class="case__block">
         <h2 class="h2">A decisão</h2>
         <p class="body-text">
-          O servidor de tempo real vive fora da Vercel. Funções serverless não seguram conexão TCP longa, e existem contornos pagos pra isso — mas um Fastify com Socket.IO num container da Railway custa uns cinco dólares por mês quando passa do plano gratuito e me dá controle total do protocolo. O site continua na Vercel; só o jogo mora noutro lugar.
+          O servidor de tempo real vive fora da Vercel. Funções serverless não seguram conexão TCP longa. Existem contornos pagos pra isso, mas um Fastify com Socket.IO num container da Railway custa uns cinco dólares por mês depois do plano gratuito e me dá controle total do protocolo. O site continua na Vercel, e só o jogo mora noutro lugar.
         </p>
         <p class="body-text">
-          Toda pontuação é decidida no servidor. Ele é o único que sabe a hora em que cada resposta chegou, então ele é o único que pode dizer quem foi primeiro.
+          Toda pontuação é decidida no servidor, que é quem sabe a hora exata em que cada resposta chegou.
         </p>
       </section>
 
       <section class="case__block case__block--wide">
         <h2 class="h2">As URLs morrem em trinta minutos</h2>
         <p class="body-text">
-          O trecho de cada música vem do Deezer, e a URL dele não é um endereço estável: é um link assinado com validade embutida, no padrão de token da Akamai. Guardar essa URL no banco funciona lindamente nos testes e falha em produção umas horas depois, que é a pior combinação possível.
+          O trecho de cada música vem do Deezer, e a URL dele não é um endereço estável: é um link assinado com validade embutida, no padrão de token da Akamai. Guardar essa URL no banco funciona nos testes e falha em produção algumas horas depois, quando ninguém mais está olhando pra aquele código.
         </p>
         <p class="body-text">
-          Eu medi em vez de chutar: de vinte faixas cacheadas, doze respondiam 403 quarenta minutos depois. Sessenta por cento da partida seria silêncio.
+          Em vez de chutar, eu medi: de vinte faixas cacheadas, doze respondiam 403 quarenta minutos depois. Numa partida real isso seria a maior parte das rodadas tocando silêncio.
         </p>
         <p class="body-text">
-          A correção foi separar o que dura do que não dura. O banco guarda a metadata da faixa, que é estável; a URL do trecho é buscada de novo, em lote, no instante em que a sala começa a partida — antes da contagem regressiva, com um controle de vazão pra nunca estourar o limite da API. Se alguma faixa sumiu do catálogo no meio do caminho, ela é descartada ali e substituída antes de qualquer jogador perceber. O “Preparando partida...” que aparece na tela não é enfeite: é esse lote acontecendo.
+          A correção separou o que tem validade longa do que não tem. O banco guarda a metadata da faixa, que é estável. A URL do trecho é buscada de novo, em lote, no instante em que a sala começa a partida, antes da contagem regressiva e com um controle de vazão pra nunca estourar o limite da API. Se alguma faixa sumiu do catálogo no meio do caminho, ela é descartada ali e substituída antes de qualquer jogador perceber. Aquele "Preparando partida..." que aparece na tela é esse lote acontecendo.
         </p>
         <div class="case__nums">
           <div class="case__num"><b>~30min</b><span>de validade na URL assinada</span></div>
           <div class="case__num"><b>12 de 20</b><span>faixas mortas depois de 40min</span></div>
-          <div class="case__num"><b>0</b><span>rodadas em silêncio depois da correção</span></div>
+          <div class="case__num"><b>300ms a 2s</b><span>o lote inteiro antes da contagem</span></div>
         </div>
       </section>
 
       <section class="case__block">
-        <h2 class="h2">Acertar “quase” ainda é acertar</h2>
+        <h2 class="h2">Acertar "quase" ainda é acertar</h2>
         <p class="body-text">
-          Ninguém digita o nome da música exatamente como está no catálogo, com acento, com o “(Remastered 2011)” no fim e com o feat na ordem certa. Então a resposta passa por normalização e por uma tabela de apelidos antes de ser comparada, e o placar aceita a forma como as pessoas de fato escrevem.
+          Ninguém digita o nome da música exatamente como está no catálogo, com acento, com o "(Remastered 2011)" no fim e com o feat na ordem certa. Então a resposta passa por normalização e por uma tabela de apelidos antes de ser comparada, e o placar aceita a forma como as pessoas de fato escrevem.
         </p>
       </section>
 
       <section class="case__block">
-        <h2 class="h2">O que eu levo daqui</h2>
+        <h2 class="h2">Um bug que só existe depois de meia hora</h2>
         <p class="body-text">
-          Que integração com API de terceiro não se testa em desenvolvimento, se testa no relógio. O bug das URLs assinadas passaria por qualquer suíte de testes: no minuto zero está tudo verde. Ele só existe depois de meia hora, e só na máquina de quem está jogando.
+          O bug das URLs assinadas passaria por qualquer suíte de testes, porque no minuto zero está tudo verde. Ele só aparece depois de meia hora e só na máquina de quem está jogando. Desde então eu olho integração com API de terceiro pensando em quanto tempo aquilo continua válido, e não só em se responde certo agora.
         </p>
       </section>
 

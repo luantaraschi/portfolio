@@ -114,10 +114,10 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
           a "como está o processo do fulano?".
         </p>
         <p class="body-text">
-          O problema não era falta de ferramenta. Era que nenhuma ferramenta conhecia
-          o fluxo inteiro do escritório. Lead chega pelo WhatsApp, vira cliente, vira
-          processo, gera prazo, audiência, petição e honorário. Cada software cobria
-          um pedaço; nenhum cobria a costura entre eles.
+          Faltava ferramenta que conhecesse o fluxo inteiro do escritório. Lead chega
+          pelo WhatsApp, vira cliente, vira processo, gera prazo, audiência, petição e
+          honorário. Cada software cobria um pedaço desse caminho e nenhum cobria a
+          costura entre os pedaços, que é onde a informação se perdia.
         </p>
       </section>
 
@@ -125,15 +125,15 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
         <h2 class="h2">A decisão</h2>
         <p class="body-text">
           Construir um sistema só, com banco só e login só, que seguisse o funil
-          inteiro em vez de mais uma ilha. tRPC com Zod para o tipo ser compartilhado
-          entre cliente e servidor: renomear um campo quebra o build, não a produção.
-          Drizzle para ter SQL de verdade quando o domínio pede. Railway com uma
-          réplica só, porque escala especulativa em escritório de cinco pessoas é
-          custo, não virtude.
+          inteiro em vez de virar mais uma ilha. tRPC com Zod para o tipo ser
+          compartilhado entre cliente e servidor, de modo que renomear um campo estoure
+          no build antes de estourar na produção. Drizzle para ter SQL de verdade quando
+          o domínio pede. Railway com uma réplica só, porque escala especulativa num
+          escritório de cinco pessoas só gera custo.
         </p>
         <p class="body-text">
-          E uma camada própria de IA multi-provedor, para que trocar de modelo fosse
-          configuração e não decisão de arquitetura.
+          E uma camada própria de IA multi-provedor, para que trocar de modelo virasse
+          uma linha de configuração em vez de uma decisão de arquitetura.
         </p>
       </section>
 
@@ -194,7 +194,8 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
         <p class="body-text">
           O diagnóstico saiu do sintoma ("anexo não abre") até a causa raiz, e a
           correção foi um guard na origem mais um reparo idempotente no boot para os
-          dados já gravados. Bug de infraestrutura fantasiado de bug de produto.
+          dados que já estavam gravados errados. O usuário reportou como falha do
+          produto uma coisa que aconteceu na camada de infraestrutura.
         </p>
       </section>
 
@@ -208,11 +209,12 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
           para um problema que nunca chega.
         </p>
         <p class="body-text">
-          É o que eu levo daqui: foi o primeiro projeto em que fui produto e
-          engenharia ao mesmo tempo, com usuário real do outro lado que perde dinheiro
-          se eu errar. A decisão mais cara de um dev sozinho não é escolher a stack,
-          é escolher o que não construir. E traduzir um domínio complexo, o CPC, o
-          processo eletrônico, a rotina do escritório, é metade do trabalho.
+          Foi o primeiro projeto em que eu fui produto e engenharia ao mesmo tempo, com
+          usuário real do outro lado que perde dinheiro se eu errar. Trabalhando sozinho,
+          eu gastei mais energia decidindo o que deixar de fora do que escolhendo a
+          stack. E boa parte do trabalho nem foi programar: foi entender o CPC, o
+          processo eletrônico e a rotina do escritório o suficiente pra traduzir tudo
+          isso em tela.
         </p>
         <div class="case__gallery">
           <figure class="shot shot--tall dither-25">

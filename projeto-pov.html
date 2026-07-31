@@ -82,7 +82,7 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
       <span class="kicker">projetos/08 · no ar</span>
       <h1 class="h1 case__title">POV</h1>
       <p class="lead case__lead">
-        Uma carta com dois extremos, um alvo escondido na escala e uma dica curta. O resto da rodada é gente discutindo o que “caro” significa.
+        Uma carta com dois extremos, um alvo escondido na escala e uma dica curta. O resto da rodada é gente discutindo o que "caro" significa.
       </p>
 
       <dl class="case__meta invert">
@@ -107,44 +107,44 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
       <section class="case__block">
         <h2 class="h2">O problema</h2>
         <p class="body-text">
-          É o único projeto daqui que nasceu de uma frase antes de nascer de um requisito: um jogo onde você tenta acertar como outra pessoa enxerga o mundo. Não existe resposta certa absoluta — existe entender o ponto de vista de quem deu a dica.
+          É o único projeto daqui que nasceu de uma frase antes de nascer de um requisito: um jogo onde você tenta acertar como outra pessoa enxerga o mundo. A rodada não tem resposta certa absoluta, tem o ponto de vista de quem deu a dica.
         </p>
         <p class="body-text">
-          O que torna isso difícil de construir é que a diversão é quase toda sensorial. Um jogo assim com cara de formulário não é um jogo pior: é outra coisa, e uma coisa que ninguém quer jogar.
+          Construir isso é difícil porque a diversão é quase toda sensorial. Com cara de formulário, um jogo assim vira outra coisa, e uma coisa que ninguém quer jogar.
         </p>
       </section>
 
       <section class="case__block">
         <h2 class="h2">A decisão</h2>
         <p class="body-text">
-          Perseguir a sensação de peça física antes de qualquer outra coisa. O medidor é o coração do jogo, e ele não podia se comportar como um slider de HTML. A referência não era um app: era um objeto de mesa, com dentes internos, tampa que desliza e trava sonora no encaixe.
+          Perseguir a sensação de peça física antes de qualquer outra coisa. O medidor é o coração do jogo e não podia se comportar como um slider de HTML. A referência que eu usei o tempo todo foi um objeto de mesa, com dentes internos, tampa que desliza e trava sonora no encaixe.
         </p>
       </section>
 
       <section class="case__block case__block--wide">
         <h2 class="h2">A agulha não desliza, ela encaixa</h2>
         <p class="body-text">
-          Um slider comum é contínuo e macio, e macio aqui é exatamente o defeito. A agulha do POV passa por casas discretas, com microtravamento em cada uma, feedback a cada passagem e um encaixe mais firme quando você solta. É mais código do que um input de intervalo e o resultado é, na descrição funcional, exatamente igual: um número entre dois extremos.
+          Um slider comum é contínuo e macio, e macio aqui é justamente o defeito. A agulha do POV passa por casas discretas, com microtravamento em cada uma, feedback a cada passagem e um encaixe mais firme quando você solta. Dá muito mais código do que um input de intervalo pra chegar, na descrição funcional, no mesmo lugar: um número entre dois extremos.
         </p>
         <p class="body-text">
-          Só que a descrição funcional é justamente o que não importa nesse projeto. Arrastar, sentir as travas, soltar e ouvir o encaixe é metade da rodada.
+          Só que nesse projeto a descrição funcional importa pouco. Arrastar, sentir as travas, soltar e ouvir o encaixe é metade da rodada.
         </p>
       </section>
 
       <section class="case__block">
         <h2 class="h2">O alvo nunca chega no cliente errado</h2>
         <p class="body-text">
-          Todo jogo de dica tem o mesmo ponto de ruptura: o alvo secreto é visível só pro Dono do POV. Se ele viajar pra todos os navegadores e ficar escondido na interface, o jogo tem uma trapaça de um clique de distância.
+          Todo jogo de dica trinca no mesmo lugar: o alvo secreto é visível só pro Dono do POV. Se ele viajar pra todos os navegadores e ficar escondido só na interface, a trapaça está a um clique de distância.
         </p>
         <p class="body-text">
-          Então a consulta que alimenta a tela decide, jogador por jogador, se aquele número pode ser enviado. Quem não é o Dono recebe o campo nulo até a fase de revelação. Não é esconder: é não mandar.
+          Então a consulta que alimenta a tela decide, jogador por jogador, se aquele número pode ser enviado. Quem não é o Dono recebe o campo nulo até a fase de revelação, ou seja, o segredo nunca chega na máquina errada pra depois ser escondido lá.
         </p>
       </section>
 
       <section class="case__block">
-        <h2 class="h2">O que eu levo daqui</h2>
+        <h2 class="h2">Por que Svelte, e não React</h2>
         <p class="body-text">
-          É o único dos meus jogos fora do React, e escolher Svelte aqui não foi por moda: uma agulha com travas é estado que muda muitas vezes por segundo, e eu queria escrever isso sem pensar em memoização. Foi também o mais rápido de sair do papel, o que me diz alguma coisa sobre o custo de familiaridade contra o custo de fricção.
+          É o único dos meus jogos fora do React. Uma agulha com travas é estado que muda muitas vezes por segundo, e eu queria escrever isso sem ficar pensando em memoização. Foi também o projeto mais rápido de sair do papel, o que me deixou com uma dúvida que eu ainda não resolvi: se foi mérito do Svelte ou só de o escopo ser menor.
         </p>
       </section>
 

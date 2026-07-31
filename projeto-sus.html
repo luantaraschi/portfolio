@@ -82,7 +82,7 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
       <span class="kicker">projetos/07 · no ar</span>
       <h1 class="h1 case__title">SUS</h1>
       <p class="lead case__lead">
-        Todo mundo recebe a mesma palavra, menos um. A partir daí é conversa, blefe e votação — e o impostor tem que fingir que sabe do que estão falando.
+        Todo mundo recebe a mesma palavra, menos um. A partir daí é conversa, blefe e votação, com o impostor tendo que fingir que sabe do que estão falando.
       </p>
 
       <dl class="case__meta invert">
@@ -106,41 +106,41 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
       <section class="case__block">
         <h2 class="h2">O problema</h2>
         <p class="body-text">
-          Jogo de impostor é ótimo numa mesa e péssimo em grupo de WhatsApp. Alguém precisa distribuir as palavras no privado, alguém precisa lembrar quem é quem, e quem chegou atrasado quebra tudo.
+          Jogo de impostor é ótimo numa mesa e péssimo em grupo de WhatsApp. Alguém tem que distribuir as palavras no privado, alguém tem que lembrar quem é quem, e quem chegou atrasado quebra a rodada inteira.
         </p>
         <p class="body-text">
-          E a maior parte dos apps que resolvem isso pede cadastro antes de deixar você jogar, que é exatamente onde a chamada com os amigos morre.
+          A maior parte dos apps que resolvem isso pede cadastro antes de deixar você jogar, e é aí que a chamada com os amigos morre.
         </p>
       </section>
 
       <section class="case__block">
         <h2 class="h2">A decisão</h2>
         <p class="body-text">
-          Zero atrito na porta. Você abre o link, o apelido já vem preenchido, o avatar já vem sorteado, você digita o código da sala e está dentro. A conta existe, mas é opcional e serve pra guardar histórico — nunca é pedágio pra entrar. Numa call de sexta à noite, cada campo de formulário a mais custa um jogador.
+          Tirar o atrito da porta. Você abre o link, o apelido já vem preenchido, o avatar já vem sorteado, você digita o código da sala e está dentro. A conta existe, mas é opcional e serve pra guardar histórico. Numa call de sexta à noite, cada campo de formulário a mais custa um jogador.
         </p>
       </section>
 
       <section class="case__block case__block--wide">
         <h2 class="h2">O segredo tem que morar no servidor</h2>
         <p class="body-text">
-          É o mesmo problema de todo jogo de informação oculta: se o cliente recebe a palavra de todo mundo e só esconde na tela, o jogo acaba no primeiro que abrir o inspetor. Não adianta esconder com CSS o que já chegou na máquina.
+          É o mesmo problema de todo jogo de informação oculta: se o cliente recebe a palavra de todo mundo e só esconde na tela, o jogo acaba no primeiro que abrir o inspetor. Esconder com CSS uma coisa que já chegou na máquina não esconde nada.
         </p>
         <p class="body-text">
-          Então o que cada jogador recebe é recortado no servidor, por jogador: o impostor recebe uma coisa, os outros recebem outra, e a palavra completa só vira pública na revelação. É uma regra chata de manter porque ela aparece em toda consulta nova que você escreve, e basta esquecer uma vez.
+          Então o que cada jogador recebe é recortado no servidor, um por um: o impostor recebe uma coisa, os outros recebem outra, e a palavra completa só vira pública na revelação. É uma regra chata de manter, porque ela reaparece em toda consulta nova que você escreve e basta esquecer uma vez pra estragar a partida.
         </p>
       </section>
 
       <section class="case__block">
         <h2 class="h2">Quem cai no meio da rodada</h2>
         <p class="body-text">
-          Sala em tempo real é fácil enquanto ninguém sai. O caso real é o celular que bloqueia a tela, o metrô que entra no túnel, a aba que recarrega. O estado vive no servidor e a tela é só um reflexo dele, então voltar significa reassinar a consulta e reaparecer na mesma rodada, no mesmo lugar. É o problema que mais aparece em todos os jogos daqui, e por isso o que eu mais aprendi a resolver.
+          Sala em tempo real é fácil enquanto ninguém sai. O caso real é o celular que bloqueia a tela, o metrô que entra no túnel, a aba que recarrega sozinha. Como o estado vive no servidor e a tela é só um reflexo dele, voltar significa reassinar a consulta e reaparecer na mesma rodada, no mesmo lugar. Esse é o problema que mais se repete nos jogos daqui, e por isso o que eu mais aprendi a resolver.
         </p>
       </section>
 
       <section class="case__block">
-        <h2 class="h2">O que eu levo daqui</h2>
+        <h2 class="h2">Quem é dono da informação</h2>
         <p class="body-text">
-          Que quase todo problema de jogo multijogador é uma pergunta sobre autoridade: quem é dono dessa informação. Quando eu respondo isso primeiro, o resto do código se escreve sozinho. Quando eu deixo pra depois, vira remendo em cima de remendo.
+          Quase todo problema de jogo multijogador que eu encontrei acaba virando a mesma pergunta: quem é dono dessa informação. Nas vezes em que eu respondi isso no começo, o resto do código saiu quase sozinho. Nas vezes em que deixei pra depois, virou remendo em cima de remendo.
         </p>
       </section>
 

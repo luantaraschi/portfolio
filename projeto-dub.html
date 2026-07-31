@@ -101,7 +101,7 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
              controls preload="metadata"
              aria-label="Trecho de um vídeo técnico sobre um instrumento de alinhamento, com a interface do aparelho em inglês na tela e narração em português."></video>
       <figcaption>
-        <span>vinte e seis segundos da saída real do pipeline — dê play com som, a prova aqui é a voz</span>
+        <span>vinte e seis segundos da saída real do pipeline. Dê play com som: a prova aqui é a voz</span>
       </figcaption>
     </figure>
 
@@ -109,41 +109,41 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
       <section class="case__block">
         <h2 class="h2">O problema</h2>
         <p class="body-text">
-          Muito material técnico bom só existe em inglês. Legenda resolve em parte, mas legenda compete com a tela: num vídeo em que você precisa olhar o que a mão da pessoa está fazendo, ler embaixo custa caro.
+          Muito material técnico bom só existe em inglês. Legenda resolve em parte, mas compete com a tela: num vídeo em que você precisa olhar o que a mão da pessoa está fazendo, ler embaixo atrapalha.
         </p>
         <p class="body-text">
-          Dublar à mão é caro de outro jeito. Uma hora de vídeo vira um dia de estúdio.
+          Dublar à mão resolve melhor, mas uma hora de vídeo vira um dia de estúdio.
         </p>
       </section>
 
       <section class="case__block">
         <h2 class="h2">A decisão</h2>
         <p class="body-text">
-          Montar o caminho inteiro como pipeline, sem passo manual no meio: o áudio sai do vídeo, o Whisper transcreve em segmentos com marca de tempo, cada segmento é traduzido, a voz é sintetizada, os cortes voltam posicionados pelo timestamp original e o vídeo final é renderizado. Se algum passo precisasse de humano, o projeto não teria valor nenhum: viraria um editor de vídeo pior que os que existem.
+          Montar o caminho inteiro como pipeline, sem passo manual no meio: o áudio sai do vídeo, o Whisper transcreve em segmentos com marca de tempo, cada segmento é traduzido, a voz é sintetizada, os cortes voltam posicionados pelo timestamp original e o vídeo final é renderizado. A ausência de passo manual é o que dá valor ao projeto: com um humano no meio do caminho, ele seria só um editor de vídeo pior do que os que já existem.
         </p>
       </section>
 
       <section class="case__block case__block--wide">
         <h2 class="h2">Português é mais longo que inglês</h2>
         <p class="body-text">
-          Esse é o problema de verdade, e só aparece quando você roda pela primeira vez. A tradução de uma frase inglesa costuma ficar mais comprida em português, e a voz sintetizada dela não cabe no espaço de tempo do segmento original. Cada segmento vaza alguns décimos pro seguinte, e no minuto três a dublagem está falando de uma coisa que apareceu na tela há muito tempo. O erro acumula.
+          Esse problema só aparece quando você roda o pipeline pela primeira vez. A tradução de uma frase inglesa costuma ficar mais comprida em português, e a voz sintetizada dela não cabe no espaço de tempo do segmento original. Cada segmento vaza alguns décimos pro seguinte, o erro vai se somando, e lá pelo minuto três a dublagem está falando de uma coisa que saiu da tela há muito tempo.
         </p>
         <p class="body-text">
-          A saída foi acelerar cada corte de voz individualmente, só o quanto ele precisa pra caber, sem deixar o pitch subir a ponto de virar desenho animado. O sincronismo é recuperado segmento a segmento em vez de esticar o vídeo ou cortar tradução. E o áudio original fica embaixo, bem baixo: mantém o ambiente da cena e dá uma referência de que aquilo não é uma faixa solta por cima.
+          A saída foi acelerar cada corte de voz individualmente, só o quanto ele precisa pra caber, sem deixar o pitch subir a ponto de virar desenho animado. Assim o sincronismo se recupera segmento a segmento, em vez de esticar o vídeo ou cortar pedaço da tradução. O áudio original fica embaixo, bem baixo, o que mantém o ambiente da cena.
         </p>
       </section>
 
       <section class="case__block">
         <h2 class="h2">Dois provedores de voz, um fallback</h2>
         <p class="body-text">
-          A síntese usa ElevenLabs quando tem chave configurada e cai pro Edge-TTS quando não tem. Não é abstração especulativa: um cobra por caractere e o outro é gratuito, então a escolha é econômica e muda no meio do uso. Quem só quer ver o pipeline rodando não precisa botar cartão em lugar nenhum.
+          A síntese usa ElevenLabs quando tem chave configurada e cai pro Edge-TTS quando não tem. Os dois provedores existem por razão econômica: um cobra por caractere, o outro é gratuito, e a escolha muda no meio do uso conforme o que você está disposto a gastar. Quem só quer ver o pipeline rodando não precisa botar cartão em lugar nenhum.
         </p>
       </section>
 
       <section class="case__block">
-        <h2 class="h2">O que eu levo daqui</h2>
+        <h2 class="h2">Sobre o vídeo aqui de cima</h2>
         <p class="body-text">
-          O vídeo aqui em cima é conteúdo técnico de outra pessoa, e está nesta página como demonstração curta do que o pipeline produz, não como material meu. Ele existe aqui por um motivo específico: esse é o único projeto do portfólio em que print nenhum prova nada. A qualidade está inteira na faixa de áudio.
+          É conteúdo técnico de outra pessoa, e está aqui como demonstração curta do que o pipeline produz, não como material meu. Botei um trecho porque esse é o único projeto do portfólio em que print nenhum prova coisa alguma: a qualidade está inteira na faixa de áudio, então ou você ouve ou não dá pra avaliar.
         </p>
       </section>
 
