@@ -152,11 +152,33 @@
       var data = new FormData(form);
 
       if (!FORM_ENDPOINT || !window.fetch) {
+        // assinatura separada por um traço em linha própria: é a convenção que
+        // todo cliente de e-mail entende, e sem ela o nome de quem escreve
+        // ficava colado no fim da mensagem como se fosse parte dela
+        var corpo = data.get('mensagem') + '\n\n--\n' +
+          data.get('nome') + '\n' + data.get('email') + '\n' +
+          'Enviado pelo formulário do luantaraschi.dev';
         var url = 'mailto:' + EMAIL +
           '?subject=' + encodeURIComponent('Contato do portfólio: ' + data.get('nome')) +
-          '&body=' + encodeURIComponent(data.get('mensagem') + '\n\n' + data.get('nome') + ' (' + data.get('email') + ')');
-        dizer('› abrindo seu cliente de e-mail…');
-        window.location.href = url;
+          '&body=' + encodeURIComponent(corpo);
+
+        // aba nova, não a mesma: com o Gmail registrado como handler, um
+        // location.href aqui trocava o portfólio pela tela de escrever e-mail e
+        // a pessoa perdia a página que estava lendo. Âncora sintética em vez de
+        // window.open porque bloqueador de popup deixa o clique em link passar.
+        // ela entra no documento antes do clique e sai logo depois: âncora solta
+        // funciona no Chrome mas o Firefox ignora o clique de quem não está na
+        // árvore, e aí o envio não fazia nada em metade dos browsers
+        var saida = document.createElement('a');
+        saida.href = url;
+        saida.target = '_blank';
+        saida.rel = 'noopener';
+        saida.style.display = 'none';
+        document.body.appendChild(saida);
+        saida.click();
+        document.body.removeChild(saida);
+
+        dizer('› abri seu cliente de e-mail numa aba nova.');
         return;
       }
 
