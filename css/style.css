@@ -175,28 +175,39 @@ body {
 .grid-glow.is-lit { opacity: 1; }
 
 /* 2.1 o cursor faz parte do sistema: seta 1-bit desenhada, com contorno.
-   Sobre o clicável ela inverte a polaridade - a mesma regra da seleção.
    No :active a mesma seta vem menor (20x32 -> 17x27): o ponteiro afunda junto
    com o botão, igual a todo o resto do site. As URLs moram aqui em cima porque
-   são quatro polaridades x dois estados; as regras lá embaixo ficam curtas. */
+   são quatro desenhos x dois estados; as regras lá embaixo ficam curtas.
+
+   Sobre o clicável não basta inverter a polaridade: invertida no modo claro a
+   seta vira clarinha com contorno escuro, que é exatamente a cara do ponteiro
+   padrão do Windows - dava a impressão de que o cursor do site tinha sumido bem
+   na hora em que ele mais precisa aparecer. Então o estado de link troca de
+   FORMA, não de cor: seta em escada de pixel, sem diagonal nenhuma, que nenhum
+   sistema operacional desenha. `crispEdges` segura o degrau duro no scale. */
 :root {
   --seta:        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='32' viewBox='0 0 12 19'%3E%3Cpath d='M1 1L1 16L4.6 12.6L6.9 18L9.3 17L7 11.8L11.4 11.8Z' fill='%23fce4a6' stroke='%231a1917' stroke-width='1.6' stroke-linejoin='miter' paint-order='stroke'/%3E%3C/svg%3E");
   --seta-press:  url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='17' height='27' viewBox='0 0 12 19'%3E%3Cpath d='M1 1L1 16L4.6 12.6L6.9 18L9.3 17L7 11.8L11.4 11.8Z' fill='%23fce4a6' stroke='%231a1917' stroke-width='1.6' stroke-linejoin='miter' paint-order='stroke'/%3E%3C/svg%3E");
-  --seta-inv:    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='32' viewBox='0 0 12 19'%3E%3Cpath d='M1 1L1 16L4.6 12.6L6.9 18L9.3 17L7 11.8L11.4 11.8Z' fill='%231a1917' stroke='%23fce4a6' stroke-width='1.6' stroke-linejoin='miter' paint-order='stroke'/%3E%3C/svg%3E");
-  --seta-inv-press: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='17' height='27' viewBox='0 0 12 19'%3E%3Cpath d='M1 1L1 16L4.6 12.6L6.9 18L9.3 17L7 11.8L11.4 11.8Z' fill='%231a1917' stroke='%23fce4a6' stroke-width='1.6' stroke-linejoin='miter' paint-order='stroke'/%3E%3C/svg%3E");
+  --seta-inv:    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='32' viewBox='0 0 12 19'%3E%3Cpath d='M0 0H1V1H2V2H3V3H4V4H5V5H6V6H7V7H8V8H9V9H5V15H3V11H0Z' fill='%23fce4a6' stroke='%231a1917' stroke-width='0.9' stroke-linejoin='miter' paint-order='stroke' shape-rendering='crispEdges'/%3E%3C/svg%3E");
+  --seta-inv-press: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='17' height='27' viewBox='0 0 12 19'%3E%3Cpath d='M0 0H1V1H2V2H3V3H4V4H5V5H6V6H7V7H8V8H9V9H5V15H3V11H0Z' fill='%23fce4a6' stroke='%231a1917' stroke-width='0.9' stroke-linejoin='miter' paint-order='stroke' shape-rendering='crispEdges'/%3E%3C/svg%3E");
 }
 :root[data-theme='light'] {
   --seta:        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='32' viewBox='0 0 12 19'%3E%3Cpath d='M1 1L1 16L4.6 12.6L6.9 18L9.3 17L7 11.8L11.4 11.8Z' fill='%23073642' stroke='%23eee8d5' stroke-width='1.6' stroke-linejoin='miter' paint-order='stroke'/%3E%3C/svg%3E");
   --seta-press:  url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='17' height='27' viewBox='0 0 12 19'%3E%3Cpath d='M1 1L1 16L4.6 12.6L6.9 18L9.3 17L7 11.8L11.4 11.8Z' fill='%23073642' stroke='%23eee8d5' stroke-width='1.6' stroke-linejoin='miter' paint-order='stroke'/%3E%3C/svg%3E");
-  --seta-inv:    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='32' viewBox='0 0 12 19'%3E%3Cpath d='M1 1L1 16L4.6 12.6L6.9 18L9.3 17L7 11.8L11.4 11.8Z' fill='%23eee8d5' stroke='%23073642' stroke-width='1.6' stroke-linejoin='miter' paint-order='stroke'/%3E%3C/svg%3E");
-  --seta-inv-press: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='17' height='27' viewBox='0 0 12 19'%3E%3Cpath d='M1 1L1 16L4.6 12.6L6.9 18L9.3 17L7 11.8L11.4 11.8Z' fill='%23eee8d5' stroke='%23073642' stroke-width='1.6' stroke-linejoin='miter' paint-order='stroke'/%3E%3C/svg%3E");
+  --seta-inv:    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='32' viewBox='0 0 12 19'%3E%3Cpath d='M0 0H1V1H2V2H3V3H4V4H5V5H6V6H7V7H8V8H9V9H5V15H3V11H0Z' fill='%23073642' stroke='%23eee8d5' stroke-width='0.9' stroke-linejoin='miter' paint-order='stroke' shape-rendering='crispEdges'/%3E%3C/svg%3E");
+  --seta-inv-press: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='17' height='27' viewBox='0 0 12 19'%3E%3Cpath d='M0 0H1V1H2V2H3V3H4V4H5V5H6V6H7V7H8V8H9V9H5V15H3V11H0Z' fill='%23073642' stroke='%23eee8d5' stroke-width='0.9' stroke-linejoin='miter' paint-order='stroke' shape-rendering='crispEdges'/%3E%3C/svg%3E");
 }
 
-:root                                              { cursor: var(--seta) 2 2, auto; }
-a, button, summary, label, [role='switch']         { cursor: var(--seta-inv) 2 2, pointer; }
-:root:active                                       { cursor: var(--seta-press) 2 2, auto; }
-:is(a, button, summary, label, [role='switch']):active {
-  cursor: var(--seta-inv-press) 2 2, pointer;
+/* a ponta da seta lisa cai em (1,1) do viewBox; a de escada cai em (0,0), então
+   a âncora muda junto - senão o clique sai um pixel abaixo de onde a ponta está */
+:root { cursor: var(--seta) 2 2, auto; }
+:root:active { cursor: var(--seta-press) 2 2, auto; }
+
+:is(a, button, summary, label, select, [role='switch'], [role='button']) {
+  cursor: var(--seta-inv) 1 1, pointer;
+}
+:is(a, button, summary, label, select, [role='switch'], [role='button']):active {
+  cursor: var(--seta-inv-press) 1 1, pointer;
 }
 /* campo de texto continua com cursor de texto - `cursor` é herdado */
 input, textarea { cursor: text; }
@@ -426,7 +437,12 @@ a { color: inherit; }
 
 /* ---------- 5. COMPONENTES ---------------------------------------------- */
 
-/* 5.1 botões - a pancada tátil vive aqui */
+/* 5.1 botões - a pancada tátil vive aqui.
+   Nenhum componente daqui pra baixo declara `cursor`. Era esse o bug: `.btn`,
+   `.lamp`, `.nav__toggle` e `.hero__me` traziam um `cursor: pointer` próprio, e
+   classe ganha de elemento na especificidade - então justo em cima do que é
+   clicável o desenho de 1 bit perdia pro ponteiro do sistema. O cursor mora
+   inteiro na seção 2.1 e mais em lugar nenhum. */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -442,7 +458,6 @@ a { color: inherit; }
   letter-spacing: 0.1em;
   text-transform: uppercase;
   text-decoration: none;
-  cursor: pointer;
   box-shadow: var(--shadow);
   transition: transform 90ms steps(2, end), box-shadow 90ms steps(2, end), background 90ms;
 }
@@ -520,7 +535,13 @@ a { color: inherit; }
   letter-spacing: 0.1em;
   text-transform: uppercase;
   text-decoration: none;
+  /* a marca é o único link do site que não tinha resposta nenhuma ao mouse.
+     Ela usa a mesma gramática dos cartões: sobe no hover, afunda no clique. */
+  transition: transform 110ms steps(2, end);
 }
+.nav__mark:hover  { transform: translate(-2px, -2px); }
+.nav__mark:active { transform: translate(1px, 1px); }
+
 .nav__glyph {
   width: 18px;
   height: 18px;
@@ -528,7 +549,20 @@ a { color: inherit; }
   background-color: var(--paper);
   background-image: repeating-conic-gradient(var(--ink) 0 25%, transparent 0 50%);
   background-size: 4px 4px;
+  box-shadow: 0 0 0 var(--ink);
+  transition: background-position 140ms steps(4, end),
+              box-shadow 110ms steps(2, end);
 }
+/* o glifo vira o negativo de si mesmo e ganha sombra dura: o quadriculado
+   troca de fase meio quadrado, que em 4px é exatamente a inversão. */
+.nav__mark:hover .nav__glyph,
+.nav__mark:focus-visible .nav__glyph {
+  background-color: var(--ink);
+  background-image: repeating-conic-gradient(var(--paper) 0 25%, transparent 0 50%);
+  background-position: 2px 2px;
+  box-shadow: 3px 3px 0 var(--ink);
+}
+.nav__mark:active .nav__glyph { box-shadow: 0 0 0 var(--ink); }
 .nav__links { display: none; gap: 4px; }
 .nav__link {
   padding: 10px 12px;
@@ -564,7 +598,6 @@ a { color: inherit; }
   padding: 0;
   border: 0;
   background: none;
-  cursor: pointer;
 }
 .lamp__track {
   position: relative;
@@ -603,7 +636,6 @@ a { color: inherit; }
   font-size: 12px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  cursor: pointer;
 }
 .nav__panel {
   display: grid;
@@ -659,6 +691,12 @@ a { color: inherit; }
 .card:hover .dither-25 { background-size: 9px 9px; }
 .card:hover .dither-12 { background-size: 15px 15px; }
 .card:hover .card__idx   { background: var(--ink); color: var(--paper); }
+
+/* o sexto da grade não é projeto, é a porta pro resto. Contorno tracejado para
+   o olho separar antes de ler o título - e o mesmo hover de todo cartão, porque
+   ele continua sendo um link e mentir sobre isso seria pior que o buraco. */
+.card--mais { border-style: dashed; }
+.card--mais .card__thumb { border-bottom-style: dashed; }
 
 /* o cursor rala o dither de perto: num raio em volta do ponteiro o papel volta
    por cima e os pontos somem. É a erosão da referência virando resposta ao toque.
@@ -1195,6 +1233,11 @@ a { color: inherit; }
   letter-spacing: 0.08em;
   text-transform: uppercase;
   white-space: nowrap;
+  /* o braço tem `width: 0`, então o chip cai no shrink-to-fit contra um espaço
+     disponível de zero e o browser arredonda a largura pra baixo: sobrava sempre
+     um algarismo de fora ("POSTGRESQ", "CLAUDE COD"). No celular o corpo menor
+     ficava abaixo do arredondamento e por isso lá aparecia inteiro. */
+  width: max-content;
 }
 .orb__ring--2 .orb__node { animation-name: orbitar; }
 
@@ -1287,7 +1330,6 @@ a { color: inherit; }
   width: min(30%, 120px);            /* 120px = largura nativa do frame */
   padding: 0;
   background-color: var(--face-paper);
-  cursor: pointer;
   transition: transform 110ms steps(2, end), box-shadow 110ms steps(2, end);
 }
 .hero__me:hover  { transform: translate(-3px, -3px); box-shadow: 7px 7px 0 var(--ink); }

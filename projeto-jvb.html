@@ -9,7 +9,7 @@ if(t==='light')document.documentElement.setAttribute('data-theme','light')
 try{history.scrollRestoration="manual"}catch(e){}})()</script>
 <title>JVB · ERP jurídico sob medida · Luan Taraschi</title>
 <meta name="description" content="Estudo de caso: ERP jurídico em produção construído por um desenvolvedor único. 124 tabelas, 881 endpoints tipados, 3.500 testes automatizados. TypeScript, React 19, tRPC, PostgreSQL, Railway." />
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'><rect width='8' height='8' fill='%231a1917'/><g fill='%23fce4a6'><rect width='4' height='4'/><rect x='4' y='4' width='4' height='4'/></g></svg>" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='16' height='16' fill='%231a1917'/><g fill='%23fce4a6' shape-rendering='crispEdges'><rect x='2' y='4' width='2' height='8'/><rect x='2' y='10' width='5' height='2'/><rect x='9' y='4' width='6' height='2'/><rect x='11' y='4' width='2' height='8'/></g></svg>" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Space+Grotesk:wght@300..700&family=Space+Mono:wght@400;700&display=swap" />
@@ -60,7 +60,7 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
 
     <header class="case__head">
       <span class="kicker">projetos/01 · produção</span>
-      <h1 class="h1 case__title">JVB — ERP jurídico sob medida</h1>
+      <h1 class="h1 case__title">JVB: ERP jurídico sob medida</h1>
       <p class="lead case__lead">
         Do WhatsApp na planilha ao sistema único: captação, processos, prazos,
         petições, financeiro e IA num só produto, em produção e em uso diário.
@@ -95,7 +95,7 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
         </p>
         <p class="body-text">
           O problema não era falta de ferramenta. Era que nenhuma ferramenta conhecia
-          o fluxo do escritório — lead chega pelo WhatsApp, vira cliente, vira
+          o fluxo inteiro do escritório. Lead chega pelo WhatsApp, vira cliente, vira
           processo, gera prazo, audiência, petição e honorário. Cada software cobria
           um pedaço; nenhum cobria a costura entre eles.
         </p>
@@ -121,7 +121,7 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
         <h2 class="h2">A escala</h2>
         <p class="body-text">
           O sistema cobre captação, processos, prazos e audiências, petições,
-          inteligência sobre diários oficiais, financeiro e gestão de permissões —
+          inteligência sobre diários oficiais, financeiro e gestão de permissões,
           com auditoria de ações, 2FA e cofre de credenciais. Tudo construído,
           mantido e suportado por uma pessoa.
         </p>
@@ -144,8 +144,8 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
         </p>
         <p class="body-text">
           Escrevi um motor puro, sem biblioteca de calendário, com toda a aritmética
-          em UTC ao meio-dia para eliminar bug de fuso e horário de verão — Páscoa
-          pelo algoritmo de Meeus/Jones/Butcher, cada regra coberta por teste. É o
+          em UTC ao meio-dia para eliminar bug de fuso e horário de verão. A Páscoa
+          vem pelo algoritmo de Meeus/Jones/Butcher, cada regra coberta por teste. É o
           código mais testado do sistema: ninguém elogia código que conta feriado,
           mas se ele erra um dia o cliente perde o processo.
         </p>
@@ -155,7 +155,7 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
         <h2 class="h2">O healthcheck que envenenou o banco</h2>
         <p class="body-text">
           Um incidente real. O sistema aprendia a própria URL pública a partir do
-          primeiro request depois do deploy — e o primeiro request depois do deploy é
+          primeiro request depois do deploy, e o primeiro request depois do deploy é
           o healthcheck da plataforma, com um <code>Host</code> que não resolve
           publicamente. Resultado: links de anexo gravados apontando para um host que
           não existe.
@@ -179,7 +179,7 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
         <p class="body-text">
           É o que eu levo daqui: foi o primeiro projeto em que fui produto e
           engenharia ao mesmo tempo, com usuário real do outro lado que perde dinheiro
-          se eu errar. A decisão mais cara de um dev sozinho não é escolher a stack —
+          se eu errar. A decisão mais cara de um dev sozinho não é escolher a stack,
           é escolher o que não construir. E traduzir um domínio complexo, o CPC, o
           processo eletrônico, a rotina do escritório, é metade do trabalho.
         </p>

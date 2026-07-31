@@ -9,7 +9,7 @@ if(t==='light')document.documentElement.setAttribute('data-theme','light')
 try{history.scrollRestoration="manual"}catch(e){}})()</script>
 <title>A história inteira · Luan Taraschi</title>
 <meta name="description" content="De um mod de Minecraft aos dez anos até agentes de IA em produção: a trajetória de Luan Taraschi, desenvolvedor full stack em Salvador." />
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'><rect width='8' height='8' fill='%231a1917'/><g fill='%23fce4a6'><rect width='4' height='4'/><rect x='4' y='4' width='4' height='4'/></g></svg>" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='16' height='16' fill='%231a1917'/><g fill='%23fce4a6' shape-rendering='crispEdges'><rect x='2' y='4' width='2' height='8'/><rect x='2' y='10' width='5' height='2'/><rect x='9' y='4' width='6' height='2'/><rect x='11' y='4' width='2' height='8'/></g></svg>" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Space+Grotesk:wght@300..700&family=Space+Mono:wght@400;700&display=swap" />
@@ -23,7 +23,13 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
   .case__title { margin-top: 16px; }
   .case__head .lead { max-width: 34ch; }
 
-  .case__body { counter-reset: bloco; margin-top: 0; }
+  /* `display: block` desfaz na marra as duas colunas que o style.css liga a
+     partir de 820px. Ali elas servem: um case tem blocos curtos que emparelham
+     bem. Aqui não: são dez capítulos de tamanhos muito diferentes, então uma
+     coluna terminava no meio da outra e o título grudado ficava por cima do
+     texto do bloco vizinho. Empilhado, a história desce numa linha só e cada
+     título fica preso enquanto o próprio texto rola por baixo dele. */
+  .case__body { display: block; counter-reset: bloco; margin-top: 0; }
 
   .case__block {
     counter-increment: bloco;
@@ -80,6 +86,9 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
     padding: clamp(26px, 4vw, 42px);
     margin-top: clamp(34px, 5vw, 56px);
   }
+  /* o h2 do fecho é bitmap em corpo grande: encostado no parágrafo os dois
+     blocos de pixel viravam uma mancha só */
+  .fecho .h2 { margin-bottom: clamp(20px, 3vw, 30px); }
   .fecho .body-text { max-width: 52ch; }
 
   .cursos {
