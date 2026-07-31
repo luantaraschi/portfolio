@@ -14,15 +14,15 @@ if(!t)t=window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark
 if(t==='light')document.documentElement.setAttribute('data-theme','light')
 var m=document.querySelector('meta[name=theme-color]');if(m)m.content=t==='light'?'#eee8d5':'#1a1917'
 try{history.scrollRestoration="manual"}catch(e){}})()</script>
-<title>Triagem por IA no WhatsApp · Luan Taraschi</title>
-<meta name="description" content="Estudo de caso: agente de IA que tria cerca de mil conversas por mês no WhatsApp de um escritório jurídico, com guardrails para nunca dar consultoria jurídica." />
-<link rel="canonical" href="https://luantaraschi.dev/projeto-triagem.html" />
+<title>Dev Tools · Luan Taraschi</title>
+<meta name="description" content="Estudo de caso: 17 utilitários de desenvolvedor num painel só, servidos por uma rota dinâmica única em Next.js 15. No ar." />
+<link rel="canonical" href="https://luantaraschi.dev/projeto-devtools.html" />
 <meta property="og:type" content="article" />
 <meta property="og:site_name" content="Luan Taraschi" />
 <meta property="og:locale" content="pt_BR" />
-<meta property="og:url" content="https://luantaraschi.dev/projeto-triagem.html" />
-<meta property="og:title" content="Triagem por IA no WhatsApp" />
-<meta property="og:description" content="Cerca de mil conversas por mês, 100% triadas por agente antes de chegar a alguém. Com guardrail: o bot nunca dá consultoria jurídica." />
+<meta property="og:url" content="https://luantaraschi.dev/projeto-devtools.html" />
+<meta property="og:title" content="Dev Tools" />
+<meta property="og:description" content="Dezessete utilitários num painel só: OCR, remoção de fundo, compressão, QR, cor. Uma rota dinâmica serve todos." />
 <meta property="og:image" content="https://luantaraschi.dev/assets/og.png" />
 <meta property="og:image:width" content="2400" />
 <meta property="og:image:height" content="1260" />
@@ -78,30 +78,26 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
   <article class="wrap" data-od-id="case">
 
     <header class="case__head">
-      <span class="kicker">projetos/02 · produção</span>
-      <h1 class="h1 case__title">Triagem por IA no WhatsApp</h1>
+      <span class="kicker">projetos/03 · no ar</span>
+      <h1 class="h1 case__title">Dev Tools</h1>
       <p class="lead case__lead">
-        O canal onde o escritório realmente atende: cerca de mil conversas por mês,
-        organizadas por um agente antes de chegar a qualquer pessoa. É o módulo de
-        captação do <a href="projeto-jvb.html">ERP JVB</a>.
+        Dezessete utilitários que eu cansei de procurar no Google toda semana,
+        reunidos num painel só. Sem cadastro, sem anúncio, sem limite de uso.
       </p>
 
       <dl class="case__meta invert">
-        <div><dt>Ano</dt><dd>2025 · em produção</dd></div>
-        <div><dt>Papel</dt><dd>Dev full stack, do requisito ao suporte</dd></div>
-        <div><dt>Stack</dt><dd>TypeScript · tRPC · PostgreSQL · Whapi/Evolution · IA multi-provedor</dd></div>
-        <div><dt>Link</dt><dd>sistema privado do cliente</dd></div>
+        <div><dt>Ano</dt><dd>2026 · no ar</dd></div>
+        <div><dt>Papel</dt><dd>Sozinho, do primeiro commit ao deploy</dd></div>
+        <div><dt>Stack</dt><dd>Next.js 15 (App Router) · React 19 · TypeScript · Tailwind · shadcn/ui</dd></div>
+        <div><dt>Link</dt><dd><a href="https://dev-tools-xi-beige.vercel.app/" target="_blank" rel="noopener">abrir o painel ↗</a></dd></div>
       </dl>
     </header>
 
-    <!-- conversa inteiramente fabricada, escrita para a captura: nenhuma
-         pessoa, número ou frase aqui saiu de atendimento real. Checklist de
-         sigilo em SHOTS.md -->
-    <figure class="shot dither-50">
-      <img src="assets/shots/triagem-conversa.png" width="1440" height="900" loading="lazy"
-           alt="Conversa de WhatsApp dentro do sistema: alguém pergunta se ganha a causa e em quanto tempo, e o atendimento responde que avaliar chance de êxito, prazo e valor é consultoria jurídica e quem faz isso é sempre um advogado. No topo da conversa, o nome do advogado que assumiu e o botão Assumir." />
+    <figure class="shot dither-25">
+      <img src="assets/shots/devtools-dash.png" width="1440" height="810" loading="lazy"
+           alt="Painel do Dev Tools: barra lateral com as ferramentas agrupadas em Formatters and Text, Images and Colors e Generators and Utilities, e no corpo da página os cartões de cada ferramenta com um campo de busca acima." />
       <figcaption>
-        <span>o guardrail em uso: perguntaram se ganha a causa, e o bot recusou a resposta em vez de arriscar</span>
+        <span>o painel: barra lateral por categoria, busca no topo, e cada ferramenta a um clique</span>
         <span class="shot__cor">passe o cursor para ver em cor</span>
       </figcaption>
     </figure>
@@ -110,85 +106,81 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
       <section class="case__block">
         <h2 class="h2">O problema</h2>
         <p class="body-text">
-          Todo contato novo chegava pelo WhatsApp, no mesmo lugar onde já corria a
-          conversa dos casos em andamento. Quem atendia gastava o dia separando
-          curioso de cliente, e o histórico de cada processo ficava espalhado em
-          conversas soltas, sem ligação nenhuma com o sistema de gestão do
-          escritório.
+          Converter um PNG pra WebP, tirar o fundo de uma imagem, formatar um JSON,
+          gerar um QR, ler texto de um print. Coisa de dois minutos que sempre acaba
+          no mesmo lugar: um site coberto de anúncio, com marca d'água na saída e um
+          botão de assinar plano no meio do caminho.
+        </p>
+        <p class="body-text">
+          Nenhuma dessas tarefas é difícil. O que incomoda é o pedágio.
         </p>
       </section>
 
       <section class="case__block">
         <h2 class="h2">A decisão</h2>
         <p class="body-text">
-          Colocar a IA na triagem, não na resposta. O agente lê a conversa,
-          classifica por perfil e intenção e decide se aquilo vira lead; a partir daí
-          quem fala é o humano. É a parte do trabalho que é repetitiva de verdade, e
-          é a única em que errar sai barato: um lead mal classificado se corrige na
-          tela, uma resposta jurídica errada não.
+          Fazer as dezessete de uma vez, num painel único, e deixar no ar de graça.
+          A decisão que sustenta o resto foi de escopo: cada ferramenta faz uma coisa
+          e não pede nada em troca. Sem conta, sem fila, sem plano.
         </p>
       </section>
 
       <section class="case__block case__block--wide">
-        <h2 class="h2">Guarda-corpo, não prompt</h2>
+        <h2 class="h2">Dezessete ferramentas, uma rota</h2>
         <p class="body-text">
-          Um assistente que responde no WhatsApp de um escritório de advocacia não
-          pode dar consultoria jurídica. Isso não é constrangimento de UX, é risco
-          disciplinar. Então a defesa não mora no prompt: é uma camada de guardrails
-          com escopo explícito (triar e coletar dado, nunca aconselhar), defesa contra
-          prompt injection, disjuntor de custo, e handoff que pausa o bot no instante
-          em que um advogado assume a conversa.
+          O caminho óbvio seria dezessete pastas, dezessete páginas e dezessete cópias
+          da mesma casca. Funciona até a hora de mexer no layout: aí é a mesma correção
+          dezessete vezes, e a décima sétima é a que fica esquecida.
         </p>
         <p class="body-text">
-          A checagem roda antes do modelo. Uma pergunta de mérito jurídico nunca chega
-          a ser respondida: ela é encaminhada para um humano.
+          Então o painel inteiro é uma rota dinâmica só, a /[tool], servida
+          por um registro central. Cada ferramenta se declara ali com nome, categoria,
+          descrição e componente; a barra lateral, a busca e os cartões da home leem
+          desse mesmo registro. Adicionar a décima oitava é escrever a ferramenta e
+          registrar uma linha. Nada de navegação para atualizar na mão, e nenhum jeito
+          de a busca discordar do menu, porque os dois são a mesma lista.
         </p>
         <div class="case__nums">
-          <div class="case__num"><b>~1.000</b><span>conversas por mês</span></div>
-          <div class="case__num"><b>100%</b><span>da triagem por IA</span></div>
-          <div class="case__num"><b>0</b><span>consultoria dada pelo bot</span></div>
+          <div class="case__num"><b>17</b><span>ferramentas no ar</span></div>
+          <div class="case__num"><b>1</b><span>rota serve todas</span></div>
+          <div class="case__num"><b>0</b><span>cadastro, anúncio ou limite</span></div>
         </div>
       </section>
 
       <section class="case__block">
-        <h2 class="h2">O nono dígito duplicava as conversas</h2>
+        <h2 class="h2">O arquivo não sai da sua máquina</h2>
         <p class="body-text">
-          O WhatsApp entrega o identificador do contato às vezes com o nono dígito do
-          celular brasileiro, às vezes sem. O mesmo cliente aparecia como duas
-          conversas, com o histórico partido ao meio.
+          O processamento acontece na aba, não num servidor meu. Isso resolve de uma
+          vez três problemas que normalmente viram três problemas separados: custo de
+          infraestrutura, fila de upload e privacidade. Ninguém precisa acreditar na
+          minha política de retenção se o arquivo nunca subiu.
         </p>
-        <p class="body-text">
-          A correção não foi mascarar na tela. Foi definir um identificador canônico e
-          casar as variantes já na entrada do webhook, antes de qualquer coisa tocar o
-          banco. Bug de domínio regional que documentação nenhuma avisa.
-        </p>
+        <figure class="shot dither-12">
+          <video src="assets/shots/devtools-uso.mp4" width="1440" height="810"
+                 autoplay muted loop playsinline preload="metadata"
+                 aria-label="Gravação do compressor de imagem em uso: uma imagem de 146 KB é arrastada para a área de upload e sai com 58 KB, uma redução de 60,5 por cento."></video>
+          <figcaption>
+            <span>o compressor rodando: 146 KB entram, 58 KB saem, 60,5% a menos e nada trafegou</span>
+            <span class="shot__cor">passe o cursor para ver em cor</span>
+          </figcaption>
+        </figure>
       </section>
 
       <section class="case__block">
-        <h2 class="h2">Como ficou</h2>
+        <h2 class="h2">O que eu levo daqui</h2>
         <p class="body-text">
-          Hoje a triagem roda inteira por IA e só o lead qualificado chega à equipe.
-          As conversas ficam amarradas ao processo dentro do próprio sistema, então o
-          histórico deixou de morar no celular de alguém. Está em produção sob meu
-          suporte direto, e isso muda o trabalho: o que eu entrego não é uma entrega,
-          é um sistema que precisa acordar funcionando toda manhã.
+          Esse é o projeto onde eu aprendi a diferença entre repetir e generalizar cedo
+          demais. As três primeiras ferramentas eu escrevi copiando e colando de
+          propósito, sem abstrair nada; só quando a terceira ficou pronta é que o
+          formato comum apareceu sozinho, e aí o registro central foi consequência, não
+          aposta. Abstrair na primeira teria me dado uma casca errada pra dezessete.
         </p>
-        <div class="case__gallery">
-          <!-- slot: assets/shots/triagem-lead.mp4 · o gif de maior retorno da lista -->
-          <figure class="shot shot--tall dither-25">
-            <figcaption><span>mensagem → lead → card no funil</span></figcaption>
-          </figure>
-          <!-- slot: assets/shots/triagem-handoff.png -->
-          <figure class="shot shot--tall dither-12">
-            <figcaption><span>o advogado assume e o bot pausa</span></figcaption>
-          </figure>
-        </div>
       </section>
     </div>
 
     <nav class="case__nav" aria-label="Navegação entre projetos">
-      <a class="btn btn--ghost" href="projeto-jvb.html">‹ Anterior: ERP JVB</a>
-      <a class="btn" href="projeto-devtools.html">Próximo: Dev Tools ›</a>
+      <a class="btn btn--ghost" href="projeto-triagem.html">‹ Anterior: Triagem por IA</a>
+      <a class="btn" href="index.html#projetos">Todos os projetos ›</a>
     </nav>
 
   </article>
@@ -209,4 +201,3 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
 <script src="js/app.js" defer></script>
 </body>
 </html>
-

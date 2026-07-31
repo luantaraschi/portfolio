@@ -281,7 +281,7 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
           </div>
         </a>
 
-        <a class="card reveal" href="https://dev-tools-xi-beige.vercel.app/" target="_blank" rel="noopener">
+        <a class="card reveal" href="projeto-devtools.html">
           <div class="card__thumb">
             <img class="card__shot" src="assets/shots/devtools-dash.png" alt="" loading="lazy" />
             <span class="card__veu dither-12 dither-fade" aria-hidden="true"></span>
@@ -290,7 +290,7 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
           <div class="card__body">
             <h3 class="h3">Dev Tools</h3>
             <p class="mono">Dezessete utilitários de dev num painel só: OCR, remoção de fundo, QR, conversão de imagem, gerador de CSS. Roda no navegador.</p>
-            <div class="card__tags"><span class="tag">Next.js 15</span><span class="tag">React 19</span><span class="tag">ao vivo ↗</span></div>
+            <div class="card__tags"><span class="tag">Next.js 15</span><span class="tag">React 19</span><span class="tag">no ar</span></div>
           </div>
         </a>
 
@@ -308,7 +308,14 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
         </a>
 
         <a class="card reveal" href="https://github.com/luantaraschi/seamless-ai-dub" target="_blank" rel="noopener">
-          <div class="card__thumb dither-25 dither-fade"><span class="card__idx">05</span></div>
+          <div class="card__thumb">
+            <!-- quadro do vídeo real que passou pelo pipeline. A prova aqui é a
+                 faixa de áudio, que um cartão mudo nunca vai carregar: o que a
+                 imagem entrega é o "entra em inglês" da legenda. -->
+            <img class="card__shot" src="assets/shots/dub-frame.png" alt="" loading="lazy" />
+            <span class="card__veu dither-25 dither-fade" aria-hidden="true"></span>
+            <span class="card__idx">05</span>
+          </div>
           <div class="card__body">
             <h3 class="h3">Seamless AI Dub</h3>
             <p class="mono">Vídeo em inglês entra, vídeo dublado em português sai: Whisper transcreve, o modelo traduz, o TTS fala e o corte volta sincronizado.</p>
