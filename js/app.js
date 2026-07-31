@@ -9,6 +9,8 @@
    13 kicker virando barra de rolagem em ASCII · 14 números da sobre contando
    15 a órbita da stack só gira em cena · 16 números do case subindo
    17 o recado de quem abre o console · 18 a guia lateral de seção
+   19 o card se transformando na página do case · 20 o CV avisando que baixou
+   21 o case que você já abriu · 22 o dedo ralando o dither onde encostou
    ========================================================================== */
 (function () {
   'use strict';
@@ -871,5 +873,106 @@
     }, { passive: true });
     window.addEventListener('resize', pintarGuia);
     pintarGuia();
+  }
+
+  /* ---- 19. o card que se transforma na página do case -------------------- */
+  // O CSS já ligou a transição entre documentos e já batizou o alvo do outro
+  // lado (.case__head + .shot). Aqui só falta dizer qual dos seis cards é o par
+  // dessa vez: o nome tem que ser único durante a captura, e marcar os seis de
+  // antemão faria o browser desistir da transição inteira por nome repetido.
+  Array.prototype.forEach.call(document.querySelectorAll('.grid-projects .card'), function (card) {
+    card.addEventListener('click', function () {
+      var thumb = card.querySelector('.card__thumb');
+      if (!thumb) return;
+      // limpa antes de marcar: voltando pelo botão do browser a página pode vir
+      // do cache com o nome de antes ainda colado, e aí dois thumbs carregariam
+      // o mesmo nome no clique seguinte
+      Array.prototype.forEach.call(document.querySelectorAll('.card__thumb'), function (t) {
+        t.style.removeProperty('view-transition-name');
+      });
+      thumb.style.setProperty('view-transition-name', 'case-capa');
+    });
+  });
+
+  /* ---- 20. o CV avisa que baixou ----------------------------------------- */
+  // `download` entrega o arquivo sem carregar página nenhuma, então a tela não
+  // se mexe e fica a dúvida de "cliquei?" - bem no momento em que a pessoa está
+  // decidindo se te chama. Mesmo gesto do botão de copiar: troca o rótulo e
+  // volta sozinho. ponytail: nada de barra de progresso, o arquivo tem 200kB.
+  Array.prototype.forEach.call(document.querySelectorAll('a[download]'), function (link) {
+    var rotulo = link.textContent, relogio = 0;
+    link.addEventListener('click', function () {
+      clearTimeout(relogio);
+      link.textContent = 'salvo ✓';
+      relogio = setTimeout(function () { link.textContent = rotulo; }, 1800);
+    });
+  });
+
+  /* ---- 21. o case que você já abriu -------------------------------------- */
+  // Voltar pra grade e cair numa parede de seis cards iguais, sem saber qual já
+  // leu, é o tipo de coisa que ninguém reclama e todo mundo sente.
+  //
+  // sessionStorage e não localStorage de propósito: a pergunta é "onde eu estava
+  // nesta visita". Semana que vem a etiqueta seria memória de elefante sobre uma
+  // coisa que a pessoa não lembra de ter feito.
+  var VISTOS = 'lt-vistos';
+  function lerVistos() {
+    try { return JSON.parse(sessionStorage.getItem(VISTOS)) || []; } catch (_) { return []; }
+  }
+  function arquivoDe(caminho) { return (caminho || '').split('/').pop().split('#')[0]; }
+
+  // numa página de case: anota que passou por aqui
+  if (document.querySelector('.case__head')) {
+    var aqui = arquivoDe(location.pathname);
+    var lista = lerVistos();
+    if (aqui && lista.indexOf(aqui) < 0) {
+      lista.push(aqui);
+      try { sessionStorage.setItem(VISTOS, JSON.stringify(lista)); } catch (_) {}
+    }
+  }
+
+  // na home: etiqueta os cards correspondentes
+  function marcarVistos() {
+    var vistos = lerVistos();
+    if (!vistos.length) return;
+    Array.prototype.forEach.call(document.querySelectorAll('.grid-projects .card'), function (card) {
+      if (vistos.indexOf(arquivoDe(card.getAttribute('href'))) < 0) return;
+      var tags = card.querySelector('.card__tags');
+      if (!tags || tags.querySelector('.tag--visto')) return;
+      var marca = document.createElement('span');
+      marca.className = 'tag tag--visto';
+      // elemento de verdade com texto de verdade, não ::content: quem usa leitor
+      // de tela também quer saber que já esteve ali
+      marca.textContent = 'visto ✓';
+      tags.insertBefore(marca, tags.firstChild);
+    });
+  }
+  marcarVistos();
+
+  // e de novo ao voltar pelo botão do browser: aí a página vem inteira do
+  // bfcache e nada deste arquivo roda de novo. Sem isto a etiqueta só aparecia
+  // num recarregamento manual - ou seja, nunca, porque voltar de um case é
+  // exatamente o momento para o qual ela foi feita.
+  window.addEventListener('pageshow', function (e) { if (e.persisted) marcarVistos(); });
+
+  /* ---- 22. o dedo rala o dither onde encostou ---------------------------- */
+  // O módulo 12 faz isto com o ponteiro e está trancado em `pointer: fine`. No
+  // toque o que existia era o thumb inteiro deslocando 6px, que é resposta de
+  // card, não de onde a pessoa tocou. Aqui o par --cx/--cy é o mesmo, e o CSS
+  // do @media (hover: none) acende a mesma camada.
+  //
+  // ponytail: pointerdown e não pointermove - no toque o pointermove só existe
+  // com o dedo apoiado, que é justamente o gesto de rolar a página. Disputar
+  // com a rolagem por causa de um efeito é trocar o site por um enfeite.
+  var gradeToque = document.querySelector('.grid-projects');
+  if (gradeToque && !reduced && window.matchMedia('(hover: none)').matches) {
+    gradeToque.addEventListener('pointerdown', function (e) {
+      var card = e.target.closest ? e.target.closest('.card') : null;
+      var thumb = card && card.querySelector('.card__thumb');
+      if (!thumb) return;
+      var r = thumb.getBoundingClientRect();
+      thumb.style.setProperty('--cx', (e.clientX - r.left) + 'px');
+      thumb.style.setProperty('--cy', (e.clientY - r.top) + 'px');
+    }, { passive: true });
   }
 })();

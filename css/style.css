@@ -720,9 +720,61 @@ a { color: inherit; }
 }
 .card:hover .card__thumb::after { opacity: 1; }
 
+/* 5.5.1 o produto por trás do dither.
+   Em repouso o cartão continua sendo o mesmo bloco de retícula do resto do
+   site: a captura está lá, mas escura e coberta pelo véu, lendo como textura.
+   No hover o véu abre e a tela do produto aparece por baixo. É o gesto de
+   erosão da referência aplicado ao contrário — em vez de desfazer a imagem,
+   ele revela a que estava embaixo o tempo todo.
+
+   `object-position: top left` porque toda captura de sistema tem a informação
+   que importa no topo: centralizar cortaria justamente o cabeçalho. */
+.card__shot {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top left;
+  /* escura o bastante para o repouso continuar lendo como textura: com o véu
+     ralo do .dither-12 a captura já aparecia inteira parada, e aí o hover não
+     revelava nada porque não havia o que revelar */
+  filter: grayscale(1) contrast(1.2) brightness(0.42);
+  transition: filter 260ms steps(4, end);
+}
+.card:hover .card__shot,
+.card:focus-visible .card__shot { filter: grayscale(1) contrast(1.02) brightness(1); }
+
+/* no modo claro escurecer é o contrário do que se quer: as capturas são de
+   interface escura, e sobre o papel creme elas viravam um bloco preto no meio
+   da grade. Ali o repouso é a mesma imagem quase transparente, um fantasma
+   cinza sobre o papel, e o hover traz ela inteira - a mesma regra que o
+   componente .shot das páginas de case já segue. */
+:root[data-theme='light'] .card__shot {
+  opacity: 0.2;
+  filter: grayscale(1) contrast(1.1);
+  transition: opacity 260ms steps(4, end);
+}
+:root[data-theme='light'] .card:hover .card__shot,
+:root[data-theme='light'] .card:focus-visible .card__shot { opacity: 1; }
+
+/* o véu carrega a classe .dither-*, e não o thumb, quando existe captura: o
+   background do thumb ficaria atrás da imagem e não apareceria. Ele herda de
+   graça a erosão que o .card:hover já aplica a qualquer .dither-* descendente. */
+.card__veu {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  transition: opacity 260ms steps(4, end),
+              background-position 240ms steps(4, end),
+              background-size 240ms steps(4, end);
+}
+.card:hover .card__veu,
+.card:focus-visible .card__veu { opacity: 0.18; }
+
 .card__idx {
   position: absolute;
-  z-index: 1;                  /* acima do papel que o cursor derrama no thumb */
+  z-index: 2;                  /* acima do véu e do papel que o cursor derrama */
   left: 10px;
   bottom: 8px;
   font-family: var(--font-display);
@@ -748,6 +800,16 @@ a { color: inherit; }
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--ink-2);
+}
+/* "visto" é a única tag que o JS escreve, e a única que fala do leitor em vez
+   de falar do projeto - por isso ela inverte, para não se misturar na fila de
+   tecnologias ao lado. Entra como .tag de propósito: a grade já tem esse
+   vocabulário, e inventar um segundo tipo de etiqueta pra dizer uma coisa só
+   seria mais desenho do que a informação merece. */
+.tag--visto {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--paper);
 }
 
 /* 5.7 timeline */
@@ -1703,6 +1765,32 @@ a { color: inherit; }
   animation: erodir 560ms steps(4, end) calc(var(--i, 0) * 60ms) backwards;
 }
 
+/* ---------- 6.9 TRANSIÇÃO ENTRE PÁGINAS ---------------------------------- */
+/* Era o único corte seco que sobrava: tudo no site tem continuidade, e clicar
+   num card piscava branco e trocava de página como se fosse outro produto.
+   Isto é a API nativa de navegação entre documentos - sem JS, sem biblioteca,
+   e quem não suporta (Firefox por enquanto) continua vendo o corte de hoje.
+
+   Dentro do @media: transição de página é movimento como qualquer outro, e
+   quem pediu para reduzir movimento não pediu menos, pediu nenhum. */
+@media not (prefers-reduced-motion: reduce) {
+  @view-transition { navigation: auto; }
+}
+
+/* O par que se transforma: o quadrado dithered do card vira o print do topo do
+   case. Os dois já são o mesmo desenho em tamanhos diferentes, então o browser
+   só precisa interpolar a caixa. O nome entra no thumb clicado pelo JS (módulo
+   19) porque só um par pode carregar o mesmo nome por vez - marcar os seis de
+   antemão faria o browser desistir da transição inteira por nome repetido. */
+.case__head + .shot { view-transition-name: case-capa; }
+
+/* passos em vez de curva: o resto do site inteiro anima em steps() e uma
+   interpolação suave aqui denunciaria que veio de outro lugar */
+::view-transition-group(case-capa) {
+  animation-duration: 320ms;
+  animation-timing-function: steps(6, end);
+}
+
 /* ---------- 7. RESPONSIVO ------------------------------------------------ */
 @media (min-width: 700px) {
   .about__grid  { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); }
@@ -1735,6 +1823,11 @@ a { color: inherit; }
   /* o dedo mora onde o cursor passaria: o thumb entrega a textura ralada no
      toque, já que o :hover nunca vai chegar */
   .card:active .card__thumb { background-position: 6px 6px; }
+  /* e a erosão acontece onde o dedo encostou, não no meio do card: o --cx/--cy
+     é o mesmo par que o ponteiro escreve no módulo 12, e quem preenche no
+     toque é o módulo 22. Sem isto o toque só deslocava a textura em bloco,
+     que é resposta de card inteiro - não de onde a pessoa tocou. */
+  .card:active .card__thumb::after { opacity: 1; }
 }
 
 /* ---------- 7b. PÁGINA DE CASE ------------------------------------------- */

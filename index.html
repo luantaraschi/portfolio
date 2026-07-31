@@ -254,7 +254,13 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
       <div class="grid-projects">
 
         <a class="card reveal" href="projeto-jvb.html">
-          <div class="card__thumb dither-50 dither-fade"><span class="card__idx">01</span></div>
+          <!-- a captura é decorativa aqui: o título e o resumo ao lado já dizem
+               o que é, e o leitor de tela não ganha nada ouvindo a tela de novo -->
+          <div class="card__thumb">
+            <img class="card__shot" src="assets/shots/jvb-painel.png" alt="" loading="lazy" />
+            <span class="card__veu dither-50 dither-fade" aria-hidden="true"></span>
+            <span class="card__idx">01</span>
+          </div>
           <div class="card__body">
             <h3 class="h3">JVB: ERP jurídico sob medida</h3>
             <p class="mono">Um escritório inteiro rodava em planilha e WhatsApp; hoje roda num sistema só. 124 tabelas, 881 endpoints tipados, 3.500 testes, tudo feito por uma pessoa.</p>
@@ -272,7 +278,11 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
         </a>
 
         <a class="card reveal" href="https://dev-tools-xi-beige.vercel.app/" target="_blank" rel="noopener">
-          <div class="card__thumb dither-12 dither-fade"><span class="card__idx">03</span></div>
+          <div class="card__thumb">
+            <img class="card__shot" src="assets/shots/devtools-dash.png" alt="" loading="lazy" />
+            <span class="card__veu dither-12 dither-fade" aria-hidden="true"></span>
+            <span class="card__idx">03</span>
+          </div>
           <div class="card__body">
             <h3 class="h3">Dev Tools</h3>
             <p class="mono">Quinze utilitários de dev num painel só: OCR, remoção de fundo, QR, conversão de imagem, gerador de CSS. Roda no navegador.</p>
@@ -344,12 +354,16 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
           </div>
         </a>
 
-        <a class="card reveal" href="https://github.com/luantaraschi/SUS" target="_blank" rel="noopener">
-          <div class="card__thumb dither-25 dither-fade"><span class="card__idx">07</span></div>
+        <a class="card reveal" href="https://sus-wine.vercel.app/" target="_blank" rel="noopener">
+          <div class="card__thumb">
+            <img class="card__shot" src="assets/shots/sus-home.png" alt="" loading="lazy" />
+            <span class="card__veu dither-25 dither-fade" aria-hidden="true"></span>
+            <span class="card__idx">07</span>
+          </div>
           <div class="card__body">
             <h3 class="h3">SUS</h3>
             <p class="mono">O jogo do impostor: todo mundo recebe a mesma palavra, menos um. Conversa, blefe e votação, em três modos diferentes.</p>
-            <div class="card__tags"><span class="tag">Convex</span><span class="tag">Next.js</span><span class="tag">tempo real</span><span class="tag">código ↗</span></div>
+            <div class="card__tags"><span class="tag">Convex</span><span class="tag">Next.js</span><span class="tag">tempo real</span><span class="tag">jogar ↗</span></div>
           </div>
         </a>
 
