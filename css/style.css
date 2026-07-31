@@ -772,7 +772,19 @@ a { color: inherit; }
   font-size: 15px;
   letter-spacing: 0.08em;
 }
-.tl__role { margin-top: 8px; }
+/* o cargo é display font e no celular quebra em três linhas; sem line-height
+   próprio elas encostavam umas nas outras */
+.tl__role { margin-top: 10px; line-height: 1.24; }
+/* ano, cargo e texto vinham colados num bloco só, e no celular - onde tudo
+   quebra em mais linhas - não dava pra ver onde um acabava e o outro começava */
+.tl__role + .body-text { margin-top: 12px; }
+@media (max-width: 620px) {
+  .tl__item { padding-bottom: 40px; }
+  /* ano e cargo são os dois em display font e de corpo parecido: sem uma folga
+     maior entre eles no celular, as cinco linhas viravam um bloco só */
+  .tl__year { font-size: 14px; }
+  .tl__role { margin-top: 14px; }
+}
 
 /* a linha do tempo desperdiçava metade da largura em tela grande. A coluna da
    direita recebe o redemoinho, preso enquanto os cargos rolam por baixo.
@@ -892,6 +904,24 @@ a { color: inherit; }
   color: var(--ink-2);
 }
 .contact-row__val { flex: 1 1 200px; word-break: break-word; }
+/* O rótulo de 92px mais o e-mail já ocupavam a linha inteira, e o botão copiar
+   era empurrado pra linha de baixo sozinho, encostado na margem esquerda
+   debaixo do rótulo - parecia botão perdido, não o botão daquela linha. Aqui o
+   rótulo toma a linha toda e valor e botão dividem a de baixo.
+   @container e não @media porque o gatilho é a largura da linha, não a da
+   tela: a partir de 700px esta coluna vira uma de duas e cada linha fica com
+   uns 315px, mais apertada do que era no celular. Media query aqui consertava
+   o telefone e deixava o notebook quebrado do mesmo jeito. */
+.contact__grid > div { container-type: inline-size; }
+@container (max-width: 420px) {
+  .contact-row { align-items: baseline; gap: 8px 12px; }
+  .contact-row__key { width: 100%; }
+  /* base 0 e não auto: com base automática a largura natural do e-mail entrava
+     na conta da quebra e empurrava o botão pra linha seguinte de novo, agora
+     numa coluna de 307px. Com base 0 o valor cede espaço em vez de expulsar o
+     botão, e quebra dentro de si mesmo - o word-break acima já cuida disso. */
+  .contact-row__val { flex: 1 1 0; min-width: 0; }
+}
 
 /* 5.10 rodapé */
 .foot {
@@ -915,6 +945,10 @@ a { color: inherit; }
 .social {
   list-style: none;
   display: flex;
+  /* os três chips somam 349px e a coluna do rodapé tem 340 num celular de
+     360: sem poder quebrar, o "Instagram" saía 9px pra fora e ficava cortado
+     na borda da tela */
+  flex-wrap: wrap;
   gap: 8px;
   margin: 0;
   padding: 0;
@@ -1137,6 +1171,19 @@ a { color: inherit; }
 }
 .hero__desc { margin-top: 20px; }
 .hero__cta { margin-top: 32px; display: flex; flex-wrap: wrap; gap: 12px; }
+
+/* A coluna de texto do hero vira o container das duas regras abaixo. É ela que
+   aperta, não a tela: no celular ela ocupa a largura toda, mas a partir de
+   940px ela divide o hero com o retrato e volta a ficar estreita. Media query
+   consertava o telefone e deixava o notebook com o mesmo defeito. */
+.hero__grid > div { container-type: inline-size; }
+
+/* Três botões numa coluna curta caíam 2 + 1 e sobrava um buraco quadrado do
+   lado do terceiro, que lia como botão que faltou carregar. Empilhados na
+   largura toda não tem sobra pra ficar torta, e o alvo do polegar cresce. */
+@container (max-width: 500px) {
+  .hero__cta .btn { flex: 1 1 100%; }
+}
 /* 6.1.3 ficha - a coluna da esquerda acabava muito antes do painel e sobrava
    um buraco. Quatro linhas de metadado resolvem o vazio e são conteúdo real. */
 .ficha {
@@ -1164,6 +1211,15 @@ a { color: inherit; }
 }
 /* o rótulo é mono miúdo, então o valor precisa de peso pra segurar a linha */
 .ficha dd { margin: 0; text-align: right; font-weight: 500; }
+/* Rótulo à esquerda e valor à direita só funciona enquanto os dois cabem na
+   mesma linha. Numa coluna curta "LangGraph, MCP e Claude Code" não cabia,
+   quebrava pra linha de baixo e ia pro canto esquerdo - e aí uma linha da
+   ficha estava alinhada de um jeito e as outras três de outro. Empilha tudo à
+   esquerda. Mesmo container do bloco de botões, pela mesma razão. */
+@container (max-width: 430px) {
+  .ficha > div { display: block; }
+  .ficha dd { text-align: left; margin-top: 3px; }
+}
 
 .hero__figure { min-width: 0; }
 .hero__canvas-wrap {
@@ -1177,7 +1233,12 @@ a { color: inherit; }
   height: 100%;
   image-rendering: pixelated;
   cursor: crosshair;
-  touch-action: none;
+  /* `none` aqui entregava todo gesto pro canvas, inclusive o de rolar: no
+     celular o dedo passando por cima da esfera girava a luz e a página ficava
+     parada. `pan-y` devolve a rolagem vertical pro browser e o canvas fica só
+     com o que sobra - que é o que ele precisa, porque seguir o ponteiro é
+     gesto de mouse, e no toque a esfera não tem o que perder. */
+  touch-action: pan-y;
 }
 .hero__cap {
   display: flex;
