@@ -1173,8 +1173,16 @@ span.codigo__repo { border-style: dashed; }
 }
 
 /* 5.10 rodapé */
+/* A linha do rodapé era 2px de tinta cheia, igual à borda de painel, de card e
+   de seção. Com o mesmo peso de tudo, ela lia como mais uma divisória do
+   sistema em vez de "acabou a página". Aqui ela recua: mesma espessura, tinta
+   parcial, então continua estruturando sem competir.
+   O `--rule-soft` na primeira linha é o piso para quem não tem color-mix; quem
+   tem sobrescreve na linha seguinte e ganha o valor exato em qualquer um dos
+   quatro temas, porque a mistura é feita sobre o --ink de cada um. */
 .foot {
-  border-top: 2px solid var(--ink);
+  border-top: 2px solid var(--rule-soft);
+  border-top-color: color-mix(in srgb, var(--ink) 38%, transparent);
   padding-block: 34px;
 }
 .foot__inner {
@@ -1545,13 +1553,21 @@ span.codigo__repo { border-style: dashed; }
   position: absolute;
   inset: 0;
   background-color: var(--paper-2);
-  background-image: radial-gradient(var(--ink) 0.8px, transparent 0.9px);
+  /* Os pontos eram `--ink`, a mesma tinta cheia do título, e o parágrafo é
+     `--ink-2`. Ou seja: ao passar o cursor, o fundo ficava MAIS CLARO que a
+     letra e o texto sumia dentro da própria textura. Em `--rule-soft` a
+     retícula continua inundando o card, só que agora por baixo da leitura, que
+     é onde textura de fundo deveria estar desde o começo. */
+  background-image: radial-gradient(var(--rule-soft) 0.8px, transparent 0.9px);
   background-size: 9px 9px;
   clip-path: inset(0 100% 0 0);
   transition: clip-path 300ms steps(6, end);
 }
 .skill:hover { box-shadow: var(--shadow); }
 .skill:hover::before { clip-path: inset(0 0 0 0); }
+/* e a outra metade do conserto: o texto sobe para a tinta cheia enquanto a
+   retícula entra, então o contraste aumenta no hover em vez de cair */
+.skill:hover p { color: var(--ink); }
 
 .skill__bar {
   position: relative;
@@ -2122,6 +2138,69 @@ span.codigo__repo { border-style: dashed; }
    que tem no meio de um bloco de texto. */
 .placar { margin-block: clamp(30px, 5vw, 56px) clamp(10px, 2vw, 20px); }
 .placar .case__nums { margin-top: 0; }
+
+/* Só no placar da home as placas são link. Nos cases elas continuam sendo
+   placa, porque lá o número já está na página que ele descreve e não teria
+   para onde levar. */
+.placar a.case__num {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  color: inherit;
+  text-decoration: none;
+  transition: box-shadow 120ms steps(2, end), transform 120ms steps(2, end);
+}
+/* A inversão sobe do rodapé da placa, como marcador de placar enchendo. É outro
+   gesto que o das ferramentas de trabalho, onde a retícula varre de lado: dois
+   blocos com o mesmo movimento leriam como o mesmo componente. */
+.placar a.case__num::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--ink);
+  clip-path: inset(100% 0 0 0);
+  transition: clip-path 260ms steps(5, end);
+}
+.placar a.case__num > * { position: relative; }
+.placar a.case__num::after {
+  content: '›';
+  position: absolute;
+  top: 12px;
+  right: 15px;
+  font-family: var(--font-mono);
+  font-size: 17px;
+  line-height: 1;
+  color: var(--ink-2);
+  transition: transform 140ms steps(3, end);
+}
+.placar a.case__num:hover::before,
+.placar a.case__num:focus-visible::before { clip-path: inset(0 0 0 0); }
+/* A placa desce para dentro da própria sombra: ela anda os 4px do deslocamento
+   e a sombra some no mesmo passo. Crescer a sombra era o caminho óbvio e ficava
+   errado, porque ela é da cor da tinta e a placa invertida também: as duas
+   viravam uma mancha só, como se o card estivesse vazando. */
+.placar a.case__num:hover,
+.placar a.case__num:focus-visible {
+  box-shadow: 0 0 0 var(--ink);
+  transform: translate(4px, 4px);
+}
+/* o texto vira papel junto com o fundo virando tinta: a placa troca de
+   polaridade inteira, sem passar por nenhum estado de baixo contraste */
+.placar a.case__num:hover b, .placar a.case__num:focus-visible b,
+.placar a.case__num:hover span, .placar a.case__num:focus-visible span,
+.placar a.case__num:hover::after, .placar a.case__num:focus-visible::after {
+  color: var(--paper);
+}
+.placar a.case__num:hover::after,
+.placar a.case__num:focus-visible::after { transform: translateX(3px); }
+@media (prefers-reduced-motion: reduce) {
+  .placar a.case__num:hover::after,
+  .placar a.case__num:focus-visible::after { transform: none; }
+  /* sem o passo, o afundar viraria um salto seco de 4px; a inversão sozinha já
+     dá o retorno, então aqui a placa fica parada e só troca de polaridade */
+  .placar a.case__num:hover,
+  .placar a.case__num:focus-visible { transform: none; box-shadow: var(--shadow); }
+}
 
 .case__nums {
   display: grid;
