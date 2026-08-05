@@ -6,6 +6,7 @@
 // custo de reintroduzir qualquer um deles é uma página quebrada em produção.
 import { readFile, readdir } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -70,6 +71,22 @@ for (const [nome, src] of html) {
   for (const p of PAGINAS.filter((p) => p !== '404.html')) {
     exigir(mapa.includes(p === 'index.html' ? 'luantaraschi.dev/</loc>' : p),
       `sitemap.xml: não lista ${p}`);
+  }
+
+  // toda URL declara quando mudou, e a data existe de verdade. Sitemap com
+  // lastmod errado é pior que sitemap sem lastmod: o Google aprende a não
+  // confiar no campo e passa a ignorá-lo no arquivo inteiro. Data no futuro é
+  // o sintoma clássico de campo escrito à mão. Quem gera é tools/gerar-sitemap.mjs.
+  const urls = mapa.match(/<url>[\s\S]*?<\/url>/g) ?? [];
+  exigir(urls.length > 0, 'sitemap.xml: nenhuma <url>');
+  const amanha = new Date(Date.now() + 864e5).toISOString().slice(0, 10);
+  for (const u of urls) {
+    const loc = u.match(/<loc>([^<]+)<\/loc>/)?.[1] ?? '?';
+    const lastmod = u.match(/<lastmod>([^<]+)<\/lastmod>/)?.[1];
+    if (!lastmod) { falhas.push(`sitemap.xml: ${loc} sem <lastmod>`); continue; }
+    exigir(/^\d{4}-\d{2}-\d{2}$/.test(lastmod),
+      `sitemap.xml: ${loc} com lastmod fora do formato AAAA-MM-DD (${lastmod})`);
+    exigir(lastmod < amanha, `sitemap.xml: ${loc} com lastmod no futuro (${lastmod})`);
   }
 }
 
@@ -148,6 +165,46 @@ for (const [nome, src] of html) {
       `${nome}: bloco de código não alcançável por teclado (falta tabindex="0")`);
     exigir(/<pre[^>]*\baria-label="/.test(bloco),
       `${nome}: bloco de código sem aria-label dizendo o que ele mostra`);
+  }
+}
+
+// --- 11. o hash da CSP corresponde ao script de tema que está nas páginas ---
+// A CSP do vercel.json libera o único script inline do site por hash, e não por
+// 'unsafe-inline'. Isso é o que faz a política valer alguma coisa, e é também
+// uma armadilha: mexer uma vírgula no script de tema invalida o hash, o
+// navegador bloqueia o script, e o site passa a abrir sempre no tema escuro com
+// um pisca ao carregar. Nada quebra no build, nada aparece em teste local sem
+// os headers - só em produção, e discretamente.
+//
+// A normalização de CRLF para LF não é detalhe: os arquivos aqui estão em CRLF
+// (Windows), o git guarda em LF por causa do core.autocrlf, e é o LF que a
+// Vercel entrega. O hash tem que ser o dos bytes servidos, não o dos bytes em
+// disco. Foi isso que decidiu tirar o hash de produção quando ele foi gerado.
+{
+  const conf = existsSync(join(RAIZ, 'vercel.json'))
+    ? JSON.parse(await readFile(join(RAIZ, 'vercel.json'), 'utf8')) : null;
+  if (!conf) {
+    falhas.push('vercel.json: não existe (sem ele o site vai ao ar sem CSP e sem cache)');
+  } else {
+    const csp = conf.headers
+      ?.flatMap((r) => r.headers ?? [])
+      .find((h) => h.key === 'Content-Security-Policy')?.value ?? '';
+    exigir(csp !== '', 'vercel.json: sem Content-Security-Policy');
+    exigir(!/script-src[^;]*'unsafe-inline'/.test(csp),
+      "vercel.json: script-src com 'unsafe-inline' anula a proteção da CSP");
+
+    const declarados = new Set(
+      [...csp.matchAll(/'(sha256-[A-Za-z0-9+/=]+)'/g)].map((m) => m[1]),
+    );
+    for (const [nome, src] of html) {
+      // o script de tema é o único <script> sem atributo nenhum
+      const corpo = src.match(/<script>([\s\S]*?)<\/script>/)?.[1];
+      if (corpo === undefined) { falhas.push(`${nome}: sem o script de tema`); continue; }
+      const hash = 'sha256-' + createHash('sha256')
+        .update(corpo.replace(/\r\n/g, '\n'), 'utf8').digest('base64');
+      exigir(declarados.has(hash),
+        `${nome}: o script de tema (${hash}) não está liberado na CSP do vercel.json`);
+    }
   }
 }
 

@@ -31,7 +31,9 @@ js/app.js               23 módulos, todos com guarda de prefers-reduced-motion
 assets/shots/           prints e capturas dos projetos
 brand-spec.md           paleta, tipografia e as referências que originaram o sistema
 SHOTS.md                roteiro de captura dos prints
+vercel.json             headers de produção: CSP, cache dos assets, hardening
 tools/check.mjs         verificação estrutural das páginas (node tools/check.mjs)
+tools/gerar-sitemap.mjs regera o sitemap com o lastmod tirado do git
 ```
 
 As ferramentas de `tools/` são de desenvolvimento e não vão para o navegador —
@@ -47,6 +49,26 @@ código que ele substituiria.
 posta direto no Formspree quando não há JS; com JS, o `fetch` intercepta e a
 pessoa não sai da página. O endpoint aparece nos dois lugares e precisa ser o
 mesmo — se divergirem, metade dos envios some sem ninguém perceber.
+
+**A CSP libera o script inline por hash, não por `'unsafe-inline'`.** Isso só é
+possível porque o site não busca nada de fora: sem CDN, sem analytics e sem fonte
+de terceiro, dá para escrever `default-src 'self'` de verdade. A política é a
+consequência da decisão de não ter dependência, não um enfeite por cima dela.
+
+Existe uma armadilha aí, e o `vercel.json` não pode explicá-la porque JSON não
+aceita comentário: **mexer no script de tema invalida o hash**. Aí o navegador
+bloqueia o script, o site passa a abrir sempre no escuro com um pisca, e nada
+disso aparece em teste local — só em produção, sem erro nenhum no build. A
+checagem 11 do `check.mjs` recalcula o hash das onze páginas e compara com o que
+está na CSP, então o descasamento vira falha antes do commit. Ela normaliza CRLF
+para LF de propósito: os arquivos aqui estão em CRLF, o git guarda em LF, e é o
+LF que vai ao ar. O hash tem que ser o dos bytes servidos.
+
+**O cache é longo só onde o nome do arquivo é promessa.** Os `.woff2` levam um
+ano com `immutable` porque nunca mudam sem mudar de nome. As capturas levam trinta
+dias. O CSS, o JS, o HTML, o PDF do currículo e o `fontes.css` seguem revalidando
+a cada visita: eles mudam mantendo o mesmo endereço, e `immutable` neles deixaria
+quem já visitou preso na versão velha por um ano.
 
 **Tudo respeita `prefers-reduced-motion`.** Os vinte e três módulos de JS checam
 antes de animar, e o CSS tem um bloco que zera duração e atraso — inclusive o

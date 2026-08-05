@@ -754,21 +754,27 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
             <span class="panel__conta" data-conta-msg aria-hidden="true"></span>
           </div>
           <div class="panel__body">
+            <!-- O `role="alert"` faz o leitor de tela anunciar o erro no instante
+                 em que ele aparece, uma vez. O `aria-describedby` é a outra
+                 metade: sem ele, quem volta ao campo depois ouve "inválido" e não
+                 ouve o motivo. Apontar para um parágrafo vazio não anuncia nada,
+                 então o par pode ficar ligado o tempo todo. -->
             <div class="field">
               <label for="f-nome">Nome</label>
-              <input id="f-nome" name="nome" type="text" autocomplete="name" required />
-              <p class="field__err" data-err="nome" role="alert"></p>
+              <input id="f-nome" name="nome" type="text" autocomplete="name"
+                     aria-describedby="erro-nome" required />
+              <p class="field__err" id="erro-nome" data-err="nome" role="alert"></p>
             </div>
             <div class="field">
               <label for="f-email">E-mail</label>
               <input id="f-email" name="email" type="email" autocomplete="email"
-                     spellcheck="false" required />
-              <p class="field__err" data-err="email" role="alert"></p>
+                     spellcheck="false" aria-describedby="erro-email" required />
+              <p class="field__err" id="erro-email" data-err="email" role="alert"></p>
             </div>
             <div class="field">
               <label for="f-msg">Mensagem</label>
-              <textarea id="f-msg" name="mensagem" required></textarea>
-              <p class="field__err" data-err="mensagem" role="alert"></p>
+              <textarea id="f-msg" name="mensagem" aria-describedby="erro-mensagem" required></textarea>
+              <p class="field__err" id="erro-mensagem" data-err="mensagem" role="alert"></p>
             </div>
             <!-- Armadilha de robô: humano nunca vê este campo, robô de spam
                  preenche tudo que encontra. O Formspree descarta o envio quando
@@ -798,6 +804,29 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
 </footer>
 
 <script src="js/app.js" defer></script>
+<!-- Prerender no hover: o navegador monta a proxima pagina inteira em segundo
+     plano quando o cursor encosta no link, e a navegacao vira instantanea. Sem
+     biblioteca, sem service worker, sem prefetch na mao.
+
+     `moderate` so dispara depois de uns 200ms parado sobre o link, entao passar
+     o mouse varrendo a grade de projetos nao pre-renderiza nove paginas de uma
+     vez. Navegador que nao conhece o formato ignora a tag e nada muda.
+
+     A lista e explicita em vez de um curinga: prerender roda o JS da pagina de
+     verdade, e eu quero escolher quais paginas pagam esse custo. -->
+<script type="speculationrules">
+{
+  "prerender": [{
+    "where": {
+      "or": [
+        { "href_matches": "/projeto-*.html" },
+        { "href_matches": "/sobre.html" }
+      ]
+    },
+    "eagerness": "moderate"
+  }]
+}
+</script>
 </body>
 </html>
 

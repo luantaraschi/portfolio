@@ -437,6 +437,29 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
 </footer>
 
 <script src="js/app.js" defer></script>
+<!-- Prerender no hover: o navegador monta a proxima pagina inteira em segundo
+     plano quando o cursor encosta no link, e a navegacao vira instantanea. Sem
+     biblioteca, sem service worker, sem prefetch na mao.
+
+     `moderate` so dispara depois de uns 200ms parado sobre o link, entao passar
+     o mouse varrendo a grade de projetos nao pre-renderiza nove paginas de uma
+     vez. Navegador que nao conhece o formato ignora a tag e nada muda.
+
+     A lista e explicita em vez de um curinga: prerender roda o JS da pagina de
+     verdade, e eu quero escolher quais paginas pagam esse custo. -->
+<script type="speculationrules">
+{
+  "prerender": [{
+    "where": {
+      "or": [
+        { "href_matches": "/projeto-*.html" },
+        { "href_matches": "/sobre.html" }
+      ]
+    },
+    "eagerness": "moderate"
+  }]
+}
+</script>
 </body>
 </html>
 
