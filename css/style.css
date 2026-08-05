@@ -730,12 +730,28 @@ span.codigo__repo { border-style: dashed; }
    em produção com 3.500 testes ocupava exatamente a mesma área que um jogo de
    adivinhar música, e o olho não lê o argumento da seção, lê o tamanho.
 
-   Em coluna estreita ele volta a ser card normal: deitado em 300px a captura
-   viraria uma tira e o texto uma coluna de uma palavra. */
-.card--destaque { grid-column: 1 / -1; }
+   980px é onde a grade passa a ter três colunas (medido, não chutado), e o
+   destaque só vale a partir dali - por contagem, não por estética. Tirando os
+   dois da grade sobram três projetos mais a porta do GitHub: em três colunas
+   isso é uma linha cheia mais uma faixa; em duas seria uma linha cheia e um
+   card sozinho ao lado de um buraco. E buraco em grade de portfólio lê como
+   projeto que faltou, que é justamente o problema que o cartão do GitHub
+   existe pra resolver. Abaixo de 980 todo mundo volta a ser card normal: seis
+   cartões em duas colunas fecham três linhas exatas, e numa fecham seis. */
+@media (min-width: 980px) {
+  /* a porta do GitHub vira faixa junto: ela não é projeto, e como quarto item
+     numa linha de três seria justamente o buraco */
+  .card--destaque,
+  .card--mais { grid-column: 1 / -1; flex-direction: row; align-items: stretch; }
 
-@media (min-width: 780px) {
-  .card--destaque { flex-direction: row; align-items: stretch; }
+  .card--mais .card__thumb {
+    flex: 0 0 20%;
+    aspect-ratio: auto;
+    border-bottom: 0;
+    border-right: 2px dashed var(--ink);
+  }
+  .card--mais .card__body { align-content: center; padding: clamp(18px, 2.2vw, 28px); }
+
   .card--destaque .card__thumb {
     flex: 0 0 42%;
     /* a razão fixa dos cards pequenos daria uma caixa mais baixa que o texto ao
@@ -754,6 +770,31 @@ span.codigo__repo { border-style: dashed; }
      espaço que ganhou */
   .card--destaque .card__body .mono { font-size: 15px; line-height: 1.55; }
 }
+/* Em duas colunas, uma grade de contagem ímpar deixa o último card sozinho ao
+   lado de meia linha vazia. É o caso dos três games. `:last-child:nth-child(odd)`
+   em vez de mirar a seção: se um quarto jogo entrar, a regra para de valer
+   sozinha, e se um sétimo projeto entrar ela passa a valer sem ninguém lembrar. */
+@media (min-width: 640px) and (max-width: 979px) {
+  .grid-projects > .card:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+    flex-direction: row;
+    align-items: stretch;
+  }
+  .grid-projects > .card:last-child:nth-child(odd) .card__thumb {
+    flex: 0 0 38%;
+    aspect-ratio: auto;
+    border-bottom: 0;
+    border-right: 2px solid var(--ink);
+  }
+  .grid-projects > .card--mais:last-child:nth-child(odd) .card__thumb {
+    border-right-style: dashed;
+  }
+  .grid-projects > .card:last-child:nth-child(odd) .card__body {
+    flex: 1;
+    align-content: center;
+  }
+}
+
 .card__thumb {
   position: relative;
   aspect-ratio: 4 / 3;
