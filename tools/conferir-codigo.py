@@ -25,6 +25,8 @@ PARES = [
      "https://raw.githubusercontent.com/luantaraschi/Hand-Gestures/main/backend/hold_manager.py"),
     ("projeto-jvb.html", "git",
      (CLONE_JVB, "origin/main", "server/businessDays.ts")),
+    ("projeto-triagem.html", "git",
+     (CLONE_JVB, "origin/main", "server/ai/embeddings.ts")),
 ]
 
 # linhas que sao minhas e estao declaradas como corte de trecho

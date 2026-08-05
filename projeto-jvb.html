@@ -15,7 +15,7 @@ if(t==='light')document.documentElement.setAttribute('data-theme','light')
 var m=document.querySelector('meta[name=theme-color]');if(m)m.content=t==='light'?'#eee8d5':'#1a1917'
 try{history.scrollRestoration="manual"}catch(e){}})()</script>
 <title>JVB · ERP jurídico sob medida · Luan Taraschi</title>
-<meta name="description" content="Estudo de caso: ERP jurídico em produção construído por um desenvolvedor único. 124 tabelas, 881 endpoints tipados, 3.500 testes automatizados. TypeScript, React 19, tRPC, PostgreSQL, Railway." />
+<meta name="description" content="Estudo de caso: ERP jurídico em produção construído por um desenvolvedor único. 124 tabelas, 881 endpoints tipados, 3.500 testes e um servidor MCP com 67 ferramentas. TypeScript, React 19, tRPC, PostgreSQL." />
 <link rel="canonical" href="https://luantaraschi.dev/projeto-jvb.html" />
 <!-- O par de idiomas. O /en/ ainda não existe: enquanto não existir, estas
      três linhas ficam COMENTADAS. hreflang apontando para 404 é erro no
@@ -50,7 +50,7 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
   "@context": "https://schema.org",
   "@type": "Article",
   "headline": "JVB · ERP jurídico sob medida",
-  "description": "Estudo de caso: ERP jurídico em produção construído por um desenvolvedor único. 124 tabelas, 881 endpoints tipados, 3.500 testes automatizados. TypeScript, React 19, tRPC, PostgreSQL, Railway.",
+  "description": "Estudo de caso: ERP jurídico em produção construído por um desenvolvedor único. 124 tabelas, 881 endpoints tipados, 3.500 testes e um servidor MCP com 67 ferramentas. TypeScript, React 19, tRPC, PostgreSQL.",
   "url": "https://luantaraschi.dev/projeto-jvb.html",
   "image": "https://luantaraschi.dev/assets/og.png",
   "inLanguage": "pt-BR",
@@ -116,7 +116,7 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
       <dl class="case__meta invert">
         <div><dt>Ano</dt><dd>2026 · em produção</dd></div>
         <div><dt>Papel</dt><dd>Desenvolvedor único: produto, arquitetura, back, front e infra</dd></div>
-        <div><dt>Stack</dt><dd>TypeScript · React 19 · tRPC · Drizzle · PostgreSQL · Railway</dd></div>
+        <div><dt>Stack</dt><dd>TypeScript · React 19 · tRPC · Drizzle · PostgreSQL · MCP · Railway</dd></div>
         <div><dt>Link</dt><dd>sistema privado do cliente</dd></div>
       </dl>
     </header>
@@ -251,6 +251,75 @@ function reasonForNonBusinessDay(
             <span class="shot__cor">passe o cursor para ver em cor</span>
           </figcaption>
         </figure>
+      </section>
+
+      <section class="case__block case__block--wide">
+        <h2 class="h2">O escritório conversa com o sistema</h2>
+        <p class="body-text">
+          O ERP expõe um servidor MCP com 67 ferramentas, 46 de leitura e 21 de
+          escrita. Na prática o advogado abre o Claude e pergunta "o que eu tenho
+          pra hoje?", "cadastra esse prazo", "resume essa conversa". Quem executa é
+          o sistema, com a permissão da pessoa que perguntou, e cada chamada fica
+          registrada.
+        </p>
+        <p class="body-text">
+          A parte trabalhosa foi a autenticação. Para o claude.ai conectar como
+          Custom Connector não bastava uma chave de API: precisava de um servidor
+          OAuth 2.1 de verdade, com registro dinâmico de cliente, código de
+          autorização, refresh e uma tela de consentimento própria, que é onde a
+          pessoa vê o que está autorizando antes de autorizar.
+        </p>
+        <p class="body-text">
+          Aí veio a decisão que dá medo. O dono quis que o Claude enviasse mensagem
+          no WhatsApp direto, sem passar por rascunho. Isso muda o teto de dano:
+          deixa de ser "nada sai do sistema". Um modelo em loop, com um erro de
+          raciocínio, vira dezenas de mensagens no celular de cliente real.
+        </p>
+        <p class="body-text">
+          O que segura o envio são três guardas, cada uma contra um jeito diferente
+          de dar errado. Quem manda é revalidado na hora, e essa checagem falha
+          fechada: sem confirmar que ainda é gestor ativo, não envia. As leituras
+          do conector falham abertas de propósito, porque ali um soluço de banco
+          não deve derrubar nada, mas aqui o efeito é externo e não tem volta. A
+          segunda é um teto diário de envios. A terceira é idempotência, e ela não
+          usa tabela de chave: a própria conversa é a fonte da verdade, então
+          mensagem igual, no mesmo lugar, dentro de uma janela curta, é retry e não
+          sai de novo.
+        </p>
+        <p class="body-text">
+          As ferramentas que chamam modelo (transcrever áudio, resumir conversa)
+          têm outro problema e outro disjuntor. Ele soma o custo real em dólar das
+          últimas 24 horas e recusa quando estoura, com uma contagem de chamadas
+          embaixo como rede: o registro de custo é fire-and-forget e pode faltar, e
+          sem essa rede uma falha de gravação abriria o disjuntor inteiro.
+        </p>
+        <div class="case__nums">
+          <div class="case__num"><b>67</b><span>ferramentas expostas via MCP</span></div>
+          <div class="case__num"><b>3</b><span>guardas antes de sair uma mensagem</span></div>
+          <div class="case__num"><b>24h</b><span>janela do disjuntor de custo</span></div>
+        </div>
+      </section>
+
+      <section class="case__block">
+        <h2 class="h2">O que roda sem ninguém mandar</h2>
+        <p class="body-text">
+          São 307 arquivos de teste e mais de 3.500 casos entre unitário e
+          integração, no Vitest, mais dois testes de fumaça em Playwright que
+          sobem o sistema de verdade.
+        </p>
+        <p class="body-text">
+          No GitHub Actions rodam duas coisas. A primeira é uma varredura de
+          segredo a cada push e a cada pull request: se chave de API, senha ou
+          string de conexão entrar no diff, o check falha e aquilo não alcança a
+          branch principal.
+        </p>
+        <p class="body-text">
+          A segunda acorda às três da manhã, quando não tem ninguém no sistema:
+          dump do banco inteiro, anexos incluídos, cifrado em AES-256 e enviado
+          para fora da infraestrutura, com trinta dias de retenção. Isso não é
+          zelo, é obrigação. São dados sigilosos de cliente de escritório de
+          advocacia, e a LGPD não aceita "a plataforma devia ter backup".
+        </p>
       </section>
 
       <section class="case__block">

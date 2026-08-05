@@ -15,7 +15,7 @@ if(t==='light')document.documentElement.setAttribute('data-theme','light')
 var m=document.querySelector('meta[name=theme-color]');if(m)m.content=t==='light'?'#eee8d5':'#1a1917'
 try{history.scrollRestoration="manual"}catch(e){}})()</script>
 <title>Triagem por IA no WhatsApp · Luan Taraschi</title>
-<meta name="description" content="Estudo de caso: agente de IA que tria cerca de mil conversas por mês no WhatsApp de um escritório jurídico, com guardrails para nunca dar consultoria jurídica." />
+<meta name="description" content="Estudo de caso: agente de IA que tria cerca de mil conversas por mês no WhatsApp de um escritório jurídico, com RAG sobre a base do escritório e guardrails para nunca dar consultoria jurídica." />
 <link rel="canonical" href="https://luantaraschi.dev/projeto-triagem.html" />
 <!-- O par de idiomas. O /en/ ainda não existe: enquanto não existir, estas
      três linhas ficam COMENTADAS. hreflang apontando para 404 é erro no
@@ -50,7 +50,7 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
   "@context": "https://schema.org",
   "@type": "Article",
   "headline": "Triagem por IA no WhatsApp",
-  "description": "Estudo de caso: agente de IA que tria cerca de mil conversas por mês no WhatsApp de um escritório jurídico, com guardrails para nunca dar consultoria jurídica.",
+  "description": "Estudo de caso: agente de IA que tria cerca de mil conversas por mês no WhatsApp de um escritório jurídico, com RAG sobre a base do escritório e guardrails para nunca dar consultoria jurídica.",
   "url": "https://luantaraschi.dev/projeto-triagem.html",
   "image": "https://luantaraschi.dev/assets/og.png",
   "inLanguage": "pt-BR",
@@ -117,7 +117,7 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
       <dl class="case__meta invert">
         <div><dt>Ano</dt><dd>2025 · em produção</dd></div>
         <div><dt>Papel</dt><dd>Dev full stack, do requisito ao suporte</dd></div>
-        <div><dt>Stack</dt><dd>TypeScript · tRPC · PostgreSQL · Whapi/Evolution · IA multi-provedor</dd></div>
+        <div><dt>Stack</dt><dd>TypeScript · tRPC · PostgreSQL · Whapi/Evolution · RAG · IA multi-provedor</dd></div>
         <div><dt>Link</dt><dd>sistema privado do cliente</dd></div>
       </dl>
     </header>
@@ -180,6 +180,104 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
           <div class="case__num"><b>100%</b><span>da triagem por IA</span></div>
           <div class="case__num"><b>0</b><span>consultoria dada pelo bot</span></div>
         </div>
+      </section>
+
+      <!-- largo por causa do código, mesmo motivo do motor de prazos no case do
+           JVB: numa coluna de 542px o cosseno pedia rolagem horizontal. -->
+      <section class="case__block case__block--wide">
+        <h2 class="h2">RAG: responder com o material da casa</h2>
+        <p class="body-text">
+          Um agente que só tem o prompt responde bonito e responde errado. Esse
+          precisava do contrário: falar a partir do material do próprio escritório,
+          e ficar quieto quando o material não cobre a pergunta.
+        </p>
+        <p class="body-text">
+          Cada documento carregado é quebrado em trechos e guardado junto com o
+          vetor dele. Na conversa, a pergunta também vira vetor, e sobem para o
+          modelo os quatro trechos mais próximos por similaridade de cosseno. Sem
+          banco vetorial: os vetores moram numa coluna e a comparação acontece em
+          memória, porque nessa ordem de grandeza o pgvector seria infraestrutura
+          para um problema que ainda não chegou. O ponto que mudaria está isolado
+          numa função só, para o dia em que chegar.
+        </p>
+        <p class="body-text">
+          Duas decisões que não aparecem em tutorial de RAG. A primeira é o escopo
+          da busca: ela só enxerga trechos das fontes ligadas àquele agente e
+          àquela instância, então documento de um cliente não aparece na conversa
+          de outro nem quando a ligação entre agente e fonte está errada no banco.
+          A segunda é como ela falha. Sem chave de API, ou com erro em qualquer
+          ponto do caminho, a busca devolve vazio e o turno segue sem RAG. O agente
+          perde contexto, o cliente não perde o atendimento.
+        </p>
+
+        <figure class="codigo panel">
+          <figcaption class="panel__bar">
+            <span class="panel__box" aria-hidden="true"></span>
+            <span class="panel__title">server/ai/embeddings.ts</span>
+            <span class="codigo__repo">repositório privado do cliente</span>
+          </figcaption>
+          <pre tabindex="0" role="region"
+               aria-label="Trecho do módulo de embeddings: o cabeçalho que documenta a degradação best-effort e a função de similaridade do cosseno"><code><span class="c">/**</span>
+<span class="c"> * embeddings.ts — Embeddings de texto para a BUSCA POR RELEVÂNCIA (RAG #3).</span>
+<span class="c"> *</span>
+<span class="c"> * Usa o GEMINI (chave do Google já configurada no sistema) — a Anthropic, usada</span>
+<span class="c"> * na geração de petições, não oferece embeddings; por isso os embeddings rodam</span>
+<span class="c"> * sempre pelo Google, independentemente do provedor de geração.</span>
+<span class="c"> *</span>
+<span class="c"> * Best-effort: retorna null sem chave ou em QUALQUER erro, para o chamador cair</span>
+<span class="c"> * no comportamento anterior (sem RAG) — nunca derruba a geração.</span>
+<span class="c"> */</span>
+
+<span class="c">// ...</span>
+
+<span class="c">/** Similaridade do cosseno entre dois vetores de mesma dimensão (0 se inválido). */</span>
+export function cosineSim(a: number[], b: number[]): number {
+  if (!a || !b || a.length !== b.length || a.length === 0) return 0;
+  let dot = 0;
+  let na = 0;
+  let nb = 0;
+  for (let i = 0; i &lt; a.length; i++) {
+    dot += a[i] * b[i];
+    na += a[i] * a[i];
+    nb += b[i] * b[i];
+  }
+  if (na === 0 || nb === 0) return 0;
+  return dot / (Math.sqrt(na) * Math.sqrt(nb));
+}</code></pre>
+        </figure>
+      </section>
+
+      <section class="case__block">
+        <h2 class="h2">Como eu sei que ele não está errando</h2>
+        <p class="body-text">
+          "A IA está funcionando?" é a pergunta que decide se o agente continua
+          ligado, e responder no olho não serve. São três instrumentos, e nenhum
+          deles é o modelo se avaliando.
+        </p>
+        <p class="body-text">
+          O primeiro é um banco de casos de guardrail dentro da suíte de testes: 88
+          casos e 160 asserções só nesse arquivo, cobrindo as perguntas que a gente
+          sabe que o cliente faz. "Eu vou ganhar essa causa?", "quanto vou
+          receber?", "qual o prazo pra recorrer?". Em todas a resposta esperada é a
+          recusa. Junto vão os casos de prompt injection, incluindo o do cliente
+          que fecha a tag do próprio bloco pra tentar escrever fora dele.
+        </p>
+        <p class="body-text">
+          O segundo é um simulador que roda um turno inteiro pelo caminho de
+          produção, com o modelo mockado e todo o resto real: o mesmo prompt, os
+          mesmos guardrails, a mesma cota. O teste conta as linhas das quatro
+          tabelas de conversa antes e depois e falha se o simulador tiver escrito
+          uma linha que fosse. Simulador que grava em conversa de cliente é pior
+          que simulador nenhum.
+        </p>
+        <p class="body-text">
+          O terceiro fica na tela do gestor, e é o que mede em produção: quantas
+          conversas cada agente atendeu, quantas escalou para uma pessoa, quantos
+          rascunhos esperam revisão. Conversa antiga, de antes de o sistema saber
+          separar um agente do outro, fica de fora da conta em vez de ser chutada
+          para o agente atual. O número menor e honesto vale mais que o número
+          maior e falso.
+        </p>
       </section>
 
       <section class="case__block">

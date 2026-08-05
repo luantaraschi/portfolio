@@ -18,7 +18,7 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
      nome espremido. Os termos que caíram daqui continuam na description e no
      og:title, que é onde eles servem pra alguma coisa. -->
 <title>Luan Taraschi · Dev Full Stack</title>
-<meta name="description" content="Portfólio de Luan Taraschi, desenvolvedor full stack em Salvador (BA). SaaS, automações e agentes de IA em produção com React, Next.js, Node.js, PostgreSQL e Docker." />
+<meta name="description" content="Luan Taraschi, desenvolvedor full stack em Salvador (BA). SaaS, automação e agentes de IA em produção: RAG, MCP e guardrails, com React, Next.js, Node.js, PostgreSQL e Docker." />
 <link rel="canonical" href="https://luantaraschi.dev/" />
 <!-- O par de idiomas. O /en/ ainda não existe: enquanto não existir, estas
      três linhas ficam COMENTADAS. hreflang apontando para 404 é erro no
@@ -80,7 +80,8 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
   "knowsLanguage": ["pt-BR", "en"],
   "knowsAbout": [
     "React", "Next.js", "Node.js", "TypeScript", "Python",
-    "PostgreSQL", "Docker", "LangGraph", "Agentes de IA", "Automação"
+    "PostgreSQL", "Docker", "CI/CD", "LangGraph", "Model Context Protocol",
+    "RAG", "Agentes de IA", "Automação"
   ],
   "sameAs": [
     "https://github.com/luantaraschi",
@@ -282,8 +283,19 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
           <p class="body-text">
             A parte que mais me interessa agora é orquestração de agentes: fazer a IA
             assumir a triagem repetitiva e devolver para o humano só o que exige
-            julgamento. É o que estou construindo em produção com LangGraph, MCP e
-            integrações via API.
+            julgamento. É o que estou construindo em produção com LangGraph, MCP,
+            RAG e integrações via API.
+          </p>
+          <!-- O site é a demonstração e ninguém abre o CSS de portfólio pra
+               descobrir isso. Uma frase, com um convite que dá pra checar em dois
+               segundos, vale mais que um selo de "acessível". -->
+          <p class="body-text">
+            Duas coisas eu trato como parte do trabalho e não como enfeite: teste e
+            acessibilidade. O sistema maior que eu mantenho passa de 3.500 testes
+            automatizados, com varredura de segredo travando todo push. Este site
+            aqui navega inteiro pelo teclado, respeita quem pediu menos movimento no
+            sistema operacional e passa no contraste. Dá pra conferir sem acreditar
+            em mim: é só apertar Tab.
           </p>
           <p style="margin-top: clamp(22px, 3vw, 32px);">
             <a class="btn btn--primary" href="sobre.html">A história inteira ›</a>
@@ -340,7 +352,7 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
           <div class="card__body">
             <h3 class="h3">JVB: ERP jurídico sob medida</h3>
             <p class="mono">Um escritório inteiro rodava em planilha e WhatsApp; hoje roda num sistema só. 124 tabelas, 881 endpoints tipados, 3.500 testes, tudo feito por uma pessoa.</p>
-            <div class="card__tags"><span class="tag">TypeScript</span><span class="tag">tRPC</span><span class="tag">PostgreSQL</span><span class="tag">em produção</span></div>
+            <div class="card__tags"><span class="tag">TypeScript</span><span class="tag">tRPC</span><span class="tag">PostgreSQL</span><span class="tag">MCP</span><span class="tag">em produção</span></div>
           </div>
         </a>
 
@@ -357,7 +369,7 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
           <div class="card__body">
             <h3 class="h3">Triagem por IA no WhatsApp</h3>
             <p class="mono">Cerca de mil conversas por mês, 100% triadas por agente antes de chegar a alguém. Com guardrail: o bot nunca dá consultoria jurídica.</p>
-            <div class="card__tags"><span class="tag">Agentes de IA</span><span class="tag">WhatsApp</span><span class="tag">guardrails</span><span class="tag">em produção</span></div>
+            <div class="card__tags"><span class="tag">Agentes de IA</span><span class="tag">RAG</span><span class="tag">WhatsApp</span><span class="tag">guardrails</span><span class="tag">em produção</span></div>
           </div>
         </a>
 
@@ -559,7 +571,7 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
             <span class="skill__swatch dither-12" aria-hidden="true"></span>
             <h3 class="h3">Dados &amp; infra</h3>
           </div>
-          <p>PostgreSQL · Drizzle · Convex · Docker · deploy e manutenção em produção</p>
+          <p>PostgreSQL · Drizzle · Convex · Docker · CI/CD no GitHub Actions · deploy e manutenção em produção</p>
         </article>
 
         <article class="skill reveal">
@@ -567,7 +579,7 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
             <span class="skill__swatch dither-50" aria-hidden="true"></span>
             <h3 class="h3">IA &amp; automação</h3>
           </div>
-          <p>LangGraph · MCP · Whisper · MediaPipe · OpenRouter · Claude Code</p>
+          <p>LangGraph · MCP · RAG · guardrails e evals · Whisper · MediaPipe · OpenRouter · Claude Code</p>
         </article>
       </div>
 

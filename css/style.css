@@ -537,6 +537,15 @@ a { color: inherit; }
    procedência, e fazê-la acender convidaria a um clique que não existe */
 a.codigo__repo:hover { color: var(--ink); border-color: var(--ink); }
 span.codigo__repo { border-style: dashed; }
+/* A barra do bloco de código carrega três coisas (marca, nome do arquivo,
+   procedência) e as outras barras de painel carregam uma. Num celular de 360px
+   isso não cabe numa linha: a etiqueta de procedência não encolhe, e a barra
+   empurrava a página 16px pra fora, com a rolagem horizontal que vem junto.
+   Só aqui, porque só aqui a barra tem três itens. O `min-width: 0` é o par
+   obrigatório do `overflow-wrap`: sem ele o item flex se recusa a ficar menor
+   que o próprio nome de arquivo e a quebra nunca acontece. */
+.codigo .panel__bar { flex-wrap: wrap; }
+.codigo .panel__title { min-width: 0; overflow-wrap: anywhere; }
 .codigo pre {
   margin: 0;
   padding: clamp(14px, 2.4vw, 22px);
