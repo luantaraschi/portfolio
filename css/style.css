@@ -1929,8 +1929,11 @@ a { color: inherit; }
 .shot:not(:has(img, video)) { aspect-ratio: 16 / 9; }
 .shot--tall:not(:has(img, video)) { aspect-ratio: 4 / 3; }
 
-.shot > img,
-.shot > video {
+/* descendente, não filho direto: as capturas moram dentro de um <picture> para
+   servir WebP a quem aceita e PNG a quem não aceita, e o `>` parava de alcançar
+   a <img> no dia em que o <picture> entrou no meio. */
+.shot img,
+.shot video {
   display: block;
   width: 100%;
   height: auto;
@@ -1940,10 +1943,10 @@ a { color: inherit; }
   filter: grayscale(1) contrast(1.06);
   transition: filter 0.45s ease;
 }
-.shot:hover > img,
-.shot:hover > video,
-.shot:focus-within > img,
-.shot:focus-within > video { filter: none; }
+.shot:hover img,
+.shot:hover video,
+.shot:focus-within img,
+.shot:focus-within video { filter: none; }
 
 .shot figcaption {
   border-top: 2px solid var(--ink);
