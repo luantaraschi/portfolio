@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://luantaraschi.dev/</loc><priority>1.0</priority></url>
+  <url><loc>https://luantaraschi.dev/sobre.html</loc><priority>0.8</priority></url>
+  <url><loc>https://luantaraschi.dev/projeto-jvb.html</loc><priority>0.9</priority></url>
+  <url><loc>https://luantaraschi.dev/projeto-triagem.html</loc><priority>0.9</priority></url>
+  <url><loc>https://luantaraschi.dev/projeto-devtools.html</loc><priority>0.7</priority></url>
+  <url><loc>https://luantaraschi.dev/projeto-gesture.html</loc><priority>0.7</priority></url>
+  <url><loc>https://luantaraschi.dev/projeto-dub.html</loc><priority>0.7</priority></url>
+  <url><loc>https://luantaraschi.dev/projeto-soms.html</loc><priority>0.6</priority></url>
+  <url><loc>https://luantaraschi.dev/projeto-sus.html</loc><priority>0.6</priority></url>
+  <url><loc>https://luantaraschi.dev/projeto-pov.html</loc><priority>0.6</priority></url>
+</urlset>
