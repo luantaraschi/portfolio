@@ -824,6 +824,35 @@ a { color: inherit; }
   color: var(--ink);
 }
 
+/* 5.6b prova social
+   Uma citação só, e larga. Duas ou três viravam parede de elogio, que é o
+   formato que ninguém lê porque ninguém acredita. A moldura é a mesma dos
+   cards - borda de 2px e sombra dura - pra não parecer widget colado de fora. */
+.prova {
+  border: 2px solid var(--ink);
+  box-shadow: var(--shadow);
+  background: var(--paper);
+  padding: clamp(26px, 4vw, 44px);
+  margin-top: clamp(34px, 5vw, 56px);
+  max-width: 68ch;
+}
+.prova blockquote {
+  margin: 0;
+  font-size: clamp(18px, 2.2vw, 24px);
+  line-height: 1.45;
+  text-wrap: pretty;
+}
+.prova figcaption {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--rule-soft);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+
 /* 5.7 timeline */
 .tl { border-left: 2px solid var(--ink); padding-left: clamp(20px, 3vw, 30px); }
 .tl__item { position: relative; padding-bottom: clamp(28px, 4vw, 40px); }
