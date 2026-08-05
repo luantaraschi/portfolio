@@ -815,6 +815,15 @@ a { color: inherit; }
   color: var(--paper);
 }
 
+/* "no ar" é a única tag que promete uma coisa clicável, e ela não pode ser um
+   <a>: o card inteiro já é um link e HTML não aninha âncora. Então ela ao menos
+   se veste de link - borda cheia em vez do traço apagado das tecnologias ao
+   lado, pra olho que varre a grade parar nela. */
+.tag--ar {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+
 /* 5.7 timeline */
 .tl { border-left: 2px solid var(--ink); padding-left: clamp(20px, 3vw, 30px); }
 .tl__item { position: relative; padding-bottom: clamp(28px, 4vw, 40px); }
