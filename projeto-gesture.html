@@ -162,6 +162,47 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
         <p class="body-text">
           Sozinha, cada uma dessas quatro camadas é bem burra. Empilhadas, elas dão conta de transformar um fluxo barulhento em uma ação que a pessoa quis fazer.
         </p>
+
+        <figure class="codigo panel">
+          <figcaption class="panel__bar">
+            <span class="panel__box" aria-hidden="true"></span>
+            <span class="panel__title">hold_manager.py</span>
+            <a class="codigo__repo" href="https://github.com/luantaraschi/Hand-Gestures/blob/main/backend/hold_manager.py"
+               target="_blank" rel="noopener">ver inteiro ↗</a>
+          </figcaption>
+          <pre tabindex="0" role="region"
+               aria-label="Trecho do hold_manager.py: as duas últimas travas, o tempo de gesto mantido e o descanso depois do disparo"><code><span class="c"># Gestures that bypass the hold mechanism entirely</span>
+_CONTINUOUS_GESTURES = {Gesture.PINCH, Gesture.SWIPE_LEFT, Gesture.SWIPE_RIGHT}
+
+
+def update(self, gesture: Gesture, timestamp: float) -&gt; dict:
+    <span class="c"># Continuous gestures skip hold entirely</span>
+    if gesture in _CONTINUOUS_GESTURES:
+        return {"hold_progress": 0.0, "action_triggered": False, "in_cooldown": False}
+
+    in_cooldown = (timestamp - self._last_trigger_time) &lt; self.cooldown
+
+    <span class="c"># Gesture changed — reset hold</span>
+    if gesture != self._current_gesture:
+        self._current_gesture = gesture
+        self._hold_start = timestamp
+        self._triggered = False
+        return {"hold_progress": 0.0, "action_triggered": False, "in_cooldown": in_cooldown}
+
+    elapsed = timestamp - self._hold_start
+    progress = min(elapsed / self.hold_duration, 1.0)
+
+    <span class="c"># Already triggered for this hold — wait for gesture change</span>
+    if self._triggered:
+        return {"hold_progress": 1.0, "action_triggered": False, "in_cooldown": in_cooldown}
+
+    if progress &gt;= 1.0 and not in_cooldown:
+        self._triggered = True
+        self._last_trigger_time = timestamp
+        return {"hold_progress": 1.0, "action_triggered": True, "in_cooldown": False}
+
+    return {"hold_progress": progress, "action_triggered": False, "in_cooldown": in_cooldown}</code></pre>
+        </figure>
         <div class="case__nums">
           <div class="case__num"><b>21</b><span>pontos por mão</span></div>
           <div class="case__num"><b>30</b><span>quadros por segundo</span></div>

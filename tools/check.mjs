@@ -129,6 +129,25 @@ for (const [nome, src] of html) {
   });
 }
 
+// --- 10. todo bloco de código aponta para o arquivo de onde ele saiu ---
+// A fidelidade linha a linha é conferida contra o GitHub por
+// tools/conferir-codigo.py, que precisa de rede. Aqui fica o que dá para
+// exigir offline: o bloco existe, tem nome de arquivo, tem link pro
+// repositório, e é alcançável por teclado - `overflow-x` sem `tabindex`
+// deixa quem não usa mouse sem chegar ao fim da linha.
+for (const [nome, src] of html) {
+  for (const bloco of src.match(/<figure class="codigo[\s\S]*?<\/figure>/g) ?? []) {
+    exigir(/<span class="panel__title">[^<]+\.\w+<\/span>/.test(bloco),
+      `${nome}: bloco de código sem nome de arquivo na barra`);
+    exigir(/class="codigo__repo"[^>]+href="https:\/\/github\.com\//.test(bloco),
+      `${nome}: bloco de código sem link para o repositório`);
+    exigir(/<pre[^>]*\btabindex="0"/.test(bloco),
+      `${nome}: bloco de código não alcançável por teclado (falta tabindex="0")`);
+    exigir(/<pre[^>]*\baria-label="/.test(bloco),
+      `${nome}: bloco de código sem aria-label dizendo o que ele mostra`);
+  }
+}
+
 if (falhas.length) {
   console.error(`\n${falhas.length} falha(s):\n`);
   for (const f of falhas) console.error(`  x ${f}`);

@@ -159,6 +159,38 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
         <p class="body-text">
           A saída foi acelerar cada corte de voz individualmente, só o quanto ele precisa pra caber, sem deixar o pitch subir a ponto de virar desenho animado. Assim o sincronismo se recupera segmento a segmento, em vez de esticar o vídeo ou cortar pedaço da tradução. O áudio original fica embaixo, bem baixo, o que mantém o ambiente da cena.
         </p>
+
+        <figure class="codigo panel">
+          <figcaption class="panel__bar">
+            <span class="panel__box" aria-hidden="true"></span>
+            <span class="panel__title">dublador.py</span>
+            <a class="codigo__repo" href="https://github.com/luantaraschi/seamless-ai-dub/blob/main/dublador.py"
+               target="_blank" rel="noopener">ver inteiro ↗</a>
+          </figcaption>
+          <pre tabindex="0" role="region"
+               aria-label="Trecho do dublador.py: o encaixe de cada corte de voz no tempo do segmento original"><code><span class="c"># o pydub encurta as ondas sonoras sem achatar a frequência</span>
+def acelerar_audio_sem_esquilo(arquivo_mp3, fator):
+    audio = AudioSegment.from_file(arquivo_mp3)
+    <span class="c"># speedup funciona perfeitamente mantendo o timbre humano grave</span>
+    audio_rapido = audio.speedup(playback_speed=fator, chunk_size=150, crossfade=25)
+    audio_rapido.export(arquivo_mp3, format="mp3")
+
+<span class="c"># ... dentro do laço, para cada segmento que o Whisper devolveu:</span>
+
+    <span class="c"># Mede quanto tempo a IA gerou de áudio cru</span>
+    duracao_ia = len(audio_temporario) / 1000.0 <span class="c"># Em segundos</span>
+    <span class="c"># Descobre quanto tempo a pessoa original (em inglês) levou para falar</span>
+    tempo_original_falando = segmento["end"] - inicio
+
+    if duracao_ia &gt; tempo_original_falando:
+        fator_aceleracao = duracao_ia / tempo_original_falando
+        <span class="c"># O limite garante que a voz não fique ofegante ou robótica</span>
+        fator_aceleracao = min(fator_aceleracao, 1.45)
+        acelerar_audio_sem_esquilo(nome_arquivo_voz, fator_aceleracao)
+
+    <span class="c"># Posiciona a voz já tratada no tempo exato</span>
+    clip_voz = AudioFileClip(nome_arquivo_voz).with_start(inicio)</code></pre>
+        </figure>
       </section>
 
       <section class="case__block">

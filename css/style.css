@@ -513,6 +513,43 @@ a { color: inherit; }
 }
 .panel__body { padding: clamp(18px, 3vw, 28px); }
 
+/* 5.2b bloco de código
+   O site descrevia código muito bem e não mostrava nenhum. É um painel como os
+   outros, com o nome do arquivo na barra e o link pro repositório na ponta.
+
+   Sem colorização de sintaxe: numa paleta de duas cores ela viraria ruído ou
+   mentira. O único destaque é o comentário em --ink-2, que é a mesma hierarquia
+   que o resto do site usa pra texto secundário. */
+.codigo { margin: clamp(22px, 3vw, 32px) 0 0; }
+.codigo__repo {
+  margin-left: auto;
+  background: var(--paper);
+  padding: 2px 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  text-decoration: none;
+  border: 1px solid var(--rule-soft);
+}
+.codigo__repo:hover { color: var(--ink); border-color: var(--ink); }
+.codigo pre {
+  margin: 0;
+  padding: clamp(14px, 2.4vw, 22px);
+  /* a linha longa rola dentro da caixa, e não empurra a página inteira */
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.65;
+  tab-size: 2;
+}
+/* rolar com o teclado exige poder focar a caixa; sem isto quem não usa mouse
+   não alcança o fim da linha */
+.codigo pre:focus-visible { outline: 3px solid var(--accent); outline-offset: -3px; }
+.codigo .c { color: var(--ink-2); }
+@media (max-width: 620px) { .codigo pre { font-size: 12px; } }
+
 /* 5.3 navegação */
 .nav {
   position: sticky;
@@ -1926,7 +1963,19 @@ a { color: inherit; }
 }
 .case__meta dd { margin: 0; }
 .case__shot { aspect-ratio: 16 / 9; border: 2px solid var(--ink); box-shadow: var(--shadow); }
-.case__body { display: grid; gap: clamp(30px, 4vw, 44px); margin-top: var(--bay); }
+/* `minmax(0, 1fr)` e não o `1fr` implícito, pelo mesmo motivo que o .about__grid
+   e o .contact__grid já usam: item de grid nasce com `min-width: auto`, então
+   ele cresce até caber o conteúdo em vez de encolher. Enquanto tudo aqui dentro
+   era texto que quebra linha, isso nunca apareceu. O primeiro <pre> mudou o
+   caso: com `white-space: pre` ele não quebra, empurrava o bloco para 646px numa
+   tela de 360, e o `overflow-x: hidden` do body escondia a metade de fora em vez
+   de deixar rolar. */
+.case__body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(30px, 4vw, 44px);
+  margin-top: var(--bay);
+}
 .case__block h2 { margin-bottom: 14px; }
 .case__gallery {
   display: grid;
