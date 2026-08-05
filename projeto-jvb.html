@@ -184,7 +184,11 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
         </div>
       </section>
 
-      <section class="case__block">
+      <!-- largo por causa do código: numa coluna de 542px cada linha do motor
+           pedia rolagem horizontal, e é o trecho que mais importa da página. Na
+           largura inteira ele cabe, e a captura logo abaixo mostra esse mesmo
+           cálculo tendo acontecido de verdade. -->
+      <section class="case__block case__block--wide">
         <h2 class="h2">Contar prazo é mais difícil do que parece</h2>
         <p class="body-text">
           O CPC conta prazo em dias úteis (art. 219), exclui o dia do começo
@@ -200,6 +204,39 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
           código mais testado do sistema: ninguém elogia código que conta feriado,
           mas se ele erra um dia o cliente perde o processo.
         </p>
+
+        <figure class="codigo panel">
+          <figcaption class="panel__bar">
+            <span class="panel__box" aria-hidden="true"></span>
+            <span class="panel__title">server/businessDays.ts</span>
+            <span class="codigo__repo">repositório privado do cliente</span>
+          </figcaption>
+          <pre tabindex="0" role="region"
+               aria-label="Trecho do motor de prazos: a normalização em UTC ao meio-dia e a função que diz por que um dia não é útil"><code><span class="c">// Datas são strings ISO "YYYY-MM-DD". Toda a aritmética é feita em UTC ao meio-dia</span>
+<span class="c">// para evitar problemas de fuso/horário de verão.</span>
+
+function toUtcNoon(iso: string): Date {
+  return new Date(`${iso}T12:00:00Z`);
+}
+
+<span class="c">// ...</span>
+
+<span class="c">// Motivo de um dia não ser útil (ou null se for útil). Considera, na ordem:</span>
+<span class="c">// fim de semana, recesso forense, feriado forense específico (extra) e feriado</span>
+<span class="c">// nacional/forense usual.</span>
+function reasonForNonBusinessDay(
+  d: Date,
+  extra: Map&lt;string, string&gt;
+): string | null {
+  if (isWeekend(d)) return d.getUTCDay() === 0 ? "Domingo" : "Sábado";
+  if (isInRecess(d)) return "Recesso forense (20/12–20/01)";
+  const iso = formatISO(d);
+  if (extra.has(iso)) return extra.get(iso) || "Feriado forense";
+  const names = holidayNamesForYear(d.getUTCFullYear());
+  if (names.has(iso)) return `Feriado: ${names.get(iso)}`;
+  return null;
+}</code></pre>
+        </figure>
         <!-- o motor mostrando o próprio raciocínio: a captura vale mais que o
              parágrafo acima, porque o vencimento e os dias pulados são o que ele
              calculou de verdade quando este prazo foi cadastrado -->

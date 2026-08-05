@@ -139,8 +139,11 @@ for (const [nome, src] of html) {
   for (const bloco of src.match(/<figure class="codigo[\s\S]*?<\/figure>/g) ?? []) {
     exigir(/<span class="panel__title">[^<]+\.\w+<\/span>/.test(bloco),
       `${nome}: bloco de código sem nome de arquivo na barra`);
-    exigir(/class="codigo__repo"[^>]+href="https:\/\/github\.com\//.test(bloco),
-      `${nome}: bloco de código sem link para o repositório`);
+    // link pro repositório quando ele é público; quando é privado, a etiqueta
+    // dizendo isso - o que não pode é o trecho aparecer sem procedência
+    exigir(/class="codigo__repo"[^>]*href="https:\/\/github\.com\//.test(bloco)
+        || /class="codigo__repo"[^>]*>[^<]*privado/.test(bloco),
+      `${nome}: bloco de código sem procedência (link do repo ou aviso de privado)`);
     exigir(/<pre[^>]*\btabindex="0"/.test(bloco),
       `${nome}: bloco de código não alcançável por teclado (falta tabindex="0")`);
     exigir(/<pre[^>]*\baria-label="/.test(bloco),

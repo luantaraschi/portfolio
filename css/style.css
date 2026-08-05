@@ -533,7 +533,10 @@ a { color: inherit; }
   text-decoration: none;
   border: 1px solid var(--rule-soft);
 }
-.codigo__repo:hover { color: var(--ink); border-color: var(--ink); }
+/* só o que é link reage ao cursor: a etiqueta de repositório privado é aviso de
+   procedência, e fazê-la acender convidaria a um clique que não existe */
+a.codigo__repo:hover { color: var(--ink); border-color: var(--ink); }
+span.codigo__repo { border-style: dashed; }
 .codigo pre {
   margin: 0;
   padding: clamp(14px, 2.4vw, 22px);
