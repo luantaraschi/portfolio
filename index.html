@@ -397,10 +397,15 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
           <div class="card__thumb">
             <!-- o único cartão com vídeo: o POV é um gesto, e print de agulha
                  parada não conta a história. Sem faixa de áudio, então `muted`
-                 aqui é só o que o autoplay exige, não uma escolha. -->
-            <video class="card__shot" src="assets/shots/pov-agulha.mp4"
+                 aqui é só o que a política de mídia exige, não uma escolha.
+
+                 Quem manda tocar é o módulo 23, pelo `data-toca`: o atributo do
+                 HTML que faria isso é surdo à preferência de movimento reduzido,
+                 e o bloco do CSS que trata do resto não alcança ele. -->
+
+            <video class="card__shot" src="assets/shots/pov-agulha.mp4" data-toca
                    width="1100" height="930"
-                   autoplay muted loop playsinline preload="metadata" aria-hidden="true"></video>
+                   muted loop playsinline preload="metadata" aria-hidden="true"></video>
             <span class="card__veu dither-12 dither-fade" aria-hidden="true"></span>
             <span class="card__idx">08</span>
           </div>

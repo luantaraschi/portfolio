@@ -11,6 +11,7 @@
    17 o recado de quem abre o console · 18 a guia lateral de seção
    19 o card se transformando na página do case · 20 o CV avisando que baixou
    21 o case que você já abriu · 22 o dedo ralando o dither onde encostou
+   23 o vídeo só toca para quem não pediu silêncio
    ========================================================================== */
 (function () {
   'use strict';
@@ -944,5 +945,34 @@
       thumb.style.setProperty('--cx', (e.clientX - r.left) + 'px');
       thumb.style.setProperty('--cy', (e.clientY - r.top) + 'px');
     }, { passive: true });
+  }
+
+  /* ---- 23. o vídeo só toca para quem não pediu silêncio ------------------ */
+  // O `autoplay` do HTML não tem como perguntar nada a ninguém: ele toca e
+  // pronto. Aqui a pergunta vem antes, e de quebra o vídeo fora da tela não
+  // gasta decodificação - mesma economia que o módulo 4 faz com os canvas.
+  var videos = document.querySelectorAll('video[data-toca]');
+  if (videos.length && !reduced) {
+    if ('IntersectionObserver' in window) {
+      var ioV = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (en.isIntersecting) {
+            // play() devolve promessa e o browser pode recusar (aba em segundo
+            // plano, política de mídia). Sem o catch vira erro solto no console
+            // de quem abriu o console - justo o público do módulo 17.
+            var p = en.target.play();
+            if (p && p.catch) p.catch(function () {});
+          } else {
+            en.target.pause();
+          }
+        });
+      }, { threshold: 0.2 });
+      Array.prototype.forEach.call(videos, function (v) { ioV.observe(v); });
+    } else {
+      Array.prototype.forEach.call(videos, function (v) {
+        var p = v.play();
+        if (p && p.catch) p.catch(function () {});
+      });
+    }
   }
 })();

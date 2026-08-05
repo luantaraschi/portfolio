@@ -27,7 +27,7 @@ sobre.html              a versão longa da história
 projeto-*.html          os oito cases: jvb, triagem, devtools, gesture, dub,
                         soms, sus, pov
 css/style.css           tokens, componentes, seções, responsivo, acessibilidade
-js/app.js               17 módulos, todos com guarda de prefers-reduced-motion
+js/app.js               23 módulos, todos com guarda de prefers-reduced-motion
 assets/shots/           prints e capturas dos projetos
 brand-spec.md           paleta, tipografia e as referências que originaram o sistema
 SHOTS.md                roteiro de captura dos prints
@@ -48,7 +48,7 @@ posta direto no Formspree quando não há JS; com JS, o `fetch` intercepta e a
 pessoa não sai da página. O endpoint aparece nos dois lugares e precisa ser o
 mesmo — se divergirem, metade dos envios some sem ninguém perceber.
 
-**Tudo respeita `prefers-reduced-motion`.** Os dezessete módulos de JS checam
+**Tudo respeita `prefers-reduced-motion`.** Os vinte e três módulos de JS checam
 antes de animar, e o CSS tem um bloco que zera duração e atraso — inclusive o
 atraso, senão a escada de entrada deixaria elemento invisível por meio segundo
 mesmo com a animação já cortada.

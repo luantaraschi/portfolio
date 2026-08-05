@@ -42,8 +42,13 @@ for (const [nome, src] of html) {
 // --- 3. nenhum autoplay declarado no HTML ---
 // O atributo é HTML puro: o bloco prefers-reduced-motion do CSS não alcança.
 // Quem quiser vídeo tocando liga por JS, dentro da guarda de movimento.
+//
+// Sem os comentários: eles falam sobre autoplay justamente para explicar por que
+// ele não está ali, e a primeira versão desta checagem acusava a explicação.
 for (const [nome, src] of html) {
-  exigir(!/\bautoplay\b/.test(src), `${nome}: autoplay no HTML ignora prefers-reduced-motion`);
+  const semComentario = src.replace(/<!--[\s\S]*?-->/g, '');
+  exigir(!/\bautoplay\b/.test(semComentario),
+    `${nome}: autoplay no HTML ignora prefers-reduced-motion`);
 }
 
 // --- 4. nenhum asset órfão em assets/shots ---
