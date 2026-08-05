@@ -1678,6 +1678,14 @@ span.codigo__repo { border-style: dashed; }
   border-top: 2px solid var(--ink);
   color: var(--ink-2);
 }
+/* mesma troca que a dica de cor da legenda das capturas faz: a instrução só
+   aparece onde ela é executável. `display: none` e não `visibility`, senão o
+   espaço vazio ficaria no meio do space-between e a legenda desalinharia. */
+.hero__cap--toque { display: none; }
+@media (hover: none) {
+  .hero__cap--ponteiro { display: none; }
+  .hero__cap--toque { display: inline; }
+}
 
 /* 6.2 sobre */
 .about__grid {
@@ -2407,6 +2415,61 @@ span.codigo__repo { border-style: dashed; }
   margin-top: var(--bay);
 }
 .case__block h2 { margin-bottom: 14px; }
+
+/* O índice do case. Nasce em JS (módulo 25) a partir dos próprios <h2>: são
+   oito páginas com títulos diferentes, e escrever a lista à mão em cada uma
+   seria copiar oito vezes uma coisa que o documento já diz - e que ficaria
+   mentindo no dia em que alguém trocasse um título.
+
+   Ele não marca onde você está, de propósito. A partir de 820px o corpo do
+   case vira grade de duas colunas, então dois blocos dividem a mesma altura:
+   no JVB, "O problema" e "A decisão" começam os dois em y=1492. Qualquer
+   marcação de "seção atual" acertaria um e erraria o outro. Quem responde
+   "quanto falta" é a barra em ASCII do topo, que é linear e não tem como
+   errar; este aqui responde "o que tem aqui dentro". */
+.sumario { margin-top: clamp(26px, 4vw, 38px); }
+.sumario__lista {
+  list-style: none;
+  margin: 0;
+  padding: clamp(12px, 2vw, 18px);
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
+  gap: 2px clamp(12px, 2vw, 24px);
+  counter-reset: nenhum;
+}
+.sumario__lista a {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 7px 8px;
+  margin-inline: -8px;
+  text-decoration: none;
+  color: var(--ink);
+  text-wrap: pretty;
+  transition: background-color 140ms steps(2, end);
+}
+.sumario__lista a:hover,
+.sumario__lista a:focus-visible { background-color: var(--paper-2); }
+/* o número é a mesma pastilha do índice do card: some no fundo até você
+   passar por cima, e aí vira o negativo dele */
+.sumario__n {
+  flex: none;
+  border: 2px solid var(--rule-soft);
+  padding: 1px 6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+  transition: background-color 140ms steps(2, end), color 140ms steps(2, end),
+              border-color 140ms steps(2, end);
+}
+.sumario__lista a:hover .sumario__n,
+.sumario__lista a:focus-visible .sumario__n {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--paper);
+}
 .case__gallery {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
@@ -2583,6 +2646,207 @@ span.codigo__repo { border-style: dashed; }
 @media (hover: hover) {
   .shot:has(img, video) .shot__cor { display: inline; }
 }
+
+/* ---------- 7d. A CAPTURA EM TAMANHO DE VERDADE -------------------------- */
+/* Seis dos oito cases têm exatamente uma captura, e ela mora numa coluna de
+   42% de largura onde nenhum texto de interface se lê. Clicar numa imagem pra
+   ver grande é o gesto mais automático que existe, e até aqui não acontecia
+   nada. O botão nasce em JS (módulo 24): sem JS não existe ampliação, e um
+   botão morto no HTML seria pior que a falta dele.
+
+   Só imagem. Dois dos três vídeos são laço mudo sem controle e o terceiro tem
+   controle nativo - uma camada de clique por cima deles roubaria o play. */
+.shot__lupa {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border: 0;
+  padding: 0;
+  background: transparent;
+}
+/* a legenda fica acima da camada de clique pra continuar selecionável: ela é
+   texto que descreve a imagem, e texto que não dá pra copiar irrita */
+.shot figcaption { position: relative; z-index: 1; }
+
+/* o distintivo: dois cantos de moldura, que é o desenho de "abre maior" sem
+   nenhuma curva. Lupa de verdade tem círculo e cabo, e círculo é justamente o
+   que não existe em lugar nenhum deste site. */
+.shot__lupa-glifo {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 26px;
+  height: 26px;
+  border: 2px solid var(--ink);
+  background: var(--paper);
+  opacity: 0;
+  transition: opacity 140ms steps(2, end), transform 140ms steps(2, end);
+}
+.shot__lupa-glifo::before,
+.shot__lupa-glifo::after {
+  content: '';
+  position: absolute;
+  width: 7px;
+  height: 7px;
+}
+.shot__lupa-glifo::before {
+  top: 4px;
+  left: 4px;
+  border-top: 2px solid var(--ink);
+  border-left: 2px solid var(--ink);
+}
+.shot__lupa-glifo::after {
+  bottom: 4px;
+  right: 4px;
+  border-bottom: 2px solid var(--ink);
+  border-right: 2px solid var(--ink);
+}
+.shot:hover .shot__lupa-glifo,
+.shot__lupa:focus-visible .shot__lupa-glifo { opacity: 1; }
+.shot__lupa:active .shot__lupa-glifo { transform: translate(1px, 1px); }
+/* sem ponteiro não existe hover pra revelar o distintivo, e uma imagem que
+   responde ao toque sem dizer que responde é a mesma armadilha do retrato */
+@media (hover: none) {
+  .shot__lupa-glifo { opacity: 1; }
+}
+
+/* O diálogo é nativo: `showModal()` entrega Escape, foco preso e resto da
+   página inerte sem uma linha disso escrita aqui.
+
+   O véu mora no próprio <dialog>, e não no ::backdrop, de propósito: o
+   ::backdrop só passou a herdar do elemento de origem faz pouco tempo, e sem
+   herança ele não enxerga nenhum token de tema. O elemento em si é filho do
+   body na árvore, então var() resolve nele como resolve em qualquer outro. */
+/* `inset: 0` e não `width: 100dvw`. O <dialog> já nasce `position: fixed`, e
+   as unidades de viewport contam a barra de rolagem junto: com 100dvw o véu
+   ficava mais largo que a área útil e a página inteira ganhava rolagem
+   horizontal enquanto a lupa estava aberta. Medido. */
+.lupa {
+  inset: 0;
+  width: auto;
+  height: auto;
+  max-width: none;
+  max-height: none;
+  border: 0;
+  /* o <dialog> nasce com `overflow: auto` no estilo do navegador. Com o véu
+     do tamanho da tela isso rendia uma barra de rolagem por 6px de sobra, e
+     como o elemento cobre o viewport a barra aparecia colada no rodapé da
+     tela, como se a página tivesse quebrado. Quem controla a própria altura é
+     o quadro aqui dentro; o véu não tem o que rolar. */
+  overflow: hidden;
+  padding: clamp(12px, 3vw, 40px);
+  color: var(--ink);
+  background-color: var(--paper);   /* fallback pra quem não tem color-mix */
+  background-color: color-mix(in srgb, var(--paper) 93%, transparent);
+  background-image: radial-gradient(var(--tex) 0.8px, transparent 0.9px);
+  background-size: 10px 10px;
+}
+.lupa[open] { display: grid; place-items: center; }
+.lupa::backdrop { background: transparent; }
+
+/* 100% e max-* do próprio pai pelo mesmo motivo: o padding do <dialog> já
+   reservou a margem, e vw/vh aqui somariam a barra de rolagem de novo */
+.lupa__quadro {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1500px;
+  max-height: 100%;
+  min-height: 0;
+}
+/* a barra do painel, com o nome do arquivo à esquerda e o contador à direita -
+   igual à do retrato.bmp e à do bloco de código */
+.lupa__fechar {
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  color: var(--ink);
+  padding: 3px 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  box-shadow: 2px 2px 0 var(--ink);
+  transition: transform 110ms steps(2, end), box-shadow 110ms steps(2, end);
+}
+.lupa__fechar:hover  { transform: translate(-1px, -1px); box-shadow: 3px 3px 0 var(--ink); }
+.lupa__fechar:active { transform: translate(2px, 2px);   box-shadow: 0 0 0 var(--ink); }
+
+/* `flex: 1` mais `min-height: 0` é o que dá altura definida ao palco. Sem
+   isso ele mede o próprio conteúdo, o `max-height: 100%` da imagem cai numa
+   referência circular, o browser desiste da porcentagem e a captura renderiza
+   no tamanho natural - medi 812px de imagem dentro de 733px de palco, cortada
+   embaixo sem nenhuma barra de rolagem dizendo isso. */
+.lupa__palco {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: grid;
+  overflow: hidden;
+  background: var(--paper-2);
+  padding: clamp(8px, 1.6vw, 16px);
+}
+/* o <picture> é que seria o item da grade, e a <img> mediria contra ele em vez
+   de contra o palco - a mesma referência circular um nível abaixo. Com
+   `contents` o wrapper some do layout e quem se posiciona é a imagem. */
+.lupa__palco picture { display: contents; }
+/* Aqui a captura vem em cor. Na página ela é dessaturada porque a paleta do
+   produto brigaria com a do portfólio; quem ampliou está justamente pedindo
+   pra ver o produto, então a regra se desfaz onde deixou de fazer sentido. */
+/* A imagem ocupa a célula inteira e o `object-fit` cuida de encaixar os pixels
+   dentro dela. Tentei antes o caminho óbvio - imagem no tamanho natural,
+   centralizada, com `max-height: 100%` segurando - e ele não funciona: a altura
+   do palco vem do flex e a porcentagem do filho não resolve contra ela, então o
+   browser descarta o limite e a captura sai cortada embaixo, sem barra de
+   rolagem nenhuma denunciando. Aqui quem decide o tamanho é a célula, que tem
+   medida de verdade, e a imagem só se acomoda dentro. */
+.lupa__img {
+  filter: none;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  object-fit: contain;
+}
+.lupa__cap {
+  border-top: 2px solid var(--ink);
+  background: var(--paper);
+  padding: 10px 14px;
+  color: var(--ink-2);
+  text-wrap: pretty;
+}
+.lupa__cap:empty { display: none; }
+
+/* Andar entre as capturas do mesmo case sem fechar e reabrir. Só aparece onde
+   existe mais de uma - no JVB são cinco, nos outros é uma só e um par de setas
+   desligadas seria promessa falsa. */
+.lupa__setas {
+  display: flex;
+  gap: 10px;
+  margin-left: auto;
+}
+.lupa__seta {
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  color: var(--ink);
+  width: 28px;
+  height: 24px;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 1;
+  transition: transform 110ms steps(2, end);
+}
+.lupa__seta:hover { transform: translate(-1px, -1px); }
+.lupa__seta:active { transform: translate(1px, 1px); }
+
+/* a entrada: o quadro cresce em passos, como tudo aqui. A saída é a mesma
+   coisa ao contrário, e existe uma classe pra ela porque animar a saída de um
+   <dialog> em CSS puro exige `allow-discrete`, que ainda não está em todo
+   lugar - o JS segura o close por 180ms e pronto. */
+@keyframes lupa-entra {
+  from { transform: scale(0.88); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+.lupa[open] .lupa__quadro { animation: lupa-entra 200ms steps(4, end) 1; }
+.lupa__quadro.saindo { animation: lupa-entra 180ms steps(4, end) 1 reverse; }
 
 /* ---------- 8. ACESSIBILIDADE / MOTION ----------------------------------- */
 :where(a, button, input, textarea, [tabindex]):focus-visible {

@@ -27,7 +27,7 @@ sobre.html              a versão longa da história
 projeto-*.html          os oito cases: jvb, triagem, devtools, gesture, dub,
                         soms, sus, pov
 css/style.css           tokens, componentes, seções, responsivo, acessibilidade
-js/app.js               23 módulos, todos com guarda de prefers-reduced-motion
+js/app.js               25 módulos, todos com guarda de prefers-reduced-motion
 assets/shots/           prints e capturas dos projetos
 brand-spec.md           paleta, tipografia e as referências que originaram o sistema
 SHOTS.md                roteiro de captura dos prints
@@ -116,6 +116,30 @@ Firefox e Safari 18.2+; o bloco `::-webkit-scrollbar` fica dentro de um
 pseudo-elementos. Medido: com as duas juntas a barra sai com 10px e o
 `width: 13px` do bloco webkit é ignorado. Sem o `@supports`, aquilo seria
 código morto se passando por regra viva.
+
+**A captura abre em tamanho de verdade, e o índice do case se escreve sozinho.**
+Seis dos oito cases têm uma captura só, numa coluna de 42% de largura onde
+nenhum texto de interface se lê — clicar para ampliar é o gesto mais automático
+que existe e não acontecia nada. O `<dialog>` nativo entrega Escape, foco preso
+e página inerte sem uma linha disso escrita. Só imagem: dois dos três vídeos são
+laço mudo e o terceiro tem controle nativo, e uma camada de clique por cima
+roubaria o play deles.
+
+O índice (`nesta página`) nasce dos próprios `<h2>`, porque são oito páginas com
+títulos diferentes e a lista escrita à mão seria oito cópias de uma coisa que o
+documento já diz. Ele não marca em que bloco você está, e isso é decisão: a
+partir de 820px o corpo do case vira grade de duas colunas, então dois blocos
+dividem a mesma altura — no JVB, "O problema" e "A decisão" começam os dois em
+y=1492. Marcar um seria errar o outro em metade da rolagem. Quem responde
+"quanto falta" é a barra em ASCII do topo, que é linear e não tem como errar.
+
+Os dois nascem em JS de propósito: sem JS não existe ampliação nem índice, e
+markup morto no HTML seria pior que a falta dele. O que o índice cria são ids
+que não existiam durante a análise do HTML, então um link copiado dele abriria
+a página no topo — o módulo 25 refaz o pulo depois de criar os ids, com o
+`scroll-behavior` desligado por um instante na raiz. `behavior: 'auto'` na
+chamada não resolve: "auto" quer dizer "o que o CSS mandar", e o CSS aqui manda
+`smooth`.
 
 **O tema é aplicado antes da primeira pintura.** Um script inline no `<head>` de
 cada página lê o `localStorage` e marca o `<html>` antes do CSS carregar, para o

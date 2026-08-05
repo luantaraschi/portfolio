@@ -12,6 +12,7 @@
    19 o card se transformando na página do case · 20 o CV avisando que baixou
    21 o case que você já abriu · 22 o dedo ralando o dither onde encostou
    23 o vídeo só toca para quem não pediu silêncio
+   24 a captura abre em tamanho de verdade · 25 o índice do case
    ========================================================================== */
 (function () {
   'use strict';
@@ -1022,6 +1023,237 @@
         var p = v.play();
         if (p && p.catch) p.catch(function () {});
       });
+    }
+  }
+
+  /* ---- 24. a captura abre em tamanho de verdade -------------------------- */
+  // Seis dos oito cases têm uma captura só, e ela é a única prova visual de que
+  // o produto existe - numa coluna de 42% de largura, onde nenhum texto de
+  // interface se lê. Clicar pra ver grande é o gesto mais automático que existe
+  // e até aqui não acontecia nada.
+  //
+  // O <dialog> nativo dá Escape, foco preso e página inerte de graça. O botão
+  // que abre nasce aqui e não no HTML: sem JS não existe ampliação, e um botão
+  // que não faz nada é pior que a falta dele.
+  //
+  // Só imagem, de propósito. Dois dos três vídeos são laço mudo e o terceiro
+  // tem controle nativo: uma camada de clique por cima roubaria o play deles.
+  var telas = [];
+  Array.prototype.forEach.call(document.querySelectorAll('.shot'), function (fig) {
+    if (fig.querySelector('img')) telas.push(fig);
+  });
+
+  if (telas.length && typeof HTMLDialogElement === 'function' &&
+      typeof document.createElement('dialog').showModal === 'function') {
+    var lupa = document.createElement('dialog');
+    lupa.className = 'lupa';
+    lupa.innerHTML =
+      '<div class="lupa__quadro panel">' +
+        '<div class="panel__bar">' +
+          '<span class="panel__box" aria-hidden="true"></span>' +
+          '<span class="panel__title" data-lupa-nome></span>' +
+          '<span class="panel__conta" data-lupa-conta></span>' +
+          '<span class="lupa__setas" data-lupa-setas hidden>' +
+            '<button class="lupa__seta" type="button" data-lupa-ant ' +
+                    'aria-label="Captura anterior">‹</button>' +
+            '<button class="lupa__seta" type="button" data-lupa-prox ' +
+                    'aria-label="Próxima captura">›</button>' +
+          '</span>' +
+          '<button class="lupa__fechar" type="button" data-lupa-fecha autofocus>' +
+            'fechar ✕</button>' +
+        '</div>' +
+        '<div class="lupa__palco" data-lupa-palco></div>' +
+        '<p class="lupa__cap mono-caps" data-lupa-cap></p>' +
+      '</div>';
+    document.body.appendChild(lupa);
+
+    var quadro = lupa.querySelector('.lupa__quadro');
+    var palco = lupa.querySelector('[data-lupa-palco]');
+    var lupaNome = lupa.querySelector('[data-lupa-nome]');
+    var lupaCap = lupa.querySelector('[data-lupa-cap]');
+    var lupaConta = lupa.querySelector('[data-lupa-conta]');
+    var lupaSetas = lupa.querySelector('[data-lupa-setas]');
+    var atual = 0, devolver = null;
+
+    // o nome do arquivo vira título de painel, do mesmo jeito que retrato.bmp e
+    // embeddings.ts: diz de onde a imagem veio sem precisar de uma frase
+    function arquivoDe(url) {
+      return String(url || '').split('/').pop().split('?')[0] || 'captura';
+    }
+    function legendaDe(fig) {
+      var s = fig.querySelector('figcaption span');
+      return s ? s.textContent.trim() : '';
+    }
+    // Clona o <picture> inteiro em vez de copiar uma URL. A primeira versão
+    // lia `img.currentSrc`, e isso só existe depois que o browser escolheu a
+    // fonte: as capturas são `loading="lazy"` e ficam abaixo da dobra, então
+    // ao clicar numa que ainda não carregou o valor vinha vazio e caía no
+    // `src`, que é o PNG. A lupa abria o arquivo grande com o WebP ao lado.
+    // Clonando o elemento, quem escolhe a fonte continua sendo o browser.
+    function mostrar(i) {
+      atual = (i + telas.length) % telas.length;
+      var fig = telas[atual];
+      var orig = fig.querySelector('picture') || fig.querySelector('img');
+      var copia = orig.cloneNode(true);
+      var img = copia.tagName === 'IMG' ? copia : copia.querySelector('img');
+      img.className = 'lupa__img';
+      // aqui a imagem é o conteúdo, não pode chegar atrasada
+      img.removeAttribute('loading');
+      palco.innerHTML = '';
+      palco.appendChild(copia);
+      // o nome definitivo é o do arquivo que o browser de fato buscou, e isso
+      // só se sabe no load; até lá vale o do atributo, que nunca fica vazio
+      lupaNome.textContent = arquivoDe(img.getAttribute('src'));
+      img.addEventListener('load', function () {
+        lupaNome.textContent = arquivoDe(img.currentSrc || img.src);
+      });
+      lupaCap.textContent = legendaDe(fig);
+      lupaConta.textContent = telas.length > 1 ? (atual + 1) + '/' + telas.length : '';
+    }
+    function abrir(i, origem) {
+      devolver = origem;
+      mostrar(i);
+      lupa.showModal();
+    }
+    function fechar() {
+      if (reduced) return lupa.close();
+      quadro.classList.add('saindo');
+      setTimeout(function () {
+        quadro.classList.remove('saindo');
+        lupa.close();
+      }, 180);
+    }
+
+    if (telas.length > 1) lupaSetas.removeAttribute('hidden');
+    lupa.querySelector('[data-lupa-ant]').addEventListener('click', function () { mostrar(atual - 1); });
+    lupa.querySelector('[data-lupa-prox]').addEventListener('click', function () { mostrar(atual + 1); });
+    lupa.querySelector('[data-lupa-fecha]').addEventListener('click', fechar);
+
+    // clique no véu fecha: o alvo só é o próprio <dialog> quando o clique caiu
+    // fora do quadro, porque o quadro cobre a si mesmo e aos filhos
+    lupa.addEventListener('click', function (e) { if (e.target === lupa) fechar(); });
+    // Escape fecha nativamente; interrompo só pra passar pela mesma saída
+    // animada do botão, senão o teclado teria um corte seco e o mouse não
+    lupa.addEventListener('cancel', function (e) { e.preventDefault(); fechar(); });
+    lupa.addEventListener('keydown', function (e) {
+      if (telas.length < 2) return;
+      if (e.key === 'ArrowRight') { e.preventDefault(); mostrar(atual + 1); }
+      if (e.key === 'ArrowLeft')  { e.preventDefault(); mostrar(atual - 1); }
+    });
+    // devolver o foco é obrigação de quem abriu um modal: sem isto o Tab
+    // recomeça do topo da página e a pessoa perde o lugar onde estava lendo
+    lupa.addEventListener('close', function () {
+      if (devolver) devolver.focus();
+      devolver = null;
+    });
+
+    telas.forEach(function (fig, i) {
+      var img = fig.querySelector('img');
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'shot__lupa';
+      b.setAttribute('aria-label', 'Ampliar: ' + (legendaDe(fig) || img.alt || 'captura').slice(0, 90));
+      var glifo = document.createElement('span');
+      glifo.className = 'shot__lupa-glifo';
+      glifo.setAttribute('aria-hidden', 'true');
+      b.appendChild(glifo);
+      fig.appendChild(b);
+      b.addEventListener('click', function () { abrir(i, b); });
+    });
+  }
+
+  /* ---- 25. o índice do case --------------------------------------------- */
+  // O JVB tem 11,7 telas e nove blocos; a Triagem, 8,7 telas e sete. Quem abre
+  // não faz ideia do que vem pela frente nem de quanto falta, e a barra em
+  // ASCII do topo (módulo 13) só responde a segunda pergunta.
+  //
+  // Nasce daqui em vez de estar no HTML porque são oito páginas com títulos
+  // diferentes: a lista escrita à mão seria oito cópias de uma coisa que o
+  // documento já diz, e passaria a mentir na primeira vez que alguém trocasse
+  // um <h2>. Aqui ela não tem como divergir - ela É os <h2>.
+  //
+  // Sem marcação de bloco atual, e isso é decisão e não esquecimento: de 820px
+  // pra cima o corpo do case é grade de duas colunas, então dois blocos
+  // dividem a mesma altura. No JVB "O problema" e "A decisão" começam os dois
+  // em y=1492. Marcar um seria errar o outro em metade da rolagem.
+  var corpoCase = document.querySelector('.case__body');
+  var blocos = document.querySelectorAll('.case__block');
+  if (corpoCase && blocos.length >= 4) {
+    var usados = {};
+    function apelido(txt) {
+      var base = txt.toLowerCase()
+        .normalize('NFD').replace(/[̀-ͯ]/g, '')   // tira o acento
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '')
+        .slice(0, 40) || 'bloco';
+      // dois blocos com o mesmo título dariam a mesma âncora, e a segunda
+      // nunca seria alcançável - o navegador para na primeira que encontra
+      usados[base] = (usados[base] || 0) + 1;
+      return usados[base] > 1 ? base + '-' + usados[base] : base;
+    }
+
+    var itens = [];
+    Array.prototype.forEach.call(blocos, function (bloco) {
+      var h = bloco.querySelector('h2');
+      if (!h) return;
+      var titulo = h.textContent.trim();
+      if (!bloco.id) bloco.id = apelido(titulo);
+      itens.push({ id: bloco.id, titulo: titulo });
+    });
+
+    if (itens.length >= 4) {
+      var sumario = document.createElement('nav');
+      sumario.className = 'sumario panel';
+      sumario.setAttribute('aria-label', 'Índice desta página');
+
+      var barra2 = document.createElement('div');
+      barra2.className = 'panel__bar';
+      barra2.innerHTML = '<span class="panel__box" aria-hidden="true"></span>' +
+        '<span class="panel__title">nesta página</span>' +
+        '<span class="panel__conta">' + itens.length + ' blocos</span>';
+      sumario.appendChild(barra2);
+
+      var lista = document.createElement('ol');
+      lista.className = 'sumario__lista';
+      itens.forEach(function (item, n) {
+        var li = document.createElement('li');
+        var a = document.createElement('a');
+        a.href = '#' + item.id;
+        var num = document.createElement('span');
+        num.className = 'sumario__n';
+        num.setAttribute('aria-hidden', 'true');   // a ordem já vem do <ol>
+        num.textContent = (n + 1 < 10 ? '0' : '') + (n + 1);
+        a.appendChild(num);
+        // textContent e não innerHTML: o título vem do documento, mas montar
+        // marcação com texto de outro lugar é hábito ruim mesmo quando a
+        // origem é confiável
+        a.appendChild(document.createTextNode(item.titulo));
+        li.appendChild(a);
+        lista.appendChild(li);
+      });
+      sumario.appendChild(lista);
+      corpoCase.parentNode.insertBefore(sumario, corpoCase);
+
+      // Os ids nascem aqui, e o navegador procura o alvo do #hash enquanto
+      // analisa o HTML - muito antes disso. Então um link copiado do índice e
+      // colado noutro lugar abriria a página no topo, calado. Aqui o pulo
+      // acontece de novo, agora que o alvo existe.
+      //
+      // O `scroll-behavior: auto` inline não é enfeite: quem chega por link
+      // quer estar lá, não assistir à viagem. E `behavior: 'auto'` na chamada
+      // não resolve - "auto" quer dizer "o que o CSS mandar", e o CSS aqui
+      // manda `smooth`. Medi: a página descia rolando cinco mil pixels na cara
+      // de quem abriu. Desligar na raiz por um instante é o que funciona sem
+      // depender de `behavior: 'instant'`, que é mais novo que o resto.
+      if (location.hash.length > 1) {
+        var destino = document.getElementById(location.hash.slice(1));
+        if (destino) {
+          var comportamento = document.documentElement.style.scrollBehavior;
+          document.documentElement.style.scrollBehavior = 'auto';
+          destino.scrollIntoView({ block: 'start' });
+          document.documentElement.style.scrollBehavior = comportamento;
+        }
+      }
     }
   }
 })();

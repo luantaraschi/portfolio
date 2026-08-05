@@ -248,9 +248,16 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
                   aria-label="Retrato de Luan Taraschi em 1 bit, sem óculos escuros."></span>
           </button>
         </div>
+        <!-- A instrução muda com o aparelho porque a coisa muda também. No
+             ponteiro a luz da esfera segue o cursor; em tela de toque ela segue
+             o dedo arrastado por cima dela (o canvas ouve `touchmove` no módulo
+             4). Pedir "mova o cursor" num celular é pedir uma coisa que não
+             existe ali - e pior, pedir a única coisa que o visitante não tem
+             como fazer, logo na primeira tela. -->
         <p class="hero__cap mono-caps">
           <span>1-bit · bayer 8×8</span>
-          <span>mova o cursor</span>
+          <span class="hero__cap--ponteiro">mova o cursor</span>
+          <span class="hero__cap--toque">arraste o dedo</span>
         </p>
       </figure>
     </div>
