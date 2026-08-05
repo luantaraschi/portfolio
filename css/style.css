@@ -1785,6 +1785,66 @@ span.codigo__repo { border-style: dashed; }
   color: var(--ink);
 }
 
+/* 6.5b a lâmpada na barra do retrato ------------------------------------- */
+/* Desenhada aqui, não importada: é bulbo mais bocal em traço de 2px, na mesma
+   regra dos glifos da órbita. O `right` abre passagem para o ilhó do .pinned,
+   que mora em right:13px e não pode ser coberto. */
+.panel__luz {
+  position: relative;
+  margin-left: auto;
+  margin-right: 22px;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 22px;
+  padding: 0;
+  border: 0;
+  /* fundo sólido pela mesma razão que o panel__title tem um: a barra é hachura
+     de 1px em 3px, e um glifo de traço fino desenhado por cima dela vira ruído.
+     O papel abre a janela onde a lâmpada cabe. */
+  background: var(--paper);
+}
+/* alvo de toque de 44px sem inchar a barra do painel, que tem 34px de altura */
+.panel__luz::after { content: ''; position: absolute; inset: -11px; }
+.panel__luz-glifo {
+  position: relative;
+  display: block;
+  width: 11px;
+  height: 11px;
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  background: var(--paper);
+  transition: background-color 120ms steps(2, end);
+}
+/* o bocal, embaixo do bulbo */
+.panel__luz-glifo::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  width: 7px;
+  height: 3px;
+  margin-left: -3.5px;
+  border: 2px solid var(--ink);
+  border-top: 0;
+  background: var(--paper);
+}
+/* acesa: o bulbo enche de tinta e solta quatro raios nos eixos */
+.panel__luz[aria-checked='true'] .panel__luz-glifo { background: var(--ink); }
+.panel__luz[aria-checked='true'] .panel__luz-glifo::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 2px;
+  height: 2px;
+  margin: -1px;
+  box-shadow: 0 -9px 0 var(--ink), 0 9px 0 var(--ink),
+              -9px 0 0 var(--ink), 9px 0 0 var(--ink);
+}
+.panel__luz:hover .panel__luz-glifo { transform: translate(-1px, -1px); }
+.panel__luz:active .panel__luz-glifo { transform: translate(1px, 1px); }
+
 /* 6.6 ilhós - os painéis da referência são pendurados, não flutuam */
 .pinned { position: relative; }
 .pinned::before,
@@ -1888,12 +1948,48 @@ span.codigo__repo { border-style: dashed; }
           mask-repeat: no-repeat;
   -webkit-mask-size: calc(var(--frames) * 100%) 100%;
           mask-size: calc(var(--frames) * 100%) 100%;
-  -webkit-mask-position: 100% 0;       /* frame 21: sem óculos = escuro */
-          mask-position: 100% 0;
+  /* --parado é o quadro de repouso do tema; --espia é três quadros adentro,
+     que é exatamente onde ele começa a levantar a mão para pegar os óculos.
+     Três: em dois não dá pra ver, em cinco ele já pegou e a espiada vira a
+     animação inteira de graça. Os valores são i/21 da tira de 22 quadros. */
+  --parado: 100%;                      /* frame 21: sem óculos = escuro */
+  --espia: 85.714%;                    /* frame 18 */
+  -webkit-mask-position: var(--parado) 0;
+          mask-position: var(--parado) 0;
 }
 :root[data-theme='light'] .film {      /* frame 0: de óculos */
-  -webkit-mask-position: 0% 0;
-          mask-position: 0% 0;
+  --parado: 0%;
+  --espia: 14.286%;                    /* frame 3 */
+}
+
+/* Segura o quadro do tema anterior enquanto a cortina passa e a reação não
+   chegou. Sem isto o repouso troca junto com o tema e os óculos aparecem de
+   estalo antes da animação que existe justamente para mostrá-los sendo postos.
+   Quem tira é o módulo 6, no mesmo instante em que solta a animação. */
+.film.congelado {
+  -webkit-mask-position: var(--congela) 0;
+          mask-position: var(--congela) 0;
+}
+
+/* Ele estava parado esperando clique, e ninguém cutuca uma foto que parece
+   foto. Aqui a mão sobe três quadros e volta: não conta a piada, só avisa que
+   tem alguém ali dentro. É o gatilho de curiosidade que faltava para o caminho
+   das cinco cutucadas existir.
+   O :not() dos dois é obrigatório: esta regra é mais específica que
+   `.film.play-on`, e sem ele passar o cursor no meio da troca de tema
+   sequestraria a animação da piada. */
+@keyframes espiar {
+  0%, 100% { -webkit-mask-position: var(--parado) 0; mask-position: var(--parado) 0; }
+  50%      { -webkit-mask-position: var(--espia) 0;  mask-position: var(--espia) 0; }
+}
+/* steps(4), não steps(3): `jump-none` distribui N valores em N-1 intervalos,
+   então com 3 o valor do meio caía em 92,857%, que não é fronteira de quadro
+   nenhum - a máscara mostrava metade do quadro 20 e metade do 19 ao mesmo
+   tempo, e o retrato aparecia com duas caras. Com 4 os valores batem exatamente
+   em 21, 20, 19 e 18 (múltiplos de 100/21). */
+.film.espia:not(.play-on):not(.play-off),
+.hero__me:hover .film:not(.play-on):not(.play-off):not(.espia) {
+  animation: espiar 440ms steps(4, jump-none) 1;
 }
 
 @keyframes film-strip {

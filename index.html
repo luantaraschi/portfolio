@@ -213,6 +213,19 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
         <figcaption class="panel__bar">
           <span class="panel__box" aria-hidden="true"></span>
           <span class="panel__title">retrato.bmp</span>
+          <!-- O segundo interruptor, e a razão dele é geometria. Numa tela de
+               1440x900 o rosto começa em y=1141: quem carrega a página e clica
+               no interruptor do topo aciona a piada com ela fora da tela. Aqui o
+               controle fica a 30px da cara dele, então quem usa este está
+               olhando para o lugar onde a coisa acontece.
+               Não explica nada e não pede nada: é cromo de painel, do mesmo
+               vocabulário do ilhó ao lado. O do header continua existindo, que é
+               onde as pessoas procuram. -->
+          <button class="panel__luz" type="button" role="switch" aria-checked="false"
+                  data-theme-toggle title="Luz do retrato"
+                  aria-label="Luz do retrato: alternar entre modo escuro e claro">
+            <span class="panel__luz-glifo" aria-hidden="true"></span>
+          </button>
         </figcaption>
         <div class="hero__canvas-wrap">
           <canvas data-dither role="img"

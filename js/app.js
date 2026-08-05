@@ -476,7 +476,7 @@
   }
 
   function replay(el, cls) {
-    el.classList.remove('play-on', 'play-off', 'flinch', 'poke');
+    el.classList.remove('play-on', 'play-off', 'flinch', 'poke', 'espia');
     void el.offsetWidth;                 // reflow forçado: reinicia a animação
     el.classList.add(cls);
   }
@@ -505,10 +505,21 @@
   // A faixa cruza a tela e o tema vira quando ela está no meio do caminho,
   // debaixo dela. O retrato reage no mesmo instante: a faixa é estreita e
   // ainda está do lado direito, então a piada dos óculos aparece inteira.
-  var CORTINA = 420, METADE = 210;
+  // BEAT: a reação dele saiu de dentro da cortina e virou um evento separado,
+  // 160ms depois que ela sai de cena. Antes os dois aconteciam no mesmo
+  // instante e a cortina, que é o objeto que cruza a tela inteira, roubava o
+  // olho justamente no quadro em que os óculos entravam: a troca de tema era
+  // vista e a piada não. Separados, a luz acende, dá um tempo, e aí ele
+  // reage - que é o tempo de comédia certo e ainda por cima é movimento
+  // isolado, que é o gatilho de atenção mais forte que existe.
+  var CORTINA = 420, METADE = 210, BEAT = 160;
   var wipeEl = document.querySelector('[data-wipe]');
   var cortinando = false;
   var volta = false;             // a faixa alterna o sentido a cada troca
+  // a cortina libera em CORTINA e a reação só sai em CORTINA+BEAT: nessa fresta
+  // dá pra clicar de novo. Sem o carimbo, a reação atrasada da troca anterior
+  // chegaria depois da nova e poria os óculos no tema errado.
+  var vez = 0;
 
   function trocar(theme) {
     if (reduced || !wipeEl || cortinando) {
@@ -518,23 +529,59 @@
       return;
     }
     cortinando = true;
+    var minha = ++vez;
+    // O quadro de repouso do retrato vem do tema (--parado). Com a reação
+    // atrasada, os 160ms entre a troca e a animação deixavam o repouso pular
+    // sozinho para o quadro final: os óculos apareciam de estalo e logo depois
+    // ele tocava a animação de colocá-los, contando a piada duas vezes e
+    // estragando as duas. `congelado` prende o retrato no quadro do tema ANTIGO
+    // durante essa fresta, e sai quando a animação assume.
+    var anterior = root.getAttribute('data-theme') === 'light' ? '0%' : '100%';
     wipeEl.className = 'wipe ' + (theme === 'light' ? 'wipe--claro' : 'wipe--escuro') +
                        (volta ? ' wipe--volta' : '');
     volta = !volta;
     void wipeEl.offsetWidth;              // reinicia a animação da faixa
     wipeEl.classList.add('is-on');
-    setTimeout(function () { setTheme(theme); reagir(theme); }, METADE);
+    setTimeout(function () {
+      if (film) {
+        film.style.setProperty('--congela', anterior);
+        film.classList.add('congelado');
+      }
+      setTheme(theme);
+    }, METADE);
     setTimeout(function () {
       wipeEl.classList.remove('is-on');
       cortinando = false;
     }, CORTINA);
+    setTimeout(function () {
+      if (minha !== vez) return;          // trocou de novo no meio: esta não vale
+      if (film) film.classList.remove('congelado');
+      reagir(theme);
+    }, CORTINA + BEAT);
   }
 
   if (film) {
     film.addEventListener('animationend', function () {
       // solta a animação e devolve o controle à regra estática do tema
-      film.classList.remove('play-on', 'play-off');
+      film.classList.remove('play-on', 'play-off', 'espia');
     });
+  }
+
+  // A primeira vez que o retrato entra na tela, ele espia sozinho: a mão sobe
+  // três quadros e volta. É o mesmo gesto do hover, só que sem precisar de
+  // cursor - resolve o celular, onde hover não existe, e resolve quem passa
+  // reto sem levar o mouse até lá. Uma vez só por visita: repetido viraria
+  // tique, e tique a gente aprende a ignorar.
+  if (stage && film && !reduced && 'IntersectionObserver' in window) {
+    var ioRosto = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        ioRosto.disconnect();
+        // espera a entrada do painel assentar antes de mexer
+        setTimeout(function () { replay(film, 'espia'); }, 520);
+      });
+    }, { threshold: 0.6 });
+    ioRosto.observe(stage);
   }
   if (stage) {
     stage.addEventListener('animationend', function (e) {
