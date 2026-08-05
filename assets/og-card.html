@@ -17,9 +17,9 @@
      Medidas em px cravado de propósito, sem clamp: o quadro tem sempre o mesmo
      tamanho, então tipografia fluida aqui só serviria pra deixar o resultado
      depender do viewport de quem tirou a foto. -->
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Space+Grotesk:wght@300..700&family=Space+Mono:wght@400;700&display=swap" />
+<!-- as mesmas fontes locais das páginas. Aqui não tem preload: este arquivo não
+     é servido a visitante nenhum, só é aberto para a captura do og.png. -->
+<link rel="stylesheet" href="fontes/fontes.css" />
 <link rel="stylesheet" href="../css/style.css" />
 <style>
   html, body { width: 1200px; height: 630px; overflow: hidden; }

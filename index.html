@@ -37,9 +37,12 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
 <meta name="twitter:card" content="summary_large_image" />
 
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='16' height='16' fill='%231a1917'/><g fill='%23fce4a6' shape-rendering='crispEdges'><rect x='2' y='4' width='2' height='8'/><rect x='2' y='10' width='5' height='2'/><rect x='9' y='4' width='6' height='2'/><rect x='11' y='4' width='2' height='8'/></g></svg>" />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&family=Silkscreen:wght@400;700&family=Space+Grotesk:wght@300..700&family=Space+Mono:wght@400;700&display=swap" />
+<!-- Auto-hospedadas. So as duas que desenham a primeira tela entram em
+     preload: o corpo de texto e a fonte do titulo. O resto chega quando o
+     CSS pedir, e o unicode-range segura o latin-ext ate aparecer um "ç". -->
+<link rel="preload" href="assets/fontes/space-grotesk-300-700-latin.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="assets/fontes/pixelify-sans-400-700-latin.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="stylesheet" href="assets/fontes/fontes.css" />
 <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>

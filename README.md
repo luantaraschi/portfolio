@@ -53,6 +53,15 @@ antes de animar, e o CSS tem um bloco que zera duração e atraso — inclusive 
 atraso, senão a escada de entrada deixaria elemento invisível por meio segundo
 mesmo com a animação já cortada.
 
+**As fontes são hospedadas aqui.** O Google Fonts punha um terceiro domínio no
+caminho crítico de todo carregamento, e o nome do hero é medido em JS depois que
+a fonte chega — ou seja, o maior elemento da tela esperava uma conexão externa
+para tomar o tamanho certo. São 145 kB em doze arquivos: um por subset, como o
+Google mesmo serve, com o `unicode-range` segurando o latin-ext até aparecer um
+"ç". Para atualizar: `python tools/baixar-fontes.py`, que rebaixa tudo e regera
+o `assets/fontes/fontes.css`. As quatro famílias são SIL Open Font License e as
+licenças estão ao lado dos arquivos.
+
 **O tema é aplicado antes da primeira pintura.** Um script inline no `<head>` de
 cada página lê o `localStorage` e marca o `<html>` antes do CSS carregar, para o
 modo claro não piscar preto ao abrir.
