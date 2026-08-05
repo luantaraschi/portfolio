@@ -69,7 +69,7 @@ com dado inventado. Ver "Como capturar o JVB de novo" no fim deste arquivo.
 | `jvb-prazos.png` | Cálculo de prazo | O motor do CPC mostrando o próprio raciocínio: prorroga para segunda e diz quais dias pulou | ✅ |
 | `jvb-prazos-lista.png` | Agenda de prazos | A agenda em uso, com contagem em dias úteis e corridos | ✅ |
 | `jvb-permissoes.png` | Log de auditoria | Que você pensou em segurança, não só em feature | ✅ |
-| `jvb-pessoas.png` | Equipe e papéis | Reserva: o log de auditoria é mais forte e ficou no lugar deste | ✅ |
+| `jvb-pessoas.png` | Equipe e papéis | Reserva: o log de auditoria é mais forte e ficou no lugar deste | 🗑 removida em 04/08/2026 (nunca entrou em página) |
 | `jvb-peticao.png` | Editor de petição com IA | IA aplicada, não IA de demo | falta |
 
 ### 02 · Triagem por IA no WhatsApp (`projeto-triagem.html`)
@@ -117,9 +117,10 @@ com dado inventado. Ver "Como capturar o JVB de novo" no fim deste arquivo.
 
 ### 08 · POV
 
-| Arquivo | Tela | O que prova |
-| --- | --- | --- |
-| `pov-1.mp4` | *(definir quando o case for escrito)* | — |
+| Arquivo | Tela | O que prova | |
+| --- | --- | --- | --- |
+| `pov-agulha.mp4` | O medidor com a agulha girando pela escala | O POV é um gesto: print de agulha parada não conta a história | ✅ |
+| `pov-home.png` | Tela inicial | Nada que o vídeo da agulha já não conte melhor | 🗑 removida em 04/08/2026 (nunca entrou em página) |
 
 ---
 
