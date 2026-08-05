@@ -240,6 +240,35 @@ for (const [nome, src] of html) {
   }
 }
 
+// --- 13. o <head> só contém o que pode morar no <head> ---
+// Nasceu de um estrago real: a troca do favicon foi feita com uma regex que
+// terminava em `.*?/>`, e o data: URI que ela devia remover tinha `/>` DENTRO
+// dele, nos <rect> do SVG. O corte caiu no lugar errado e o resto do desenho
+// ficou solto no <head>. O navegador, ao encontrar um <g> ali, fecha o head e
+// abre o body: o resto do SVG virou conteúdo e um `" />` apareceu escrito no
+// topo de todas as páginas.
+//
+// Nada acusou. As checagens olhavam as tags que deviam existir, e o problema
+// era uma tag que não devia. Esta olha o avesso: a lista do HTML é fechada, e
+// qualquer coisa fora dela é vazamento.
+{
+  const NO_HEAD = new Set([
+    'base', 'link', 'meta', 'noscript', 'script', 'style', 'template', 'title',
+  ]);
+  for (const [nome, src] of html) {
+    const head = src.match(/<head\b[^>]*>([\s\S]*?)<\/head>/i)?.[1];
+    if (head === undefined) { falhas.push(`${nome}: sem <head>`); continue; }
+    // o conteúdo de script e style é texto livre (JSON-LD, CSS): não é markup
+    const limpo = head
+      .replace(/<!--[\s\S]*?-->/g, '')
+      .replace(/<(script|style)\b[^>]*>[\s\S]*?<\/\1>/gi, '');
+    for (const [, tag] of limpo.matchAll(/<\/?([a-zA-Z][\w-]*)/g)) {
+      exigir(NO_HEAD.has(tag.toLowerCase()),
+        `${nome}: <${tag}> dentro do <head> - o navegador fecha o head ali e o resto vaza para a página`);
+    }
+  }
+}
+
 if (falhas.length) {
   console.error(`\n${falhas.length} falha(s):\n`);
   for (const f of falhas) console.error(`  x ${f}`);
