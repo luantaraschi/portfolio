@@ -74,9 +74,20 @@ for (const [nome, src] of html) {
 }
 
 // --- 6. dados estruturados ---
+// Existir não basta: uma vírgula sobrando invalida o bloco inteiro, o Google
+// descarta em silêncio e a página fica com a aparência de quem tem dado
+// estruturado sem ter. Então aqui o JSON é realmente parseado.
 for (const [nome, src] of html) {
   if (nome === '404.html') continue;
-  exigir(src.includes('application/ld+json'), `${nome}: sem JSON-LD`);
+  const bloco = src.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
+  if (!bloco) { falhas.push(`${nome}: sem JSON-LD`); continue; }
+  try {
+    const dados = JSON.parse(bloco[1]);
+    exigir(dados['@context'] === 'https://schema.org', `${nome}: JSON-LD sem @context do schema.org`);
+    exigir(typeof dados['@type'] === 'string', `${nome}: JSON-LD sem @type`);
+  } catch (e) {
+    falhas.push(`${nome}: JSON-LD não é JSON válido (${e.message})`);
+  }
 }
 
 // --- 7. fontes auto-hospedadas ---

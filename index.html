@@ -44,6 +44,43 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
 <link rel="preload" href="assets/fontes/pixelify-sans-400-700-latin.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="stylesheet" href="assets/fontes/fontes.css" />
 <link rel="stylesheet" href="css/style.css" />
+
+<!-- É o que liga o nome ao GitHub e ao LinkedIn na cabeça do buscador. Os
+     dados repetem o que já está visível na página de propósito: dado
+     estruturado que afirma o que a página não mostra é o que faz o Google
+     desconfiar do resto. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Luan Taraschi",
+  "url": "https://luantaraschi.dev/",
+  "image": "https://luantaraschi.dev/assets/og.png",
+  "jobTitle": "Desenvolvedor Full Stack",
+  "email": "mailto:luantaraschi@gmail.com",
+  "telephone": "+5571984675555",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Salvador",
+    "addressRegion": "BA",
+    "addressCountry": "BR"
+  },
+  "alumniOf": {
+    "@type": "CollegeOrUniversity",
+    "name": "Universidade Católica do Salvador"
+  },
+  "knowsLanguage": ["pt-BR", "en"],
+  "knowsAbout": [
+    "React", "Next.js", "Node.js", "TypeScript", "Python",
+    "PostgreSQL", "Docker", "LangGraph", "Agentes de IA", "Automação"
+  ],
+  "sameAs": [
+    "https://github.com/luantaraschi",
+    "https://www.linkedin.com/in/luantaraschi/",
+    "https://www.instagram.com/luantaraschi/"
+  ]
+}
+</script>
 </head>
 <body>
 
