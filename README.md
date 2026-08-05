@@ -84,6 +84,17 @@ antes de animar, e o CSS tem um bloco que zera duração e atraso — inclusive 
 atraso, senão a escada de entrada deixaria elemento invisível por meio segundo
 mesmo com a animação já cortada.
 
+**Todo token que pinta detalhe precisa existir nos quatro escopos.** Já mordeu
+três vezes, sempre igual: uma cor lida do escopo errado vira a cor do fundo em
+que ela está e o componente some inteiro, sem erro nenhum em lugar nenhum. Foi
+a barrinha de paciência do retrato (`--ink` sobre `--face-paper`), os pontos
+dos cards de skill (`--ink` de fundo com texto em `--ink-2`) e os pontos da
+linha do tempo, que eram `#fce4a6` sobre `#fce4a6` porque os `--pop-*` nunca
+tinham sido declarados para dentro do `.invert`. Ao criar um token novo:
+declare em `:root`, em `:root[data-theme='light']`, em `.invert` e em
+`:root[data-theme='light'] .invert` — e sempre com literal, porque `var()`
+dentro de custom property resolve no elemento que declara.
+
 **E quem pede mais contraste no sistema não recebe o cinza do meio.** O
 `--ink-2` existe só para baixar hierarquia; sob `prefers-contrast: more` ele
 deixa de existir e a régua fina vira a régua cheia. Está redeclarado nos quatro

@@ -91,9 +91,9 @@
   if (form) {
     var status = form.querySelector('[data-status]');
     var rules = {
-      nome: function (v) { return v.trim().length >= 2 ? '' : 'Escreve seu nome (2 caracteres no mínimo).'; },
-      email: function (v) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim()) ? '' : 'E-mail inválido, confere o formato.'; },
-      mensagem: function (v) { return v.trim().length >= 10 ? '' : 'Conta um pouco mais: 10 caracteres no mínimo.'; }
+      nome: function (v) { return v.trim().length >= 2 ? '' : 'Escreve o nome: 2 letras ou mais.'; },
+      email: function (v) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim()) ? '' : 'E-mail inválido, olha o formato.'; },
+      mensagem: function (v) { return v.trim().length >= 10 ? '' : 'Conta um pouco mais: 10 letras.'; }
     };
 
     function validateField(input) {

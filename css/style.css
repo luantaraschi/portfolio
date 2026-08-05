@@ -85,6 +85,18 @@
 :root                     { --pop-1: #fce4a6; --pop-2: #fce4a6; --pop-3: #fce4a6; }
 :root[data-theme='light'] { --pop-1: #dc322f; --pop-2: #268bd2; --pop-3: #2aa198; }
 
+/* E dentro de um painel invertido eles têm que virar junto. Isto faltava, e o
+   preço era um componente inteiro sumindo: no modo escuro os três apontam para
+   a tinta da página, que é exatamente a cor do papel do painel invertido -
+   #fce4a6 sobre #fce4a6. Os pontos da linha do tempo estavam lá o tempo todo,
+   desenhados, invisíveis, em qualquer largura de tela. Mesma armadilha da
+   barrinha de paciência do retrato, um ano-luz depois.
+   No modo claro o painel vira solarized escuro e os três acentos continuam
+   valendo: é para fundo escuro que eles foram desenhados. */
+.invert, .guia--inv       { --pop-1: #1a1917; --pop-2: #1a1917; --pop-3: #1a1917; }
+:root[data-theme='light'] .invert,
+:root[data-theme='light'] .guia--inv { --pop-1: #dc322f; --pop-2: #268bd2; --pop-3: #2aa198; }
+
 /* 1.2 o retrato tem polaridade fixa: cabelo escuro sobre fundo claro nos dois
    modos, porque inverter uma foto de rosto dá um negativo ilegível. O que
    muda é só o par de cores - por isso ele é máscara, não bitmap colorido. */
@@ -1134,14 +1146,20 @@ span.codigo__repo { border-style: dashed; }
 }
 
 /* 5.7 timeline */
-.tl { border-left: 2px solid var(--ink); padding-left: clamp(20px, 3vw, 30px); }
+/* o mínimo do clamp subiu de 20 para 28: no celular o texto encostava no
+   trilho, e é justamente onde o ponto de cada item mora - ele nasce metade
+   dentro, metade fora da linha, e sem folga o parágrafo passava por cima dele.
+   O `left` do ponto lê o mesmo clamp, então os dois andam juntos. */
+.tl { border-left: 2px solid var(--ink); padding-left: clamp(28px, 3vw, 30px); }
 .tl__item { position: relative; padding-bottom: clamp(28px, 4vw, 40px); }
 .tl__item:last-child { padding-bottom: 0; }
 .tl__item::before {
   content: '';
   position: absolute;
   top: 6px;
-  left: calc(-1 * clamp(20px, 3vw, 30px) - 7px);
+  /* ponytail: o clamp aqui é o mesmo padding-left do .tl. Se um mudar sem o
+     outro, o ponto sai de cima do trilho. */
+  left: calc(-1 * clamp(28px, 3vw, 30px) - 7px);
   width: 12px;
   height: 12px;
   background: var(--pop-1);
@@ -1279,14 +1297,22 @@ span.codigo__repo { border-style: dashed; }
   background-image: radial-gradient(rgba(255, 107, 61, 0.3) 0.9px, transparent 1px);
   background-size: 4px 4px;
 }
+/* A caixa da mensagem existe antes da mensagem. Ela era `display: none`
+   enquanto vazia, então cada erro que aparecia empurrava tudo que vinha
+   embaixo - e como a validação roda no blur, a pessoa saía de um campo e via o
+   resto do formulário descer. Com três campos errados de uma vez o painel
+   inteiro crescia, que é o que se vê comparando as duas telas.
+   O `min-height` segura exatamente uma linha, e as três mensagens couberam em
+   uma linha depois de encurtadas (módulo 3): medi o campo em 270px num celular
+   de 360 e a maior delas ia a 352px, ou seja, duas linhas garantidas. */
 .field__err {
   font-family: var(--font-mono);
   font-size: 12px;
   letter-spacing: 0.04em;
+  line-height: 1.35;
   color: var(--alert);
-  min-height: 1em;
+  min-height: 1.35em;
 }
-.field__err:empty { display: none; }
 
 .form__status {
   margin-top: 14px;
@@ -1345,7 +1371,13 @@ span.codigo__repo { border-style: dashed; }
    O `--rule-soft` na primeira linha é o piso para quem não tem color-mix; quem
    tem sobrescreve na linha seguinte e ganha o valor exato em qualquer um dos
    quatro temas, porque a mistura é feita sobre o --ink de cada um. */
+/* Opaco, como a barra do topo. Antes o rodapé era só uma régua fina: a
+   retícula do fundo da página atravessava ele inteiro e o bloco não terminava
+   em lugar nenhum - a página simplesmente parava. Um fundo próprio dá o fim.
+   `--paper-2` e não `--paper`: é o mesmo degrau que os painéis usam, então o
+   rodapé lê como peça do sistema e não como uma faixa pintada por cima. */
 .foot {
+  background: var(--paper-2);
   border-top: 2px solid var(--rule-soft);
   border-top-color: color-mix(in srgb, var(--ink) 38%, transparent);
   padding-block: 34px;
@@ -1356,6 +1388,41 @@ span.codigo__repo { border-style: dashed; }
   gap: 14px;
   justify-content: space-between;
   align-items: baseline;
+}
+
+/* No celular os três pedaços não cabem lado a lado e o flex os embrulhava em
+   três linhas de 14px de respiro, empilhadas no pé da tela - a impressão era
+   de sobra de página, não de rodapé.
+   Aqui eles viram linhas de verdade, cada uma com régua e folga própria, na
+   mesma ordem do DOM. E os chips passam a ocupar a largura toda, um por
+   linha: os três somam 334px numa coluna de 310 num aparelho de 360, então
+   lado a lado eles quebram de qualquer jeito - empilhados eles ainda ganham
+   alvo de toque de 44px, que lado a lado nunca teriam. */
+@media (max-width: 700px) {
+  .foot { padding-block: 26px 34px; }
+  .foot__inner {
+    display: grid;
+    gap: 0;
+    align-items: stretch;
+  }
+  .foot__inner > * { padding-block: 15px; }
+  .foot__inner > * + * { border-top: 1px solid var(--rule-soft); }
+  .foot__inner > :first-child { padding-top: 0; }
+  .foot__inner > :last-child { padding-bottom: 0; }
+  .foot__inner .social {
+    display: grid;
+    gap: 2px;
+    align-self: stretch;
+  }
+  /* `flex` no lugar de `inline-flex`: assim o link ocupa a linha inteira e o
+     alvo de toque é a faixa toda, não só os 96px do texto "GitHub". Medido em
+     44px de altura por 320 de largura, contra 96x44 antes. */
+  .foot__inner .social__l {
+    display: flex;
+    justify-content: flex-start;
+    padding: 11px 10px;
+    margin-inline: -10px;
+  }
 }
 
 /* 5.9 redes - o glifo mora no CSS, não no HTML.
@@ -2565,6 +2632,19 @@ span.codigo__repo { border-style: dashed; }
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr));
   gap: clamp(14px, 2vw, 18px);
   margin-top: clamp(22px, 3vw, 30px);
+}
+/* Três placas numa grade de duas colunas deixam a terceira sozinha, com um
+   vazio do tamanho de uma placa ao lado dela - e vazio em grade lê como item
+   que faltou, não como fim da lista. É o mesmo defeito que a grade de projetos
+   já resolve com `:last-child:nth-child(odd)`, e a solução é a mesma: a última
+   atravessa a linha inteira.
+
+   Medido: as duas grades (o placar da home e as dos cases) passam a três
+   colunas em 560px e ficam com duas abaixo disso, então a regra vale só nessa
+   faixa. Com quatro placas nada acontece, porque aí a última é par e a grade
+   fecha 2+2 sozinha. */
+@media (max-width: 559px) {
+  .case__nums > :last-child:nth-child(odd) { grid-column: 1 / -1; }
 }
 .case__num { border: 2px solid var(--ink); padding: 16px 18px; box-shadow: var(--shadow); }
 .case__num b {
