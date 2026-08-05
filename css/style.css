@@ -1919,6 +1919,12 @@ a { color: inherit; }
   padding-top: 26px;
 }
 /* números do case: a escala do sistema dita de uma vez, sem virar parágrafo */
+/* O placar da home. É o mesmo .case__nums de dentro dos cases, só que aqui ele
+   vem sozinho e precisa de respiro dos dois lados em vez do encaixe apertado
+   que tem no meio de um bloco de texto. */
+.placar { margin-block: clamp(30px, 5vw, 56px) clamp(10px, 2vw, 20px); }
+.placar .case__nums { margin-top: 0; }
+
 .case__nums {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr));

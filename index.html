@@ -232,7 +232,25 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
     </div>
   </section>
 
+  <!-- ===== placar =====
+       Os três números que dizem o que mudou pra alguém, e não o tamanho da
+       coisa. O site tinha muito 124 tabelas e 881 endpoints, que impressionam
+       quem lê como engenheiro e não dizem nada pra quem vai contratar; as dez
+       horas por semana estavam soterradas no sexto parágrafo da linha do tempo.
+       Aqui em cima, no primeiro rolar, todo mundo passa por eles.
+
+       Reusa o .case__num dos cases de propósito: o vocabulário de placa já
+       existe e o módulo 16 já faz o número subir ao entrar em cena, então isto
+       não inventa componente nem animação nova. -->
   <div class="wrap">
+    <div class="placar reveal">
+      <div class="case__nums">
+        <div class="case__num"><b>2</b><span>sistemas em produção que eu mantenho</span></div>
+        <div class="case__num"><b>~1.000</b><span>conversas por mês triadas por IA</span></div>
+        <div class="case__num"><b>10h</b><span>por semana devolvidas à equipe</span></div>
+      </div>
+    </div>
+
     <div class="ramp reveal" aria-hidden="true">
       <span class="dither-50"></span><span class="dither-25"></span><span class="dither-12"></span>
     </div>
