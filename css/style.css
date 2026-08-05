@@ -643,16 +643,69 @@ span.codigo__repo { border-style: dashed; }
 .nav__link[aria-current] { border-color: var(--ink); }
 
 /* 5.3.1 lâmpada - o interruptor de tema, sempre visível no topo */
+/* O interruptor não dizia o que era. Era um switch genérico com um `title` que
+   só aparece depois de segundos de cursor parado em cima, e o que ele controla
+   (a luz da página) não estava escrito em lugar nenhum visível.
+   Agora ele é ladeado por lua e sol, e o lado ATIVO acende: além de dizer o que
+   o controle faz, diz em que modo você está agora, que a régua sozinha não
+   dizia. Os dois glifos são desenho de CSS em traço de 2px, mesma regra dos
+   glifos da órbita: nada de fonte de ícone e nada de SVG novo. */
 .lamp {
-  display: inline-grid;
-  place-items: center;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
   flex: none;
-  min-width: 44px;
   min-height: 44px;
-  padding: 0;
+  padding: 0 2px;
   border: 0;
   background: none;
 }
+.lamp__icone {
+  position: relative;
+  flex: none;
+  width: 13px;
+  height: 13px;
+  color: var(--ink-2);
+  transition: color 120ms steps(2, end);
+}
+/* lua: disco cheio com uma mordida de papel deslocada. O papel aqui é o fundo
+   da barra, então ela some no recorte em vez de virar um segundo disco. */
+.lamp__icone--lua::before {
+  content: '';
+  position: absolute;
+  inset: 1px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.lamp__icone--lua::after {
+  content: '';
+  position: absolute;
+  inset: -1px -3px 3px 4px;
+  border-radius: 50%;
+  background: var(--paper);
+}
+/* sol: miolo cheio e quatro raios nos eixos, tudo em pixel inteiro */
+.lamp__icone--sol::before {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.lamp__icone--sol::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 2px;
+  height: 2px;
+  margin: -1px;
+  box-shadow: 0 -6px 0 currentColor, 0 6px 0 currentColor,
+              -6px 0 0 currentColor, 6px 0 0 currentColor;
+}
+/* o lado em que você está agora fica em tinta cheia; o outro espera apagado */
+.lamp[aria-checked='false'] .lamp__icone--lua,
+.lamp[aria-checked='true']  .lamp__icone--sol { color: var(--ink); }
 .lamp__track {
   position: relative;
   display: block;
@@ -1906,7 +1959,10 @@ span.codigo__repo { border-style: dashed; }
 .hero__me:hover  { transform: translate(-3px, -3px); box-shadow: 7px 7px 0 var(--ink); }
 .hero__me:active { transform: translate(3px, 3px);   box-shadow: 0 0 0 var(--ink); }
 
-/* barra de paciência: enche a cada cutucada e estoura na quinta */
+/* barra de paciência: enche a cada cutucada e estoura na quinta.
+   `--face-ink` e não `--ink`: o cartão do rosto é claro nos dois temas (o
+   --face-paper não inverte), e no escuro o --ink é a mesma areia #fce4a6 do
+   fundo dele. A barra existia e ninguém via, porque era areia sobre areia. */
 .hero__me::after {
   content: '';
   position: absolute;
@@ -1914,11 +1970,16 @@ span.codigo__repo { border-style: dashed; }
   right: 0;
   bottom: 0;
   height: 4px;
-  background: var(--ink);
+  background: var(--face-ink);
   transform: scaleX(calc(var(--pokes, 0) / 5));
   transform-origin: left;
   transition: transform 120ms steps(2, end);
 }
+/* Encher é resposta a clique e tem que ser seco. Esvaziar é a paciência dele
+   voltando, e aí vale ser lento: oito degraus em meio segundo, dá pra ver o
+   progresso indo embora em vez de ele sumir. Quem põe e tira a classe é o
+   módulo 7. */
+.hero__me.esvaziando::after { transition: transform 520ms steps(8, end); }
 
 /* cada cutucada dá um empurrão seco; a quinta chama o flinch inteiro */
 @keyframes poke {
@@ -1948,18 +2009,25 @@ span.codigo__repo { border-style: dashed; }
           mask-repeat: no-repeat;
   -webkit-mask-size: calc(var(--frames) * 100%) 100%;
           mask-size: calc(var(--frames) * 100%) 100%;
-  /* --parado é o quadro de repouso do tema; --espia é três quadros adentro,
-     que é exatamente onde ele começa a levantar a mão para pegar os óculos.
-     Três: em dois não dá pra ver, em cinco ele já pegou e a espiada vira a
-     animação inteira de graça. Os valores são i/21 da tira de 22 quadros. */
+  /* --parado é o quadro de repouso do tema; --espia é quatro quadros adentro,
+     onde a mão já está levantada e a caminho dos óculos. É a pose de quem
+     parou esperando: em dois ou três ainda parece tremida, em seis ele já
+     pegou e a espiada entrega a piada de graça.
+     Os valores são i/21, porque a tira tem 22 quadros. */
   --parado: 100%;                      /* frame 21: sem óculos = escuro */
-  --espia: 85.714%;                    /* frame 18 */
+  --espia: 80.952%;                    /* frame 17 */
   -webkit-mask-position: var(--parado) 0;
           mask-position: var(--parado) 0;
+  /* transição, e não animação, é o que faz a espiada PARAR onde chegou em vez
+     de voltar sozinha: enquanto o cursor está em cima o valor final continua
+     sendo --espia, e ele fica lá. Sair do retrato desfaz pelo mesmo caminho,
+     de graça, sem segunda animação. */
+  transition: -webkit-mask-position 300ms steps(5, jump-none),
+                      mask-position 300ms steps(5, jump-none);
 }
 :root[data-theme='light'] .film {      /* frame 0: de óculos */
   --parado: 0%;
-  --espia: 14.286%;                    /* frame 3 */
+  --espia: 19.048%;                    /* frame 4 */
 }
 
 /* Segura o quadro do tema anterior enquanto a cortina passa e a reação não
@@ -1978,18 +2046,29 @@ span.codigo__repo { border-style: dashed; }
    O :not() dos dois é obrigatório: esta regra é mais específica que
    `.film.play-on`, e sem ele passar o cursor no meio da troca de tema
    sequestraria a animação da piada. */
+/* O aceno de chegada, uma vez só: aqui a ida e a volta são de propósito,
+   porque não tem cursor parado em cima para segurar o quadro.
+   steps(5), não steps(4): `jump-none` distribui N valores em N-1 intervalos.
+   A primeira versão usava 3 para 3 quadros e o valor do meio caía em 92,857%,
+   que não é fronteira de quadro nenhum: a máscara mostrava metade do quadro 20
+   e metade do 19 e o retrato aparecia com duas caras. Para N quadros de
+   distância são N+1 valores. */
 @keyframes espiar {
   0%, 100% { -webkit-mask-position: var(--parado) 0; mask-position: var(--parado) 0; }
   50%      { -webkit-mask-position: var(--espia) 0;  mask-position: var(--espia) 0; }
 }
-/* steps(4), não steps(3): `jump-none` distribui N valores em N-1 intervalos,
-   então com 3 o valor do meio caía em 92,857%, que não é fronteira de quadro
-   nenhum - a máscara mostrava metade do quadro 20 e metade do 19 ao mesmo
-   tempo, e o retrato aparecia com duas caras. Com 4 os valores batem exatamente
-   em 21, 20, 19 e 18 (múltiplos de 100/21). */
-.film.espia:not(.play-on):not(.play-off),
-.hero__me:hover .film:not(.play-on):not(.play-off):not(.espia) {
-  animation: espiar 440ms steps(4, jump-none) 1;
+.film.espia:not(.play-on):not(.play-off) {
+  animation: espiar 520ms steps(5, jump-none) 1;
+}
+/* E o hover, que segura. Sem animação: só o valor final mudando, com a
+   transição do .film levando ele até lá em cinco degraus. Os :not() protegem a
+   troca de tema - esta regra é mais específica que .film.play-on e sem eles
+   passar o cursor no meio da piada sequestraria a máscara. */
+@media (hover: hover) and (pointer: fine) {
+  .hero__me:hover .film:not(.play-on):not(.play-off):not(.espia):not(.congelado) {
+    -webkit-mask-position: var(--espia) 0;
+            mask-position: var(--espia) 0;
+  }
 }
 
 @keyframes film-strip {

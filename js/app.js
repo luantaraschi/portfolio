@@ -608,6 +608,7 @@
   if (stage) {
     stage.addEventListener('click', function () {
       clearTimeout(relogio);
+      stage.classList.remove('esvaziando');   // voltou a cutucar: enche seco de novo
       pokes += 1;
       if (pokes >= POKES) {
         pokes = 0;
@@ -619,6 +620,7 @@
       if (!reduced) replay(stage, 'poke');
       relogio = setTimeout(function () {
         pokes = 0;
+        stage.classList.add('esvaziando');
         stage.style.setProperty('--pokes', 0);
       }, JANELA);
     });
