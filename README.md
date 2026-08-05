@@ -23,14 +23,19 @@ muda de comportamento.
 ```
 index.html              home: hero, sobre, projetos, games, stack, timeline, contato
 sobre.html              a versão longa da história
-projeto-jvb.html        case: ERP jurídico
-projeto-triagem.html    case: triagem por IA no WhatsApp
+404.html                página de erro
+projeto-*.html          os oito cases: jvb, triagem, devtools, gesture, dub,
+                        soms, sus, pov
 css/style.css           tokens, componentes, seções, responsivo, acessibilidade
 js/app.js               17 módulos, todos com guarda de prefers-reduced-motion
 assets/shots/           prints e capturas dos projetos
 brand-spec.md           paleta, tipografia e as referências que originaram o sistema
 SHOTS.md                roteiro de captura dos prints
+tools/check.mjs         verificação estrutural das páginas (node tools/check.mjs)
 ```
+
+As ferramentas de `tools/` são de desenvolvimento e não vão para o navegador —
+a promessa de "sem dependência" continua valendo para quem abre o site.
 
 ## Decisões que valem uma linha
 
