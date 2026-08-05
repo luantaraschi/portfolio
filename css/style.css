@@ -684,6 +684,36 @@ a { color: inherit; }
 }
 .card:hover { transform: translate(-3px, -3px); box-shadow: 6px 6px 0 var(--ink); }
 .card:active { transform: translate(2px, 2px); box-shadow: 0 0 0 var(--ink); }
+
+/* Os dois com cliente pagando e uso diário atravessam a linha inteira e deitam:
+   captura à esquerda, texto à direita. Numa grade de nove caixas iguais, um ERP
+   em produção com 3.500 testes ocupava exatamente a mesma área que um jogo de
+   adivinhar música, e o olho não lê o argumento da seção, lê o tamanho.
+
+   Em coluna estreita ele volta a ser card normal: deitado em 300px a captura
+   viraria uma tira e o texto uma coluna de uma palavra. */
+.card--destaque { grid-column: 1 / -1; }
+
+@media (min-width: 780px) {
+  .card--destaque { flex-direction: row; align-items: stretch; }
+  .card--destaque .card__thumb {
+    flex: 0 0 42%;
+    /* a razão fixa dos cards pequenos daria uma caixa mais baixa que o texto ao
+       lado e sobraria papel embaixo da captura; aqui quem manda na altura é a
+       coluna de texto */
+    aspect-ratio: auto;
+    border-bottom: 0;
+    border-right: 2px solid var(--ink);
+  }
+  .card--destaque .card__body {
+    flex: 1;
+    align-content: center;
+    padding: clamp(20px, 2.6vw, 34px);
+  }
+  /* o resumo é a razão de o card ser grande: em corpo de legenda ele não usa o
+     espaço que ganhou */
+  .card--destaque .card__body .mono { font-size: 15px; line-height: 1.55; }
+}
 .card__thumb {
   position: relative;
   aspect-ratio: 4 / 3;
