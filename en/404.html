@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -14,8 +14,8 @@ if(!t)t=window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark
 if(t==='light')document.documentElement.setAttribute('data-theme','light')
 var m=document.querySelector('meta[name=theme-color]');if(m)m.content=t==='light'?'#eee8d5':'#1a1917'
 try{history.scrollRestoration="manual"}catch(e){}})()</script>
-<title>404 · página não encontrada · Luan Taraschi</title>
-<meta name="description" content="Esta página não existe no portfólio de Luan Taraschi." />
+<title>404 · page not found · Luan Taraschi</title>
+<meta name="description" content="This page does not exist on Luan Taraschi’s portfolio." />
 <!-- página de erro não entra em índice de busca, e não tem canonical: ela
      responde por qualquer caminho errado, então não existe "o" URL dela -->
 <meta name="robots" content="noindex" />
@@ -31,9 +31,9 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
 <!-- Auto-hospedadas. So as duas que desenham a primeira tela entram em
      preload: o corpo de texto e a fonte do titulo. O resto chega quando o
      CSS pedir, e o unicode-range segura o latin-ext ate aparecer um "ç". -->
-<link rel="preload" href="assets/fontes/space-grotesk-300-700-latin.woff2" as="font" type="font/woff2" crossorigin />
-<link rel="preload" href="assets/fontes/pixelify-sans-400-700-latin.woff2" as="font" type="font/woff2" crossorigin />
-<link rel="stylesheet" href="assets/fontes/fontes.css" />
+<link rel="preload" href="/assets/fontes/space-grotesk-300-700-latin.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="/assets/fontes/pixelify-sans-400-700-latin.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="stylesheet" href="/assets/fontes/fontes.css" />
 <!-- Caminhos absolutos daqui pra baixo, ao contrário das outras páginas: o 404
      responde por /qualquer/coisa/funda, e "css/style.css" resolveria contra o
      caminho que errou, não contra a raiz. A página ficaria sem estilo bem na
@@ -57,33 +57,33 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
 </head>
 <body>
 
-<a class="skip" href="#conteudo">Pular para o conteúdo</a>
+<a class="skip" href="#conteudo">Skip to content</a>
 <div class="grid-glow" data-glow aria-hidden="true"></div>
 <div class="wipe" data-wipe aria-hidden="true"></div>
 
 <header class="nav" data-od-id="nav">
   <div class="wrap nav__inner">
-    <a class="nav__mark" href="/">
+    <a class="nav__mark" href="/en/">
       <span class="nav__glyph" aria-hidden="true"></span>
       Luan Taraschi
     </a>
-    <nav class="nav__links" aria-label="Seções do site">
-      <a class="nav__link" href="/#sobre">Sobre</a>
-      <a class="nav__link" href="/#projetos">Projetos</a>
-      <a class="nav__link" href="/#games">Games</a>
-      <a class="nav__link" href="/#skills">Stack</a>
-      <a class="nav__link" href="/#experiencia">Experiência</a>
-      <a class="nav__link" href="/#contato">Contato</a>
+    <nav class="nav__links" aria-label="Site sections">
+      <a class="nav__link" href="/en/#sobre">About</a>
+      <a class="nav__link" href="/en/#projetos">Projects</a>
+      <a class="nav__link" href="/en/#games">Games</a>
+      <a class="nav__link" href="/en/#skills">Stack</a>
+      <a class="nav__link" href="/en/#experiencia">Experience</a>
+      <a class="nav__link" href="/en/#contato">Contact</a>
     </nav>
     <!-- O par de idiomas. Mostra a lingua para onde ele leva, nao a que
          esta aberta. O caminho e sempre /en/ mais o mesmo nome de arquivo:
          mesma estrutura dos dois lados, entao a troca nunca cai em 404. -->
-    <a class="lang" href="/en/404.html" hreflang="en" lang="en">EN</a>
+    <a class="lang" href="/404.html" hreflang="pt-BR" lang="pt-BR">PT</a>
 
 
     <button class="lamp" type="button" role="switch" aria-checked="false"
-            data-theme-toggle title="Luz da página"
-            aria-label="Alternar entre modo escuro e claro">
+            data-theme-toggle title="Page light"
+            aria-label="Switch between dark and light mode">
       <span class="lamp__icone lamp__icone--lua" aria-hidden="true"></span>
       <span class="lamp__track" aria-hidden="true"><span class="lamp__knob"></span></span>
       <span class="lamp__icone lamp__icone--sol" aria-hidden="true"></span>
@@ -94,12 +94,12 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
     </button>
   </div>
   <div class="nav__panel" id="menu-mobile" data-nav-panel hidden>
-    <a href="/#sobre">Sobre</a>
-    <a href="/#projetos">Projetos</a>
-    <a href="/#games">Games</a>
-    <a href="/#skills">Stack</a>
-    <a href="/#experiencia">Experiência</a>
-    <a href="/#contato">Contato</a>
+    <a href="/en/#sobre">About</a>
+    <a href="/en/#projetos">Projects</a>
+    <a href="/en/#games">Games</a>
+    <a href="/en/#skills">Stack</a>
+    <a href="/en/#experiencia">Experience</a>
+    <a href="/en/#contato">Contact</a>
   </div>
 </header>
 
@@ -107,17 +107,17 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
   <section class="sec erro">
     <div class="wrap erro__grid">
       <div>
-        <span class="kicker">erro/404</span>
+        <span class="kicker">error/404</span>
         <p class="erro__code">404</p>
-        <h1 class="h2" style="margin-top: 18px">Esta página não existe</h1>
+        <h1 class="h2" style="margin-top: 18px">This page does not exist</h1>
         <p class="lead" style="margin-top: 14px; max-width: 40ch">
-          Ou o endereço veio torto, ou eu mudei alguma coisa de lugar e o link
-          velho ficou apontando pro vazio. Nos dois casos a culpa é minha.
+          Either the address came out wrong, or I moved something and the old
+          link is now pointing at nothing. Both are my fault.
         </p>
         <div class="erro__acoes">
-          <a class="btn btn--primary" href="/">Voltar ao início</a>
-          <a class="btn btn--ghost" href="/#projetos">Ver os projetos</a>
-          <a class="btn btn--ghost" href="/#contato">Me avisar do link quebrado</a>
+          <a class="btn btn--primary" href="/en/">Back to the start</a>
+          <a class="btn btn--ghost" href="/en/#projetos">See the work</a>
+          <a class="btn btn--ghost" href="/en/#contato">Tell me about the broken link</a>
         </div>
       </div>
 
@@ -129,7 +129,7 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
         <!-- o mesmo pintor Bayer das outras páginas; o app.js acha pelo
              [data-dither] e a esfera segue o cursor aqui também -->
         <canvas class="erro__canvas" data-dither role="img"
-          aria-label="Esfera renderizada com dithering Bayer de 1 bit que reage ao movimento do cursor"></canvas>
+          aria-label="A sphere rendered with 1-bit Bayer dithering that reacts to cursor movement"></canvas>
         <p class="hero__cap mono-caps">
           <span>1-bit · bayer 8×8</span>
           <span>mova o cursor</span>
@@ -147,7 +147,7 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
       <li><a class="social__l social__l--li" href="https://www.linkedin.com/in/luantaraschi/" target="_blank" rel="noopener">LinkedIn</a></li>
       <li><a class="social__l social__l--ig" href="https://www.instagram.com/luantaraschi/" target="_blank" rel="noopener">Instagram</a></li>
     </ul>
-    <span class="mono-caps">feito por mim, com muito amor</span>
+    <span class="mono-caps">made by me, with a lot of love</span>
   </div>
 </footer>
 

@@ -1,6 +1,13 @@
 # Versão em Inglês — Esboço
 
-**Status:** não iniciado. Depende de decisão de conteúdo do Luan.
+**Status:** FEITO em 05/08/2026. As onze páginas estão no ar em `/en/`, com
+hreflang recíproco, seletor de idioma na barra e sitemap com as vinte URLs.
+As cinco decisões foram respondidas: reescrita (não tradução), as onze páginas
+(não um recorte), sobre.html inteiro, CV em inglês pendente do Luan (o botão
+de download não aparece no /en/ enquanto o arquivo não existir), e a URL como
+única fonte da verdade, sem localStorage.
+
+O que sobrou deste plano fica abaixo, como registro do que foi decidido.
 
 **Por que existe:** o site afirma "Inglês fluente" na ficha do hero e "Respondo
 em português ou inglês" no contato, e é `lang="pt-BR"` de ponta a ponta. Para

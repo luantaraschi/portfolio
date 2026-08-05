@@ -28,6 +28,7 @@ projeto-*.html          os oito cases: jvb, triagem, devtools, gesture, dub,
                         soms, sus, pov
 css/style.css           tokens, componentes, seções, responsivo, acessibilidade
 js/app.js               25 módulos, todos com guarda de prefers-reduced-motion
+en/                     as mesmas 11 páginas em inglês, mesmos nomes de arquivo
 assets/shots/           prints e capturas dos projetos
 brand-spec.md           paleta, tipografia e as referências que originaram o sistema
 SHOTS.md                roteiro de captura dos prints
@@ -151,6 +152,29 @@ a página no topo — o módulo 25 refaz o pulo depois de criar os ids, com o
 `scroll-behavior` desligado por um instante na raiz. `behavior: 'auto'` na
 chamada não resolve: "auto" quer dizer "o que o CSS mandar", e o CSS aqui manda
 `smooth`.
+
+**O site existe em duas línguas, com os mesmos nomes de arquivo.** `/en/` tem
+as mesmas onze páginas, e `sobre.html` continua se chamando `sobre.html` lá
+dentro. Slug traduzido seria mais bonito na barra de endereço e pediria uma
+tabela de-para em três lugares: no seletor de idioma, no `hreflang` e no
+módulo 21, que casa o case já visitado por nome de arquivo. Tabela de-para é
+onde as coisas divergem em silêncio, e o preço aqui seria uma página em inglês
+apontando para uma âncora que só existe em português.
+
+O que **não** foi duplicado é o `app.js`: um arquivo serve as duas línguas e a
+língua vem do `<html lang>`, que já é a fonte da verdade para leitor de tela e
+para buscador. Só entra na tabela de strings o que o JS escreve na tela; tudo
+que está no HTML foi traduzido no HTML, porque texto que o servidor manda
+pronto é texto que o Google lê e que aparece mesmo se o JS falhar.
+
+Os comentários de código continuam em português - eles são para quem mantém, e
+quem mantém é ele. E os trechos de código dos cases ficam **verbatim**,
+comentários em português inclusive: são recortes reais de um sistema real, e
+traduzir ali seria falsificar o documento.
+
+A checagem 8 exige o par nos dois sentidos. hreflang que só um lado declara o
+Google descarta inteiro, e o sintoma disso é nenhum: as duas páginas continuam
+indexadas, cada uma por conta própria, competindo entre si.
 
 **O tema é aplicado antes da primeira pintura.** Um script inline no `<head>` de
 cada página lê o `localStorage` e marca o `<html>` antes do CSS carregar, para o

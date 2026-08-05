@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -14,22 +14,22 @@ if(!t)t=window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark
 if(t==='light')document.documentElement.setAttribute('data-theme','light')
 var m=document.querySelector('meta[name=theme-color]');if(m)m.content=t==='light'?'#eee8d5':'#1a1917'
 try{history.scrollRestoration="manual"}catch(e){}})()</script>
-<title>POV · Luan Taraschi</title>
-<meta name="description" content="Estudo de caso: party game de percepção em Svelte e Convex, com um medidor que tem que parecer peça mecânica." />
-<link rel="canonical" href="https://luantaraschi.dev/projeto-pov.html" />
+<title>SUS · Luan Taraschi</title>
+<meta name="description" content="Case study: a real-time impostor game with Convex. No account to join, playable on a phone, three modes." />
+<link rel="canonical" href="https://luantaraschi.dev/en/projeto-sus.html" />
 <!-- O par de idiomas, com os dois lados no ar. x-default aponta para o
      português: é a versão original, é onde o conteúdo nasce e é a língua
      de quem mais visita. As duas páginas declaram o par inteiro, nas duas
      direções - hreflang que só um lado declara o Google descarta. -->
-<link rel="alternate" hreflang="pt-BR" href="https://luantaraschi.dev/projeto-pov.html" />
-<link rel="alternate" hreflang="en" href="https://luantaraschi.dev/en/projeto-pov.html" />
-<link rel="alternate" hreflang="x-default" href="https://luantaraschi.dev/projeto-pov.html" />
+<link rel="alternate" hreflang="pt-BR" href="https://luantaraschi.dev/projeto-sus.html" />
+<link rel="alternate" hreflang="en" href="https://luantaraschi.dev/en/projeto-sus.html" />
+<link rel="alternate" hreflang="x-default" href="https://luantaraschi.dev/projeto-sus.html" />
 <meta property="og:type" content="article" />
 <meta property="og:site_name" content="Luan Taraschi" />
-<meta property="og:locale" content="pt_BR" />
-<meta property="og:url" content="https://luantaraschi.dev/projeto-pov.html" />
-<meta property="og:title" content="POV" />
-<meta property="og:description" content="Um jogo onde você tenta acertar como outra pessoa enxerga o mundo. Svelte, Convex e um ponteiro com travas." />
+<meta property="og:locale" content="en_US" />
+<meta property="og:url" content="https://luantaraschi.dev/en/projeto-sus.html" />
+<meta property="og:title" content="SUS" />
+<meta property="og:description" content="Everyone gets the same word, except one. Talking, bluffing and voting in real time, nothing to install." />
 <meta property="og:image" content="https://luantaraschi.dev/assets/og.png" />
 <meta property="og:image:width" content="2400" />
 <meta property="og:image:height" content="1260" />
@@ -47,22 +47,23 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
 <!-- Auto-hospedadas. So as duas que desenham a primeira tela entram em
      preload: o corpo de texto e a fonte do titulo. O resto chega quando o
      CSS pedir, e o unicode-range segura o latin-ext ate aparecer um "ç". -->
-<link rel="preload" href="assets/fontes/space-grotesk-300-700-latin.woff2" as="font" type="font/woff2" crossorigin />
-<link rel="preload" href="assets/fontes/silkscreen-400-latin.woff2" as="font" type="font/woff2" crossorigin />
-<link rel="stylesheet" href="assets/fontes/fontes.css" />
-<link rel="stylesheet" href="css/style.css" />
+<link rel="preload" href="/assets/fontes/space-grotesk-300-700-latin.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="/assets/fontes/silkscreen-400-latin.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="stylesheet" href="/assets/fontes/fontes.css" />
+<link rel="stylesheet" href="/css/style.css" />
 
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "Article",
-  "headline": "POV",
-  "description": "Estudo de caso: party game de percepção em Svelte e Convex, com um medidor que tem que parecer peça mecânica.",
-  "url": "https://luantaraschi.dev/projeto-pov.html",
+  "headline": "SUS",
+  "description": "Case study: a real-time impostor game with Convex. No account to join, playable on a phone, three modes.",
+  "url": "https://luantaraschi.dev/projeto-sus.html",
   "image": "https://luantaraschi.dev/assets/og.png",
   "inLanguage": "pt-BR",
   "author": {
     "@type": "Person",
+  "inLanguage": "en",
     "name": "Luan Taraschi",
     "url": "https://luantaraschi.dev/"
   }
@@ -72,7 +73,7 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
 
 <body>
 
-<a class="skip" href="#conteudo">Pular para o conteúdo</a>
+<a class="skip" href="#conteudo">Skip to content</a>
 <div class="grid-glow" data-glow aria-hidden="true"></div>
 <div class="wipe" data-wipe aria-hidden="true"></div>
 
@@ -82,23 +83,23 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
       <span class="nav__glyph" aria-hidden="true"></span>
       Luan Taraschi
     </a>
-    <nav class="nav__links" aria-label="Seções do site">
-      <a class="nav__link" href="index.html#sobre">Sobre</a>
+    <nav class="nav__links" aria-label="Site sections">
+      <a class="nav__link" href="index.html#sobre">About</a>
       <a class="nav__link" href="index.html#projetos" aria-current="page">Projetos</a>
       <a class="nav__link" href="index.html#games">Games</a>
       <a class="nav__link" href="index.html#skills">Stack</a>
-      <a class="nav__link" href="index.html#experiencia">Experiência</a>
-      <a class="nav__link" href="index.html#contato">Contato</a>
+      <a class="nav__link" href="index.html#experiencia">Experience</a>
+      <a class="nav__link" href="index.html#contato">Contact</a>
     </nav>
     <!-- O par de idiomas. Mostra a lingua para onde ele leva, nao a que
          esta aberta. O caminho e sempre /en/ mais o mesmo nome de arquivo:
          mesma estrutura dos dois lados, entao a troca nunca cai em 404. -->
-    <a class="lang" href="/en/projeto-pov.html" hreflang="en" lang="en">EN</a>
+    <a class="lang" href="/projeto-sus.html" hreflang="pt-BR" lang="pt-BR">PT</a>
 
 
     <button class="lamp" type="button" role="switch" aria-checked="false"
-            data-theme-toggle title="Luz da página"
-            aria-label="Alternar entre modo escuro e claro">
+            data-theme-toggle title="Page light"
+            aria-label="Switch between dark and light mode">
       <span class="lamp__icone lamp__icone--lua" aria-hidden="true"></span>
       <span class="lamp__track" aria-hidden="true"><span class="lamp__knob"></span></span>
       <span class="lamp__icone lamp__icone--sol" aria-hidden="true"></span>
@@ -109,12 +110,12 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
     </button>
   </div>
   <div class="nav__panel" id="menu-mobile" data-nav-panel hidden>
-    <a href="index.html#sobre">Sobre</a>
-    <a href="index.html#projetos">Projetos</a>
+    <a href="index.html#sobre">About</a>
+    <a href="index.html#projetos">Projects</a>
     <a href="index.html#games">Games</a>
     <a href="index.html#skills">Stack</a>
-    <a href="index.html#experiencia">Experiência</a>
-    <a href="index.html#contato">Contato</a>
+    <a href="index.html#experiencia">Experience</a>
+    <a href="index.html#contato">Contact</a>
   </div>
 </header>
 
@@ -122,82 +123,82 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
   <article class="wrap" data-od-id="case">
 
     <header class="case__head">
-      <a class="case__voltar" href="index.html#projetos">Todos os projetos</a>
-      <span class="kicker">games/03 · no ar</span><span
+      <a class="case__voltar" href="index.html#projetos">All projects</a>
+      <span class="kicker">games/02 · live</span><span
         class="kicker kicker--barra" data-progresso aria-hidden="true"></span>
-      <h1 class="h1 case__title">POV</h1>
+      <h1 class="h1 case__title">SUS</h1>
       <p class="lead case__lead">
-        Uma carta com dois extremos, um alvo escondido na escala e uma dica curta. O resto da rodada é gente discutindo o que "caro" significa.
+        Everyone gets the same word, except one. From there it is talking, bluffing and voting, with the impostor having to fake knowing what everyone is on about.
       </p>
 
       <dl class="case__meta invert">
-        <div><dt>Ano</dt><dd>2026 · no ar</dd></div>
-        <div><dt>Papel</dt><dd>Do conceito ao deploy</dd></div>
-        <div><dt>Stack</dt><dd>Svelte · Convex · TypeScript · Vite</dd></div>
-        <div><dt>Link</dt><dd><a href="https://pov-beige.vercel.app/" target="_blank" rel="noopener">jogar agora ↗</a></dd></div>
+        <div><dt>Year</dt><dd>2026 · live</dd></div>
+        <div><dt>Role</dt><dd>From the game to the hosting</dd></div>
+        <div><dt>Stack</dt><dd>Next.js · Convex · TypeScript · tempo real</dd></div>
+        <div><dt>Link</dt><dd><a href="https://sus-wine.vercel.app/" target="_blank" rel="noopener">play it now ↗</a></dd></div>
       </dl>
     </header>
 
-    <figure class="shot dither-12">
-      <video src="assets/shots/pov-agulha.mp4" width="1100" height="930"
-             data-toca muted loop playsinline preload="metadata"
-             aria-label="O medidor do POV com a agulha girando pela escala entre dois extremos opostos."></video>
+    <figure class="shot dither-25">
+      <picture>
+        <source srcset="/assets/shots/sus-home.webp" type="image/webp" />
+        <img src="/assets/shots/sus-home.png" width="1200" height="900" loading="lazy"
+             alt="Tela inicial do SUS em roxo, com o título, o subtítulo o jogo de quem é o impostor, um avatar sorteado, campos de apelido e código, e os botões criar sala, entrar e como jogar." />
+      </picture>
       <figcaption>
-        <span>a agulha não desliza: ela passa por casas, e cada casa trava</span>
-        <span class="shot__cor">passe o cursor para ver em cor</span>
+        <span>the entire entry on one screen: nickname, code, a randomly drawn avatar and go</span>
+        <span class="shot__cor">hover to see it in colour</span>
       </figcaption>
     </figure>
 
     <div class="case__body">
       <section class="case__block">
-        <h2 class="h2">O problema</h2>
+        <h2 class="h2">The problem</h2>
         <p class="body-text">
-          É o único projeto daqui que nasceu de uma frase antes de nascer de um requisito: um jogo onde você tenta acertar como outra pessoa enxerga o mundo. A rodada não tem resposta certa absoluta, tem o ponto de vista de quem deu a dica.
+          The impostor game is great around a table and terrible in a WhatsApp group. Someone has to hand out the words privately, someone has to remember who is who, and whoever turns up late breaks the whole round.
         </p>
         <p class="body-text">
-          Construir isso é difícil porque a diversão é quase toda sensorial. Com cara de formulário, um jogo assim vira outra coisa, e uma coisa que ninguém quer jogar.
+          Most apps that solve this ask you to sign up before they let you play, and that is where the call with your friends dies.
         </p>
       </section>
 
       <section class="case__block">
-        <h2 class="h2">A decisão</h2>
+        <h2 class="h2">The decision</h2>
         <p class="body-text">
-          Perseguir a sensação de peça física antes de qualquer outra coisa. O medidor é o coração do jogo e não podia se comportar como um slider de HTML. A referência que eu usei o tempo todo foi um objeto de mesa, com dentes internos, tampa que desliza e trava sonora no encaixe.
+          Take the friction off the door. You open the link, the nickname is already filled in, the avatar is already drawn, you type the room code and you are in. The account exists, but it is optional and it is there to keep your history. On a Friday night call, every extra form field costs you a player.
         </p>
       </section>
 
       <section class="case__block case__block--wide">
-        <h2 class="h2">A agulha não desliza, ela encaixa</h2>
+        <h2 class="h2">The secret has to live on the server</h2>
         <p class="body-text">
-          Um slider comum é contínuo e macio, e macio aqui é justamente o defeito. A agulha do POV passa por casas discretas, com microtravamento em cada uma, feedback a cada passagem e um encaixe mais firme quando você solta. Dá muito mais código do que um input de intervalo pra chegar, na descrição funcional, no mesmo lugar: um número entre dois extremos.
+          It is the same problem every hidden-information game has: if the client receives everybody’s word and only hides it on screen, the game ends with the first person who opens devtools. Hiding with CSS something that already reached the machine hides nothing.
         </p>
         <p class="body-text">
-          Só que nesse projeto a descrição funcional importa pouco. Arrastar, sentir as travas, soltar e ouvir o encaixe é metade da rodada.
-        </p>
-      </section>
-
-      <section class="case__block">
-        <h2 class="h2">O alvo nunca chega no cliente errado</h2>
-        <p class="body-text">
-          Todo jogo de dica trinca no mesmo lugar: o alvo secreto é visível só pro Dono do POV. Se ele viajar pra todos os navegadores e ficar escondido só na interface, a trapaça está a um clique de distância.
-        </p>
-        <p class="body-text">
-          Então a consulta que alimenta a tela decide, jogador por jogador, se aquele número pode ser enviado. Quem não é o Dono recebe o campo nulo até a fase de revelação, ou seja, o segredo nunca chega na máquina errada pra depois ser escondido lá.
+          So what each player receives is cut on the server, one by one: the impostor gets one thing, the others get another, and the full word only becomes public at the reveal. It is a tedious rule to maintain, because it reappears in every new query you write and forgetting it once is enough to ruin the match.
         </p>
       </section>
 
       <section class="case__block">
-        <h2 class="h2">Por que Svelte, e não React</h2>
+        <h2 class="h2">Whoever drops mid-round</h2>
         <p class="body-text">
-          É o único dos meus jogos fora do React. Uma agulha com travas é estado que muda muitas vezes por segundo, e eu queria escrever isso sem ficar pensando em memoização. Foi também o projeto mais rápido de sair do papel, o que me deixou com uma dúvida que eu ainda não resolvi: se foi mérito do Svelte ou só de o escopo ser menor.
+          A real-time room is easy while nobody leaves. The real case is the phone that locks its screen, the underground train entering a tunnel, the tab that reloads on its own. Because the state lives on the server and the screen is only a reflection of it, coming back means resubscribing to the query and reappearing in the same round, in the same place. It is the problem that repeats most across the games here, and therefore the one I have learned to solve best.
+        </p>
+      </section>
+
+      <section class="case__block">
+        <h2 class="h2">Who owns the information</h2>
+        <p class="body-text">
+          Almost every multiplayer problem I have run into ends up becoming the same question: who owns this information. The times I answered that at the start, the rest of the code almost wrote itself. The times I left it for later, it became a patch on top of a patch.
         </p>
       </section>
 
     </div>
 
-    <nav class="case__nav" aria-label="Navegação entre projetos">
-      <a class="btn btn--ghost" href="projeto-sus.html">‹ Anterior: SUS</a>
-      <a class="btn" href="index.html#projetos">Todos os projetos ›</a>
+    <nav class="case__nav" aria-label="Project navigation">
+      <a class="btn btn--ghost" href="projeto-soms.html">‹ Previous: SOMS</a>
+      <a class="btn btn--ghost" href="index.html#projetos">All projects</a>
+      <a class="btn" href="projeto-pov.html">Next: POV ›</a>
     </nav>
 
   </article>
@@ -211,11 +212,11 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
       <li><a class="social__l social__l--li" href="https://www.linkedin.com/in/luantaraschi/" target="_blank" rel="noopener">LinkedIn</a></li>
       <li><a class="social__l social__l--ig" href="https://www.instagram.com/luantaraschi/" target="_blank" rel="noopener">Instagram</a></li>
     </ul>
-    <span class="mono-caps">feito por mim, com muito amor</span>
+    <span class="mono-caps">made by me, with a lot of love</span>
   </div>
 </footer>
 
-<script src="js/app.js" defer></script>
+<script src="/js/app.js" defer></script>
 <!-- Prerender no hover: o navegador monta a proxima pagina inteira em segundo
      plano quando o cursor encosta no link, e a navegacao vira instantanea. Sem
      biblioteca, sem service worker, sem prefetch na mao.
@@ -231,8 +232,8 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
   "prerender": [{
     "where": {
       "or": [
-        { "href_matches": "/projeto-*.html" },
-        { "href_matches": "/sobre.html" }
+        { "href_matches": "/en/projeto-*.html" },
+        { "href_matches": "/en/sobre.html" }
       ]
     },
     "eagerness": "moderate"

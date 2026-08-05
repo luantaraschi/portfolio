@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -14,9 +14,9 @@ if(!t)t=window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark
 if(t==='light')document.documentElement.setAttribute('data-theme','light')
 var m=document.querySelector('meta[name=theme-color]');if(m)m.content=t==='light'?'#eee8d5':'#1a1917'
 try{history.scrollRestoration="manual"}catch(e){}})()</script>
-<title>A história inteira · Luan Taraschi</title>
-<meta name="description" content="De um mod de Minecraft aos dez anos até agentes de IA em produção: a trajetória de Luan Taraschi, desenvolvedor full stack em Salvador." />
-<link rel="canonical" href="https://luantaraschi.dev/sobre.html" />
+<title>The long version · Luan Taraschi</title>
+<meta name="description" content="From a Minecraft mod at ten years old to AI agents in production: the path of Luan Taraschi, full stack developer in Salvador, Brazil." />
+<link rel="canonical" href="https://luantaraschi.dev/en/sobre.html" />
 <!-- O par de idiomas, com os dois lados no ar. x-default aponta para o
      português: é a versão original, é onde o conteúdo nasce e é a língua
      de quem mais visita. As duas páginas declaram o par inteiro, nas duas
@@ -26,10 +26,10 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
 <link rel="alternate" hreflang="x-default" href="https://luantaraschi.dev/sobre.html" />
 <meta property="og:type" content="article" />
 <meta property="og:site_name" content="Luan Taraschi" />
-<meta property="og:locale" content="pt_BR" />
-<meta property="og:url" content="https://luantaraschi.dev/sobre.html" />
-<meta property="og:title" content="A história inteira · Luan Taraschi" />
-<meta property="og:description" content="De um mod de Minecraft aos dez anos até agentes de IA em produção: como eu cheguei aqui, sem pular a parte chata." />
+<meta property="og:locale" content="en_US" />
+<meta property="og:url" content="https://luantaraschi.dev/en/sobre.html" />
+<meta property="og:title" content="The long version · Luan Taraschi" />
+<meta property="og:description" content="From a Minecraft mod at ten years old to AI agents in production: how I got here, without skipping the boring part." />
 <meta property="og:image" content="https://luantaraschi.dev/assets/og.png" />
 <meta property="og:image:width" content="2400" />
 <meta property="og:image:height" content="1260" />
@@ -47,10 +47,10 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
 <!-- Auto-hospedadas. So as duas que desenham a primeira tela entram em
      preload: o corpo de texto e a fonte do titulo. O resto chega quando o
      CSS pedir, e o unicode-range segura o latin-ext ate aparecer um "ç". -->
-<link rel="preload" href="assets/fontes/space-grotesk-300-700-latin.woff2" as="font" type="font/woff2" crossorigin />
-<link rel="preload" href="assets/fontes/silkscreen-400-latin.woff2" as="font" type="font/woff2" crossorigin />
-<link rel="stylesheet" href="assets/fontes/fontes.css" />
-<link rel="stylesheet" href="css/style.css" />
+<link rel="preload" href="/assets/fontes/space-grotesk-300-700-latin.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="/assets/fontes/silkscreen-400-latin.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="stylesheet" href="/assets/fontes/fontes.css" />
+<link rel="stylesheet" href="/css/style.css" />
 
 <script type="application/ld+json">
 {
@@ -63,6 +63,7 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
   "inLanguage": "pt-BR",
   "author": {
     "@type": "Person",
+  "inLanguage": "en",
     "name": "Luan Taraschi",
     "url": "https://luantaraschi.dev/"
   }
@@ -188,7 +189,7 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
 </head>
 <body>
 
-<a class="skip" href="#conteudo">Pular para o conteúdo</a>
+<a class="skip" href="#conteudo">Skip to content</a>
 <div class="grid-glow" data-glow aria-hidden="true"></div>
 <div class="wipe" data-wipe aria-hidden="true"></div>
 
@@ -198,23 +199,23 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
       <span class="nav__glyph" aria-hidden="true"></span>
       Luan Taraschi
     </a>
-    <nav class="nav__links" aria-label="Seções do site">
+    <nav class="nav__links" aria-label="Site sections">
       <a class="nav__link" href="index.html#sobre" aria-current="page">Sobre</a>
-      <a class="nav__link" href="index.html#projetos">Projetos</a>
+      <a class="nav__link" href="index.html#projetos">Projects</a>
       <a class="nav__link" href="index.html#games">Games</a>
       <a class="nav__link" href="index.html#skills">Stack</a>
-      <a class="nav__link" href="index.html#experiencia">Experiência</a>
-      <a class="nav__link" href="index.html#contato">Contato</a>
+      <a class="nav__link" href="index.html#experiencia">Experience</a>
+      <a class="nav__link" href="index.html#contato">Contact</a>
     </nav>
     <!-- O par de idiomas. Mostra a lingua para onde ele leva, nao a que
          esta aberta. O caminho e sempre /en/ mais o mesmo nome de arquivo:
          mesma estrutura dos dois lados, entao a troca nunca cai em 404. -->
-    <a class="lang" href="/en/sobre.html" hreflang="en" lang="en">EN</a>
+    <a class="lang" href="/sobre.html" hreflang="pt-BR" lang="pt-BR">PT</a>
 
 
     <button class="lamp" type="button" role="switch" aria-checked="false"
-            data-theme-toggle title="Luz da página"
-            aria-label="Alternar entre modo escuro e claro">
+            data-theme-toggle title="Page light"
+            aria-label="Switch between dark and light mode">
       <span class="lamp__icone lamp__icone--lua" aria-hidden="true"></span>
       <span class="lamp__track" aria-hidden="true"><span class="lamp__knob"></span></span>
       <span class="lamp__icone lamp__icone--sol" aria-hidden="true"></span>
@@ -225,12 +226,12 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
     </button>
   </div>
   <div class="nav__panel" id="menu-mobile" data-nav-panel hidden>
-    <a href="index.html#sobre">Sobre</a>
-    <a href="index.html#projetos">Projetos</a>
+    <a href="index.html#sobre">About</a>
+    <a href="index.html#projetos">Projects</a>
     <a href="index.html#games">Games</a>
     <a href="index.html#skills">Stack</a>
-    <a href="index.html#experiencia">Experiência</a>
-    <a href="index.html#contato">Contato</a>
+    <a href="index.html#experiencia">Experience</a>
+    <a href="index.html#contato">Contact</a>
   </div>
 </header>
 
@@ -238,15 +239,14 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
   <article class="wrap" data-od-id="vida">
 
     <header class="case__head">
-      <a class="case__voltar" href="index.html">Voltar para a home</a>
-      <span class="kicker">sobre/ · a versão longa</span><span
+      <a class="case__voltar" href="index.html">Back to the home page</a>
+      <span class="kicker">about/ · the long version</span><span
         class="kicker kicker--barra" data-progresso aria-hidden="true"></span>
       <h1 class="h1 case__title" style="font-size: clamp(30px, 5.4vw, 56px);">
-        Eu tinha dez anos
+        I was ten years old
       </h1>
       <p class="lead" style="margin-top:18px;">
-        Quando tentei criar meu primeiro mod de Minecraft. Não deu em nada, mas
-        eu não ia desistir de seguir aquele rumo.
+        when I tried to build my first Minecraft mod. Nothing came of it, but I was not going to stop heading that way.
       </p>
     </header>
 
@@ -256,113 +256,75 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
         <h2 class="h2"><span class="bloco__n" aria-hidden="true"></span>LurramAdventures</h2>
         <div class="bloco__txt">
           <p class="body-text">
-          Eu passava as tardes jogando com os amigos e vendo vídeo de mod feito
-          por desenvolvedor. Achava aquilo a coisa mais legal do mundo. Meu
-          favorito era o OresPawn, e um dia decidi que ia fazer o meu.
+          I spent my afternoons playing with friends and watching videos of mods other developers had made. I thought it was the coolest thing in the world. My favourite was OresPawn, and one day I decided I would make my own.
         </p>
         <p class="body-text">
-          Botei meu nick no nome, LurramAdventures, porque eu já me imaginava
-          vendo alguém jogar aquilo. Só que era muito mais complexo do que eu
-          imaginava: era preciso configurar tudo, das funções às texturas e ao
-          comportamento. O LurramAdventures não deu em nada. O rumo ficou.
+          I put my gamer tag in the name, LurramAdventures, because I could already picture watching someone play it. It was far more complex than I imagined: everything had to be configured, from the functions to the textures to the behaviour. LurramAdventures came to nothing. The direction stayed.
         </p>
         </div>
       </section>
 
       <section class="case__block">
-        <h2 class="h2"><span class="bloco__n" aria-hidden="true"></span>Troquei de escola por um laboratório</h2>
+        <h2 class="h2"><span class="bloco__n" aria-hidden="true"></span>I changed schools for a lab</h2>
         <div class="bloco__txt">
           <p class="body-text">
-          Saí da escola onde eu estudava desde os cinco anos porque tinha chegado
-          uma nova na região, com robótica e programação na grade. Deixei todos os
-          meus amigos para trás para ir atrás disso.
+          I left the school I had been at since I was five because a new one had opened nearby, with robotics and programming on the timetable. I left all my friends behind to go after it.
         </p>
         <p class="body-text">
-          No primeiro ano montei um time, ganhei o campeonato regional e fui
-          selecionado para a equipe oficial da escola, a que representava a cidade
-          dali em diante. Foi um ano inteiro trancado no laboratório de robótica
-          todas as tardes até chegarmos ao estadual, na FIRST LEGO LEAGUE 2019, em
-          Salvador. Eu era o programador: robô de Lego montado para completar um
-          circuito complexo e muito código ajustado no detalhe para ele fazer
-          exatamente o que precisava fazer. Não passamos de fase. Valeu demais.
+          In the first year I put a team together, won the regional championship and was picked for the school’s official squad, the one that represented the city from then on. It was a whole year locked in the robotics lab every afternoon until we reached the state finals, at FIRST LEGO LEAGUE 2019 in Salvador. I was the programmer: a Lego robot built to complete a complex course, and a lot of code tuned in detail so it would do exactly what it had to. We did not get past that round. It was worth every hour.
         </p>
         <p class="body-text">
-          Time de robótica não é só robô. A liga avalia Core Values junto com a
-          performance: como o time divide tarefa, como resolve desacordo, como
-          trata o adversário. Foi o primeiro lugar onde eu aprendi que a parte
-          difícil de construir alguma coisa em grupo quase nunca é a técnica.
+          A robotics team is not only about the robot. The league scores Core Values alongside performance: how the team splits the work, how it settles disagreements, how it treats the opposition. That was the first place I learned that the hard part of building something as a group is almost never the technical part.
         </p>
         </div>
       </section>
 
       <section class="case__block">
-        <h2 class="h2"><span class="bloco__n" aria-hidden="true"></span>A pandemia foi a melhor escola que eu tive</h2>
+        <h2 class="h2"><span class="bloco__n" aria-hidden="true"></span>The pandemic was the best school I ever had</h2>
         <div class="bloco__txt">
           <p class="body-text">
-          Aproveitei o tempo parado para me aprofundar de vez. Passei boa parte
-          daquele período vendo curso de programação, um atrás do outro, e foi uma
-          das épocas mais produtivas da minha vida. Foi ali que comecei a programar
-          para valer, aprendendo linguagem de verdade e aplicando na prática,
-          construindo coisa útil na web. E foi ali que decidi que era aquilo que eu
-          queria fazer pelo resto da vida.
+          I used the standstill to go deep. I spent most of that period working through programming courses, one after another, and it was one of the most productive stretches of my life. That is when I started programming for real, learning actual languages and putting them to work, building useful things on the web. And that is when I decided this was what I wanted to do for the rest of my life.
         </p>
         <p class="body-text">
-          Pouco depois do Ensino Médio entrei em Engenharia de Software, com
-          formatura prevista para 2027. A graduação me deu a base e o vocabulário,
-          e o resto eu fui buscar por fora, por vontade própria, no mesmo ritmo da
-          pandemia. Os cursos que fiz nesse ritmo:
+          Shortly after finishing secondary school I started a Software Engineering degree, graduating in 2027. University gave me the foundation and the vocabulary; the rest I went after on my own, at the same pace as the pandemic. The courses I took along the way:
         </p>
         <ul class="cursos">
           <li>Front-End</li>
           <li>UX/UI Design</li>
           <li>PostgreSQL</li>
-          <li>IA Generativa para Devs</li>
-          <li>IA e Aplicações com LLMs</li>
-          <li>ChatGPT e Engenharia de Prompt para Devs</li>
+          <li>Generative AI for Developers</li>
+          <li>AI and Applications with LLMs</li>
+          <li>ChatGPT and Prompt Engineering for Developers</li>
         </ul>
         </div>
       </section>
 
       <section class="case__block">
-        <h2 class="h2"><span class="bloco__n" aria-hidden="true"></span>IA na mão de quem sabe o que está fazendo</h2>
+        <h2 class="h2"><span class="bloco__n" aria-hidden="true"></span>AI in the hands of someone who knows what they are doing</h2>
         <div class="bloco__txt">
           <p class="body-text">
-          Com a chegada das IAs, o uso de LLM no desenvolvimento virou meu assunto
-          favorito. Usada do jeito certo, na mão de um desenvolvedor que sabe o que
-          está fazendo, uma IA é um aliado valiosíssimo. Foi para esse lado que eu
-          me especializei e é onde me sinto mais forte hoje. Também não paro de
-          correr atrás de tecnologia nova para aplicar no dia a dia.
+          When AI arrived, using LLMs in development became my favourite subject. Used properly, in the hands of a developer who knows what they are doing, AI is an enormously valuable ally. That is the direction I specialised in and where I feel strongest today. I also never stop chasing new technology to put to work day to day.
         </p>
         </div>
       </section>
 
       <section class="case__block">
-        <h2 class="h2"><span class="bloco__n" aria-hidden="true"></span>Sair do modo projeto pessoal</h2>
+        <h2 class="h2"><span class="bloco__n" aria-hidden="true"></span>Leaving side-project mode</h2>
         <div class="bloco__txt">
           <p class="body-text">
-          Meu primeiro contato com o mercado foi um ano de estágio de
-          desenvolvimento na TecnoTRENDS, em equipe e com Scrum. Foi onde eu saí do
-          modo projeto pessoal e aprendi a trabalhar em código do qual outras
-          pessoas dependiam. É uma mudança de postura que não dá para aprender
-          sozinho em casa.
+          My first contact with the industry was a year-long development internship at TecnoTRENDS, on a team and with Scrum. That is where I left side-project mode and learned to work on code other people depended on. It is a shift in posture you cannot learn alone at home.
         </p>
         <p class="body-text">
-          O Scrum eu levei comigo, e não foi pela cerimônia. Foram duas coisas:
-          trabalho picado em pedaço que cabe numa entrega, e problema dito no dia
-          em que aparece. Parece pouco e é o que me impede, até hoje, de passar
-          três semanas construindo na direção errada antes de alguém ver.
+          Scrum came with me, and not for the ceremony. It was two things: work sliced into pieces that fit a delivery, and a problem said out loud the day it appears. It sounds small, and it is what stops me, to this day, from spending three weeks building in the wrong direction before anyone looks.
         </p>
         </div>
       </section>
 
       <section class="case__block">
-        <h2 class="h2"><span class="bloco__n" aria-hidden="true"></span>A outra metade do trabalho: automação</h2>
+        <h2 class="h2"><span class="bloco__n" aria-hidden="true"></span>The other half of the job: automation</h2>
         <div class="bloco__txt">
           <p class="body-text">
-          Na JVB Advocacia eu descobri o que virou a outra metade do meu trabalho.
-          Comecei com coisa simples: relatório semanal, resumo de notícia,
-          compilado de e-mail, andamento de processo. Conforme fui aprendendo, fui
-          conseguindo fazer coisa cada vez mais complexa e mais útil.
+          At JVB Advocacia I found what became the other half of my work. I started with simple things: a weekly report, a news digest, an email roundup, case updates. As I learned, I was able to build things that were increasingly complex and increasingly useful.
         </p>
         </div>
       </section>
@@ -371,90 +333,65 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
         <h2 class="h2"><span class="bloco__n" aria-hidden="true"></span>JVB Kanban</h2>
         <div class="bloco__txt">
           <p class="body-text">
-          Desse processo nasceu o JVB Kanban, um sistema de gestão de casos que
-          acabou tomando conta da rotina do escritório inteiro. Hoje ele toca mais
-          de 300 processos e tirou umas 10 horas de trabalho manual por semana de
-          cima da equipe.
+          Out of that came JVB Kanban, a case management system that ended up taking over the routine of the entire firm. Today it carries more than 300 cases and took some 10 hours of manual work a week off the team.
         </p>
         <p class="body-text">
-          Fui o único desenvolvedor, mas não fui quem decidiu o que construir. Eu
-          não entendo de Direito, então cada módulo saiu de conversa com quem ia
-          usar: eu levava a proposta, a equipe dizia onde ela não sobrevivia à
-          rotina real, e eu refazia. É o tipo de coisa que só funciona se você
-          aceitar que a sua primeira ideia provavelmente está errada.
+          I was the only developer, but I was not the one deciding what to build. I know nothing about law, so every module came out of talking to the people who would use it: I brought the proposal, the team pointed at where it would not survive the real routine, and I rebuilt it. It is the kind of thing that only works if you accept that your first idea is probably wrong.
         </p>
         <p class="body-text">
-          Roda em PostgreSQL na Railway e tem integração via MCP, então a própria
-          IA consulta o andamento dos casos e delega tarefa dentro do sistema. É
-          exatamente o tipo de coisa que eu gosto de construir. Quando a parceria
-          terminou, eu já tinha aquilo validado e rodando em produção, e o apoio do
-          meu antigo chefe para buscar cliente novo.
+          It runs on PostgreSQL on Railway and is integrated over MCP, so the AI itself checks case progress and assigns work inside the system. It is exactly the kind of thing I like to build. When the partnership ended I already had it validated and running in production, plus the backing of my former boss to go after new clients.
         </p>
         </div>
       </section>
 
       <section class="case__block">
-        <h2 class="h2"><span class="bloco__n" aria-hidden="true"></span>Hoje eu trabalho por conta</h2>
+        <h2 class="h2"><span class="bloco__n" aria-hidden="true"></span>Today I work for myself</h2>
         <div class="bloco__txt">
           <p class="body-text">
-          Construo software sob medida. Já são cinco clientes atendidos, entre
-          escritórios de advocacia e agência de viagem, com dois sistemas em
-          produção que eu mantenho e evoluo. O maior deles é um CRM de WhatsApp que
-          passa das mil conversas por mês, com a triagem inteira automatizada, de
-          forma que só o lead já qualificado chega no atendente humano.
+          I build bespoke software. Five clients so far, from law firms to a travel agency, with two systems in production that I maintain and keep evolving. The larger one is a WhatsApp CRM that passes a thousand conversations a month, with the entire triage automated, so only the already-qualified lead reaches a human.
         </p>
         </div>
       </section>
 
       <section class="case__block">
-        <h2 class="h2"><span class="bloco__n" aria-hidden="true"></span>O design eu nunca vou largar</h2>
+        <h2 class="h2"><span class="bloco__n" aria-hidden="true"></span>I will never let go of design</h2>
         <div class="bloco__txt">
           <p class="body-text">
-          Web design e design gráfico não são meu foco no momento, mas são uma
-          coisa que eu nunca vou deixar de amar. Aquele site que a pessoa abre e
-          solta um uau antes mesmo de entender o que ele faz. Espero ter arrancado
-          uma boa impressão neste aqui, hehe.
+          Web and graphic design are not my focus right now, but they are something I will never stop loving. That site someone opens and reacts to before they even understand what it does. I hope this one made an impression.
         </p>
         <p class="body-text">
-          Estou sempre criando interface nova, testando ideia de layout, e mesmo
-          quando o projeto é inteiro no backend eu acabo puxando esse cuidado para
-          dentro dele.
+          I am always building new interfaces and testing layout ideas, and even when a project is entirely backend I end up pulling that care into it.
         </p>
         </div>
       </section>
 
       <section class="case__block">
-        <h2 class="h2"><span class="bloco__n" aria-hidden="true"></span>Tempo livre não existe</h2>
+        <h2 class="h2"><span class="bloco__n" aria-hidden="true"></span>There is no such thing as free time</h2>
         <div class="bloco__txt">
           <p class="body-text">
-          Todo tempo livre que eu tenho minha cabeça já começa a pensar em projeto
-          novo, interface nova, o que dá para construir. Às vezes é só pela diversão
-          mesmo, como o SUS, um jogo web que eu fiz em uma semana para jogar em call
-          com os amigos.
+          Any free time I have, my head starts on a new project, a new interface, what could be built. Sometimes it is purely for fun, like SUS, a web game I made in a week to play on a call with friends.
         </p>
         </div>
       </section>
 
       <section class="fecho invert">
-        <h2 class="h2">E eu sinto que estou só no começo</h2>
+        <h2 class="h2">And I feel like I am only getting started</h2>
         <p class="body-text">
-          Só de pensar nas tecnologias que ainda vão aparecer para ajudar no
-          desenvolvimento eu já fico animado com o que vem pela frente.
+          Just thinking about the technology still to come to help with development gets me excited about what is ahead.
         </p>
         <p class="body-text" style="margin-top:14px;">
-          Se você leu até aqui, provavelmente tem alguma coisa para ser construída.
-          Me chama. ;)
+          If you read this far, you probably have something that needs building. Get in touch.
         </p>
         <p style="margin-top: clamp(20px, 3vw, 28px);">
-          <a class="btn btn--primary" href="index.html#contato">Falar comigo ›</a>
+          <a class="btn btn--primary" href="index.html#contato">Get in touch ›</a>
         </p>
       </section>
 
     </div>
 
-    <nav class="case__nav" aria-label="Navegação">
-      <a class="btn btn--ghost" href="index.html#sobre">‹ Voltar para a home</a>
-      <a class="btn" href="index.html#projetos">Ver os projetos ›</a>
+    <nav class="case__nav" aria-label="Navigation">
+      <a class="btn btn--ghost" href="index.html#sobre">‹ Back to the home page</a>
+      <a class="btn" href="index.html#projetos">See the work ›</a>
     </nav>
 
   </article>
@@ -468,11 +405,11 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
       <li><a class="social__l social__l--li" href="https://www.linkedin.com/in/luantaraschi/" target="_blank" rel="noopener">LinkedIn</a></li>
       <li><a class="social__l social__l--ig" href="https://www.instagram.com/luantaraschi/" target="_blank" rel="noopener">Instagram</a></li>
     </ul>
-    <span class="mono-caps">feito por mim, com muito amor</span>
+    <span class="mono-caps">made by me, with a lot of love</span>
   </div>
 </footer>
 
-<script src="js/app.js" defer></script>
+<script src="/js/app.js" defer></script>
 <!-- Prerender no hover: o navegador monta a proxima pagina inteira em segundo
      plano quando o cursor encosta no link, e a navegacao vira instantanea. Sem
      biblioteca, sem service worker, sem prefetch na mao.
@@ -488,8 +425,8 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
   "prerender": [{
     "where": {
       "or": [
-        { "href_matches": "/projeto-*.html" },
-        { "href_matches": "/sobre.html" }
+        { "href_matches": "/en/projeto-*.html" },
+        { "href_matches": "/en/sobre.html" }
       ]
     },
     "eagerness": "moderate"

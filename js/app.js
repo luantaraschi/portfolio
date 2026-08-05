@@ -31,6 +31,44 @@
 
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  // Um arquivo de JS serve as duas línguas: /en/ é a mesma página com o mesmo
+  // comportamento, e duplicar o arquivo seria duplicar vinte e cinco módulos
+  // para trocar dezoito frases. A língua vem do <html lang>, que já existe e
+  // já é a fonte da verdade para leitor de tela e para o buscador.
+  //
+  // Só entra aqui o que o JS escreve na tela. Tudo que está no HTML foi
+  // traduzido no HTML - texto que o servidor manda pronto é texto que o Google
+  // lê e que aparece mesmo se o JS falhar.
+  var EN = document.documentElement.lang.slice(0, 2) === 'en';
+  function diz(pt, en) { return EN ? en : pt; }
+
+  var T = {
+    copiado:      diz('copiado ✓', 'copied ✓'),
+    copieManual:  diz('copie manualmente', 'copy it manually'),
+    corrija:      diz('› corrija os campos marcados acima.', '› please fix the fields marked above.'),
+    enviando:     diz('enviando…', 'sending…'),
+    enviandoStatus: diz('› enviando…', '› sending…'),
+    recebido:     diz('› recebido. Respondo em até um dia útil.', '› got it. I answer within one business day.'),
+    falhou:       diz('› não consegui enviar. Me escreva direto em ', '› could not send it. Write to me directly at '),
+    salvo:        diz('salvo ✓', 'saved ✓'),
+    visto:        diz('visto ✓', 'seen ✓'),
+    fechar:       diz('fechar ✕', 'close ✕'),
+    fecharCap:    diz('Fechar a captura', 'Close the screenshot'),
+    capAnterior:  diz('Captura anterior', 'Previous screenshot'),
+    capProxima:   diz('Próxima captura', 'Next screenshot'),
+    ampliar:      diz('Ampliar: ', 'Enlarge: '),
+    captura:      diz('captura', 'screenshot'),
+    nestaPagina:  diz('nesta página', 'on this page'),
+    blocos:       diz(' blocos', ' sections'),
+    indice:       diz('Índice desta página', 'Index of this page'),
+    semOculos:    diz('Retrato de Luan Taraschi em 1 bit, sem óculos escuros.',
+                      'Portrait of Luan Taraschi in 1 bit, without sunglasses.'),
+    comOculos:    diz('Retrato de Luan Taraschi em 1 bit, de óculos escuros por causa da luz.',
+                      'Portrait of Luan Taraschi in 1 bit, wearing sunglasses because of the light.'),
+    console:      diz('Sem framework, sem build, sem dependência.\nA esfera é dithering Bayer 8×8 pintado em canvas, um pixel por vez.\n\nProcurando dev? ',
+                      'No framework, no build step, no dependency.\nThe sphere is Bayer 8×8 dithering painted on canvas, one pixel at a time.\n\nLooking for a dev? ')
+  };
+
   /* ---- 1. menu mobile --------------------------------------------------- */
   var toggle = document.querySelector('[data-nav-toggle]');
   var panel = document.querySelector('[data-nav-panel]');
@@ -63,19 +101,19 @@
     var label = btn.textContent;
     btn.addEventListener('click', function () {
       var done = function () {
-        btn.textContent = 'copiado ✓';
+        btn.textContent = T.copiado;
         btn.style.borderColor = 'var(--accent)';
         setTimeout(function () { btn.textContent = label; btn.style.borderColor = ''; }, 1800);
       };
       if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(EMAIL).then(done, function () { btn.textContent = 'copie manualmente'; });
+        navigator.clipboard.writeText(EMAIL).then(done, function () { btn.textContent = T.copieManual; });
       } else {
         // fallback para contextos sem clipboard API
         var tmp = document.createElement('textarea');
         tmp.value = EMAIL;
         document.body.appendChild(tmp);
         tmp.select();
-        try { document.execCommand('copy'); done(); } catch (_) { btn.textContent = 'copie manualmente'; }
+        try { document.execCommand('copy'); done(); } catch (_) { btn.textContent = T.copieManual; }
         document.body.removeChild(tmp);
       }
     });
@@ -144,7 +182,7 @@
       });
       if (firstBad) {
         firstBad.focus();
-        dizer('› corrija os campos marcados acima.');
+        dizer(T.corrija);
         return;
       }
       var data = new FormData(form);
@@ -158,8 +196,8 @@
 
       // trava o botão: dois cliques no envio viram duas mensagens iguais na
       // caixa de entrada, e quem clicou não tem como saber que mandou duas
-      if (botao) { botao.disabled = true; botao.textContent = 'enviando…'; }
-      dizer('› enviando…');
+      if (botao) { botao.disabled = true; botao.textContent = T.enviando; }
+      dizer(T.enviandoStatus);
 
       function soltar() {
         if (botao) { botao.disabled = false; botao.textContent = rotuloBotao; }
@@ -182,10 +220,10 @@
         if (conta) conta.textContent = '';
         soltar();
         // [role=status] no HTML: o leitor de tela anuncia sozinho, sem foco
-        dizer('› recebido. Respondo em até um dia útil.');
+        dizer(T.recebido);
       }).catch(function () {
         soltar();
-        dizer('› não consegui enviar. Me escreva direto em ' + EMAIL + '.');
+        dizer(T.falhou + EMAIL + '.');
       });
     });
   }
@@ -462,10 +500,7 @@
   var stage = document.querySelector('[data-stage]');
   var STORE = 'lt-tema';
 
-  var LEGENDA = {
-    dark: 'Retrato de Luan Taraschi em 1 bit, sem óculos escuros.',
-    light: 'Retrato de Luan Taraschi em 1 bit, de óculos escuros por causa da luz.'
-  };
+  var LEGENDA = { dark: T.semOculos, light: T.comOculos };
 
   function paintToggles(theme) {
     Array.prototype.forEach.call(toggles, function (b) {
@@ -837,9 +872,7 @@
   try {
     console.log(
       '%c██░░\n░░██  LUAN TARASCHI\n\n' +
-      '%cSem framework, sem build, sem dependência.\n' +
-      'A esfera é dithering Bayer 8×8 pintado em canvas, um pixel por vez.\n\n' +
-      'Procurando dev? ' + EMAIL,
+      '%c' + T.console + EMAIL,
       'font-family:monospace;font-size:15px;line-height:1.15;font-weight:700',
       'font-family:monospace;font-size:12px;line-height:1.5'
     );
@@ -924,7 +957,7 @@
     var rotulo = link.textContent, relogio = 0;
     link.addEventListener('click', function () {
       clearTimeout(relogio);
-      link.textContent = 'salvo ✓';
+      link.textContent = T.salvo;
       relogio = setTimeout(function () { link.textContent = rotulo; }, 1800);
     });
   });
@@ -964,7 +997,7 @@
       marca.className = 'tag tag--visto';
       // elemento de verdade com texto de verdade, não ::content: quem usa leitor
       // de tela também quer saber que já esteve ali
-      marca.textContent = 'visto ✓';
+      marca.textContent = T.visto;
       tags.insertBefore(marca, tags.firstChild);
     });
   }
@@ -1055,12 +1088,13 @@
           '<span class="panel__conta" data-lupa-conta></span>' +
           '<span class="lupa__setas" data-lupa-setas hidden>' +
             '<button class="lupa__seta" type="button" data-lupa-ant ' +
-                    'aria-label="Captura anterior">‹</button>' +
+                    'aria-label="' + T.capAnterior + '">‹</button>' +
             '<button class="lupa__seta" type="button" data-lupa-prox ' +
-                    'aria-label="Próxima captura">›</button>' +
+                    'aria-label="' + T.capProxima + '">›</button>' +
           '</span>' +
-          '<button class="lupa__fechar" type="button" data-lupa-fecha autofocus>' +
-            'fechar ✕</button>' +
+          '<button class="lupa__fechar" type="button" data-lupa-fecha autofocus ' +
+            'aria-label="' + T.fecharCap + '">' +
+            T.fechar + '</button>' +
         '</div>' +
         '<div class="lupa__palco" data-lupa-palco></div>' +
         '<p class="lupa__cap mono-caps" data-lupa-cap></p>' +
@@ -1152,7 +1186,7 @@
       var b = document.createElement('button');
       b.type = 'button';
       b.className = 'shot__lupa';
-      b.setAttribute('aria-label', 'Ampliar: ' + (legendaDe(fig) || img.alt || 'captura').slice(0, 90));
+      b.setAttribute('aria-label', T.ampliar + (legendaDe(fig) || img.alt || T.captura).slice(0, 90));
       var glifo = document.createElement('span');
       glifo.className = 'shot__lupa-glifo';
       glifo.setAttribute('aria-hidden', 'true');
@@ -1204,13 +1238,13 @@
     if (itens.length >= 4) {
       var sumario = document.createElement('nav');
       sumario.className = 'sumario panel';
-      sumario.setAttribute('aria-label', 'Índice desta página');
+      sumario.setAttribute('aria-label', T.indice);
 
       var barra2 = document.createElement('div');
       barra2.className = 'panel__bar';
       barra2.innerHTML = '<span class="panel__box" aria-hidden="true"></span>' +
-        '<span class="panel__title">nesta página</span>' +
-        '<span class="panel__conta">' + itens.length + ' blocos</span>';
+        '<span class="panel__title">' + T.nestaPagina + '</span>' +
+        '<span class="panel__conta">' + itens.length + T.blocos + '</span>';
       sumario.appendChild(barra2);
 
       var lista = document.createElement('ol');

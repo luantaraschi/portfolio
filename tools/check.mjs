@@ -12,12 +12,18 @@ import { fileURLToPath } from 'node:url';
 
 const RAIZ = join(dirname(fileURLToPath(import.meta.url)), '..');
 
-const PAGINAS = [
+const PT = [
   'index.html', 'sobre.html', '404.html',
   'projeto-jvb.html', 'projeto-triagem.html', 'projeto-devtools.html',
   'projeto-gesture.html', 'projeto-dub.html', 'projeto-soms.html',
   'projeto-sus.html', 'projeto-pov.html',
 ];
+// A versão em inglês tem os mesmos nomes de arquivo dentro de /en/. Isso não é
+// preguiça: o seletor de idioma é "/en/ mais o nome do arquivo" e o módulo 21
+// (o case que você já abriu) casa por nome de arquivo. Slug traduzido pediria
+// uma tabela de-para em três lugares, e tabela de-para é onde as coisas
+// divergem em silêncio.
+const PAGINAS = [...PT, ...PT.map((p) => `en/${p}`)];
 
 const falhas = [];
 const exigir = (ok, msg) => { if (!ok) falhas.push(msg); };
@@ -68,9 +74,10 @@ for (const [nome, src] of html) {
     ? await readFile(join(RAIZ, 'sitemap.xml'), 'utf8') : '';
   exigir(mapa !== '', 'sitemap.xml: não existe');
   // o 404 fica de fora de propósito: página de erro não se indexa
-  for (const p of PAGINAS.filter((p) => p !== '404.html')) {
-    exigir(mapa.includes(p === 'index.html' ? 'luantaraschi.dev/</loc>' : p),
-      `sitemap.xml: não lista ${p}`);
+  // as duas home não têm nome de arquivo na URL: elas são / e /en/
+  const HOME = { 'index.html': 'luantaraschi.dev/</loc>', 'en/index.html': 'luantaraschi.dev/en/</loc>' };
+  for (const p of PAGINAS.filter((p) => !p.endsWith('404.html'))) {
+    exigir(mapa.includes(HOME[p] ?? p), `sitemap.xml: não lista ${p}`);
   }
 
   // toda URL declara quando mudou, e a data existe de verdade. Sitemap com
@@ -95,7 +102,7 @@ for (const [nome, src] of html) {
 // descarta em silêncio e a página fica com a aparência de quem tem dado
 // estruturado sem ter. Então aqui o JSON é realmente parseado.
 for (const [nome, src] of html) {
-  if (nome === '404.html') continue;
+  if (nome.endsWith('404.html')) continue;
   const bloco = src.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
   if (!bloco) { falhas.push(`${nome}: sem JSON-LD`); continue; }
   try {
@@ -113,17 +120,44 @@ for (const [nome, src] of html) {
     `${nome}: ainda busca fonte no Google (domínio de terceiro no caminho crítico)`);
 }
 
-// --- 8. hreflang preparado para a versão em inglês ---
-// Enquanto /en/ não existe, o par fica comentado no HTML: hreflang apontando
-// para 404 é erro no Search Console. O que se exige aqui é que o comentário
-// exista com o caminho certo, pronto para descomentar em uma linha.
-// Quando /en/ for ao ar, troque este bloco por uma exigência de <link> de
-// verdade - e aí o comentário vira o que ele sempre foi, um lembrete cumprido.
+// --- 8. o par de idiomas fecha nos dois sentidos ---
+// O /en/ está no ar, então o hreflang deixou de ser comentário e virou <link>.
+// A regra que importa é a reciprocidade: hreflang que só um lado declara o
+// Google descarta inteiro, e o sintoma disso é nenhum - as duas páginas
+// continuam indexadas, cada uma por conta própria, competindo entre si.
+//
+// Também se exige aqui que a página em inglês declare `lang="en"` e que a
+// portuguesa declare `lang="pt-BR"`: o par hreflang certo com o lang errado é
+// contradição, e é o `lang` que o leitor de tela obedece.
 for (const [nome, src] of html) {
-  if (nome === '404.html') continue;
-  const alvo = nome === 'index.html' ? 'luantaraschi.dev/en/"' : `en/${nome}"`;
-  exigir(src.includes('hreflang="en"'), `${nome}: sem o par hreflang preparado`);
-  exigir(src.includes(alvo), `${nome}: o hreflang de inglês não aponta para ${alvo}`);
+  const ehEn = nome.startsWith('en/');
+  const base = ehEn ? nome.slice(3) : nome;
+  const raiz = base === 'index.html' ? '' : base;
+  // sem os comentários: o bloco que explica o par fala de hreflang justamente
+  // para explicá-lo, e a primeira versão desta checagem acusava a explicação
+  const semComentario = src.replace(/<!--[\s\S]*?-->/g, '');
+
+  exigir(new RegExp(`<html lang="${ehEn ? 'en' : 'pt-BR'}"`).test(src),
+    `${nome}: <html lang> não corresponde à língua da pasta`);
+
+  if (base === '404.html') {
+    // o seletor de idioma da 404 tem `hreflang` como atributo e isso é certo;
+    // o que ela não pode ter é <link rel="alternate">, que é o que indexa
+    exigir(!semComentario.includes('rel="alternate"'),
+      `${nome}: página de erro não entra em par de idiomas`);
+    continue;
+  }
+  const pt = `href="https://luantaraschi.dev/${raiz}"`;
+  const en = `href="https://luantaraschi.dev/en/${raiz}"`;
+  exigir(semComentario.includes(`hreflang="pt-BR" ${pt}`), `${nome}: hreflang pt-BR não aponta para /${raiz}`);
+  exigir(semComentario.includes(`hreflang="en" ${en}`), `${nome}: hreflang en não aponta para /en/${raiz}`);
+  exigir(semComentario.includes(`hreflang="x-default" ${pt}`), `${nome}: x-default deveria apontar para o português`);
+
+  // o seletor tem que levar para a página equivalente, e não para a home da
+  // outra língua: quem está lendo um case e troca de idioma quer o mesmo case
+  const destino = ehEn ? `/${raiz}` : `/en/${raiz}`;
+  exigir(src.includes(`<a class="lang" href="${destino}"`),
+    `${nome}: o seletor de idioma não aponta para ${destino}`);
 }
 
 // --- 9. a caminhada entre os cases não tem beco sem saída ---
@@ -173,7 +207,7 @@ for (const [nome, src] of html) {
     // link pro repositório quando ele é público; quando é privado, a etiqueta
     // dizendo isso - o que não pode é o trecho aparecer sem procedência
     exigir(/class="codigo__repo"[^>]*href="https:\/\/github\.com\//.test(bloco)
-        || /class="codigo__repo"[^>]*>[^<]*privado/.test(bloco),
+        || /class="codigo__repo"[^>]*>[^<]*(privado|private)/.test(bloco),
       `${nome}: bloco de código sem procedência (link do repo ou aviso de privado)`);
     exigir(/<pre[^>]*\btabindex="0"/.test(bloco),
       `${nome}: bloco de código não alcançável por teclado (falta tabindex="0")`);

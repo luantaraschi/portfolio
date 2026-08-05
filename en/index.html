@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -17,9 +17,9 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
 <!-- curto de propósito: a aba corta em ~30 caracteres, e o que sobrava era o
      nome espremido. Os termos que caíram daqui continuam na description e no
      og:title, que é onde eles servem pra alguma coisa. -->
-<title>Luan Taraschi · Dev Full Stack</title>
-<meta name="description" content="Desenvolvedor full stack em Salvador (BA). SaaS, automação e agentes de IA em produção: mil conversas por mês triadas por IA e dez horas semanais devolvidas à equipe." />
-<link rel="canonical" href="https://luantaraschi.dev/" />
+<title>Luan Taraschi · Full Stack Dev</title>
+<meta name="description" content="Full stack developer in Salvador, Brazil. SaaS, automation and AI agents in production: a thousand conversations a month triaged by AI and ten hours a week handed back to the team." />
+<link rel="canonical" href="https://luantaraschi.dev/en/" />
 <!-- O par de idiomas, com os dois lados no ar. x-default aponta para o
      português: é a versão original, é onde o conteúdo nasce e é a língua
      de quem mais visita. As duas páginas declaram o par inteiro, nas duas
@@ -33,14 +33,14 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
      LinkedIn buscam a imagem do servidor deles, sem contexto da página. -->
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="Luan Taraschi" />
-<meta property="og:locale" content="pt_BR" />
-<meta property="og:url" content="https://luantaraschi.dev/" />
-<meta property="og:title" content="Luan Taraschi · Desenvolvedor Full Stack e Agentes de IA" />
-<meta property="og:description" content="Construo o sistema que a empresa passa a usar todo dia. Cinco clientes, dois sistemas em produção que eu mantenho, mil conversas por mês triadas por IA." />
+<meta property="og:locale" content="en_US" />
+<meta property="og:url" content="https://luantaraschi.dev/en/" />
+<meta property="og:title" content="Luan Taraschi · Full Stack Developer and AI Agents" />
+<meta property="og:description" content="I build the system a company ends up using every day. Five clients, two systems in production that I keep running, a thousand conversations a month triaged by AI." />
 <meta property="og:image" content="https://luantaraschi.dev/assets/og.png" />
 <meta property="og:image:width" content="2400" />
 <meta property="og:image:height" content="1260" />
-<meta property="og:image:alt" content="O nome Luan Taraschi em tipografia bitmap ao lado de uma esfera renderizada com dithering de 1 bit." />
+<meta property="og:image:alt" content="The name Luan Taraschi in bitmap type next to a sphere rendered with 1-bit dithering." />
 <meta name="twitter:card" content="summary_large_image" />
 
 <!-- Arquivos de verdade, e nao mais data: URI. O Googlebot NAO busca data URI
@@ -55,10 +55,10 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
 <!-- Auto-hospedadas. So as duas que desenham a primeira tela entram em
      preload: o corpo de texto e a fonte do titulo. O resto chega quando o
      CSS pedir, e o unicode-range segura o latin-ext ate aparecer um "ç". -->
-<link rel="preload" href="assets/fontes/space-grotesk-300-700-latin.woff2" as="font" type="font/woff2" crossorigin />
-<link rel="preload" href="assets/fontes/pixelify-sans-400-700-latin.woff2" as="font" type="font/woff2" crossorigin />
-<link rel="stylesheet" href="assets/fontes/fontes.css" />
-<link rel="stylesheet" href="css/style.css" />
+<link rel="preload" href="/assets/fontes/space-grotesk-300-700-latin.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="/assets/fontes/pixelify-sans-400-700-latin.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="stylesheet" href="/assets/fontes/fontes.css" />
+<link rel="stylesheet" href="/css/style.css" />
 
 <!-- É o que liga o nome ao GitHub e ao LinkedIn na cabeça do buscador. Os
      dados repetem o que já está visível na página de propósito: dado
@@ -68,10 +68,11 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
 {
   "@context": "https://schema.org",
   "@type": "Person",
+  "inLanguage": "en",
   "name": "Luan Taraschi",
   "url": "https://luantaraschi.dev/",
   "image": "https://luantaraschi.dev/assets/og.png",
-  "jobTitle": "Desenvolvedor Full Stack",
+  "jobTitle": "Full Stack Developer",
   "email": "mailto:luantaraschi@gmail.com",
   "telephone": "+5571984675555",
   "address": {
@@ -88,8 +89,8 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
   "knowsAbout": [
     "React", "Next.js", "Node.js", "TypeScript", "Python",
     "PostgreSQL", "Docker", "CI/CD", "LangGraph", "Model Context Protocol",
-    "RAG", "Agentes de IA", "Automação", "tRPC", "OAuth 2.1",
-    "Segurança de aplicação", "LGPD"
+    "RAG", "AI Agents", "Automation", "tRPC", "OAuth 2.1",
+    "Application security", "LGPD"
   ],
   "sameAs": [
     "https://github.com/luantaraschi",
@@ -101,7 +102,7 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
 </head>
 <body>
 
-<a class="skip" href="#conteudo">Pular para o conteúdo</a>
+<a class="skip" href="#conteudo">Skip to content</a>
 <div class="grid-glow" data-glow aria-hidden="true"></div>
 <div class="wipe" data-wipe aria-hidden="true"></div>
 
@@ -114,24 +115,24 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
       Luan Taraschi
     </a>
 
-    <nav class="nav__links" aria-label="Seções do site">
-      <a class="nav__link" href="#sobre">Sobre</a>
-      <a class="nav__link" href="#projetos">Projetos</a>
+    <nav class="nav__links" aria-label="Site sections">
+      <a class="nav__link" href="#sobre">About</a>
+      <a class="nav__link" href="#projetos">Projects</a>
       <a class="nav__link" href="#games">Games</a>
       <a class="nav__link" href="#skills">Stack</a>
-      <a class="nav__link" href="#experiencia">Experiência</a>
-      <a class="nav__link" href="#contato">Contato</a>
+      <a class="nav__link" href="#experiencia">Experience</a>
+      <a class="nav__link" href="#contato">Contact</a>
     </nav>
     <!-- O par de idiomas. Mostra a lingua para onde ele leva, nao a que
          esta aberta. O caminho e sempre /en/ mais o mesmo nome de arquivo:
          mesma estrutura dos dois lados, entao a troca nunca cai em 404. -->
-    <a class="lang" href="/en/" hreflang="en" lang="en">EN</a>
+    <a class="lang" href="/" hreflang="pt-BR" lang="pt-BR">PT</a>
 
 
 
     <button class="lamp" type="button" role="switch" aria-checked="false"
-            data-theme-toggle title="Luz da página"
-            aria-label="Alternar entre modo escuro e claro">
+            data-theme-toggle title="Page light"
+            aria-label="Switch between dark and light mode">
       <span class="lamp__icone lamp__icone--lua" aria-hidden="true"></span>
       <span class="lamp__track" aria-hidden="true"><span class="lamp__knob"></span></span>
       <span class="lamp__icone lamp__icone--sol" aria-hidden="true"></span>
@@ -142,27 +143,27 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
     </button>
   </div>
   <div class="nav__panel" id="menu-mobile" data-nav-panel hidden>
-    <a href="#sobre">Sobre</a>
-    <a href="#projetos">Projetos</a>
+    <a href="#sobre">About</a>
+    <a href="#projetos">Projects</a>
     <a href="#games">Games</a>
     <a href="#skills">Stack</a>
-    <a href="#experiencia">Experiência</a>
-    <a href="#contato">Contato</a>
+    <a href="#experiencia">Experience</a>
+    <a href="#contato">Contact</a>
   </div>
 </header>
 
 <!-- ===== guia lateral =====
      Índice de verdade, com âncora de verdade: sem JS ele já navega, só não
      sabe apontar onde você está. O JS acrescenta o aria-current e o --p. -->
-<nav class="guia" data-guia aria-label="Progresso da leitura">
+<nav class="guia" data-guia aria-label="Reading progress">
   <ol class="guia__lista">
-    <li><a href="#inicio"><span>Início</span></a></li>
-    <li><a href="#sobre"><span>Sobre</span></a></li>
-    <li><a href="#projetos"><span>Projetos</span></a></li>
+    <li><a href="#inicio"><span>Start</span></a></li>
+    <li><a href="#sobre"><span>About</span></a></li>
+    <li><a href="#projetos"><span>Projects</span></a></li>
     <li><a href="#games"><span>Games</span></a></li>
     <li><a href="#skills"><span>Stack</span></a></li>
-    <li><a href="#experiencia"><span>Experiência</span></a></li>
-    <li><a href="#contato"><span>Contato</span></a></li>
+    <li><a href="#experiencia"><span>Experience</span></a></li>
+    <li><a href="#contato"><span>Contact</span></a></li>
   </ol>
 </nav>
 
@@ -189,7 +190,7 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
 
     <div class="wrap hero__grid">
       <div>
-        <p class="hero__role">Desenvolvedor full stack · automações e agentes de IA</p>
+        <p class="hero__role">Full stack developer · automation and AI agents</p>
         <!-- A frase abre pelo que mudou, e não pelo que eu uso. A versão
              anterior listava o que eu construo (SaaS, automação, agentes) e
              deixava o resultado para a linha do tempo, na oitava tela: as dez
@@ -198,35 +199,34 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
              Os três números aqui são os mesmos que já estavam em outras
              seções - nada novo, só na ordem em que interessa a quem lê. -->
         <p class="lead hero__desc">
-          Construo o sistema que a empresa passa a usar todo dia. No último,
-          um escritório inteiro saiu da planilha e do WhatsApp: mil conversas
-          por mês triadas por IA e dez horas por semana devolvidas à equipe.
+          I build the system a company ends up using every day. On the last
+          one, an entire law firm moved off spreadsheets and WhatsApp: a
+          thousand conversations a month triaged by AI, and ten hours a week
+          handed back to the team.
         </p>
         <div class="hero__cta">
-          <a class="btn btn--primary" href="#projetos">Ver projetos</a>
-          <a class="btn btn--ghost" href="#contato">Falar comigo</a>
+          <a class="btn btn--primary" href="#projetos">See the work</a>
+          <a class="btn btn--ghost" href="#contato">Get in touch</a>
           <!-- `download` já é do HTML: baixa em vez de abrir no leitor do
                browser, e o valor força o nome do arquivo salvo. Sem JS. -->
-          <a class="btn btn--ghost" href="assets/luan-taraschi-cv.pdf"
-             download="luan-taraschi-cv.pdf">Baixar CV ↓</a>
         </div>
 
         <!-- preenche a coluna até a altura do painel e já é conteúdo de verdade -->
         <dl class="ficha">
           <div>
-            <dt>Base</dt>
-            <dd>Salvador, BA (Brasil)</dd>
+            <dt>Based in</dt>
+            <dd>Salvador, Brazil (UTC−3)</dd>
           </div>
           <div>
-            <dt>Disponível</dt>
-            <dd>freela e efetivo</dd>
+            <dt>Available for</dt>
+            <dd>contract and full-time</dd>
           </div>
           <div>
-            <dt>Hoje mexendo com</dt>
-            <dd>LangGraph, MCP e Claude Code</dd>
+            <dt>Currently into</dt>
+            <dd>LangGraph, MCP and Claude Code</dd>
           </div>
           <div>
-            <dt>Escrevendo código desde</dt>
+            <dt>Writing code since</dt>
             <dd>2019</dd>
           </div>
         </dl>
@@ -245,20 +245,20 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
                vocabulário do ilhó ao lado. O do header continua existindo, que é
                onde as pessoas procuram. -->
           <button class="panel__luz" type="button" role="switch" aria-checked="false"
-                  data-theme-toggle title="Luz do retrato"
-                  aria-label="Luz do retrato: alternar entre modo escuro e claro">
+                  data-theme-toggle title="Portrait light"
+                  aria-label="Portrait light: switch between dark and light mode">
             <span class="panel__luz-glifo" aria-hidden="true"></span>
           </button>
         </figcaption>
         <div class="hero__canvas-wrap">
           <canvas data-dither role="img"
-            aria-label="Esfera renderizada com dithering Bayer de 1 bit que reage ao movimento do cursor"></canvas>
+            aria-label="A sphere rendered with 1-bit Bayer dithering that reacts to cursor movement"></canvas>
 
           <button class="hero__me panel" type="button"
-                  data-stage title="cutuca"
-                  aria-label="Cutucar o retrato">
+                  data-stage title="poke"
+                  aria-label="Poke the portrait">
             <span class="film" data-film role="img"
-                  aria-label="Retrato de Luan Taraschi em 1 bit, sem óculos escuros."></span>
+                  aria-label="Portrait of Luan Taraschi in 1 bit, without sunglasses."></span>
           </button>
         </div>
         <!-- A instrução muda com o aparelho porque a coisa muda também. No
@@ -269,8 +269,8 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
              como fazer, logo na primeira tela. -->
         <p class="hero__cap mono-caps">
           <span>1-bit · bayer 8×8</span>
-          <span class="hero__cap--ponteiro">mova o cursor</span>
-          <span class="hero__cap--toque">arraste o dedo</span>
+          <span class="hero__cap--ponteiro">move the cursor</span>
+          <span class="hero__cap--toque">drag your finger</span>
         </p>
       </figure>
     </div>
@@ -294,9 +294,9 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
            que se comporta como botão sem ser um é mentira de interface, e aqui
            eles são botão de verdade. -->
       <div class="case__nums">
-        <a class="case__num" href="#projetos"><b>2</b><span>sistemas em produção que eu mantenho</span></a>
-        <a class="case__num" href="projeto-triagem.html"><b>~1.000</b><span>conversas por mês triadas por IA</span></a>
-        <a class="case__num" href="projeto-jvb.html"><b>10h</b><span>por semana devolvidas à equipe</span></a>
+        <a class="case__num" href="#projetos"><b>2</b><span>systems in production that I keep running</span></a>
+        <a class="case__num" href="projeto-triagem.html"><b>~1.000</b><span>conversations a month triaged by AI</span></a>
+        <a class="case__num" href="projeto-jvb.html"><b>10h</b><span>a week handed back to the team</span></a>
       </div>
     </div>
 
@@ -310,23 +310,23 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
     <div class="wrap">
       <div class="sec__head reveal">
         <span class="kicker">sobre.txt</span>
-        <h2 class="h2">Como eu trabalho</h2>
+        <h2 class="h2">How I work</h2>
       </div>
 
       <div class="about__grid">
         <div class="reveal">
           <p class="body-text">
-            Sou desenvolvedor full stack. Construo SaaS e automação com React,
-            Next.js, Node.js, PostgreSQL e Docker, e trabalho desde o primeiro
-            semestre da graduação, sem interrupção. Curso Engenharia de Software
-            na UCSAL, com conclusão prevista para 2027.2.
+            I am a full stack developer. I build SaaS and automation with React,
+            Next.js, Node.js, PostgreSQL and Docker, and I have been working
+            since my first semester at university, without a break. I am
+            reading Software Engineering at UCSAL, finishing in late 2027.
           </p>
           <p class="body-text">
-            Já são cinco clientes atendidos, entre escritórios de advocacia e
-            agência de viagem, e eu faço o ciclo inteiro: levantamento de requisitos,
-            arquitetura, modelagem de banco, integrações, deploy e suporte em
-            produção. Prefiro entregar o fluxo que resolve o problema do cliente a
-            entregar tecnologia bonita que ninguém usa.
+            Five clients so far, from law firms to a travel agency, and I run the
+            whole cycle: requirements, architecture, data modelling,
+            integrations, deployment and production support. I would rather
+            ship the flow that solves the client's problem than ship beautiful
+            technology nobody uses.
           </p>
           <!-- Isto estava escrito no site, numa oração subordinada no fim de um
                parágrafo da linha do tempo, na oitava tela. Para cliente que vai
@@ -334,28 +334,29 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
                é decisivo; para recrutador, é a diferença entre quem escreve
                código e quem entende para quem o código está sendo escrito. -->
           <p class="body-text">
-            Boa parte do trabalho acontece antes do código. Nos projetos por conta
-            própria eu faço também a ponta comercial: proposta, apresentação e
-            relacionamento. E no JVB eu não entendia nada de Direito, então o
-            sistema saiu de conversa com quem vive a rotina. O que ficou de pé foi
-            o que era útil no dia a dia deles, não o que era bonito no meu editor.
+            A good part of the work happens before any code. On my own projects I
+            also handle the commercial end: proposal, pitch and the client
+            relationship. And at JVB I knew nothing about law, so the system
+            came out of talking to the people who live that routine. What
+            stayed standing was what helped their day, not what looked good in
+            my editor.
           </p>
           <p class="body-text">
-            A parte que mais me interessa agora é orquestração de agentes: fazer a IA
-            assumir a triagem repetitiva e devolver para o humano só o que exige
-            julgamento. É o que estou construindo em produção com LangGraph, MCP,
-            RAG e integrações via API.
+            What interests me most right now is agent orchestration: letting AI
+            take the repetitive triage and hand back to a human only what needs
+            judgement. That is what I am building in production with LangGraph,
+            MCP, RAG and API integrations.
           </p>
           <!-- O site é a demonstração e ninguém abre o CSS de portfólio pra
                descobrir isso. Uma frase, com um convite que dá pra checar em dois
                segundos, vale mais que um selo de "acessível". -->
           <p class="body-text">
-            Duas coisas eu trato como parte do trabalho e não como enfeite: teste e
-            acessibilidade. O sistema maior que eu mantenho passa de 3.500 testes
-            automatizados, com varredura de segredo travando todo push. Este site
-            aqui navega inteiro pelo teclado, respeita quem pediu menos movimento no
-            sistema operacional e passa no contraste. Dá pra conferir sem acreditar
-            em mim: é só apertar Tab.
+            Two things I treat as part of the job and not as decoration: tests and
+            accessibility. The larger system I maintain runs over 3,500
+            automated tests, with secret scanning blocking every push. This
+            site navigates entirely by keyboard, respects anyone who asked for
+            less motion in their operating system, and passes contrast. You do
+            not have to take my word for it: just press Tab.
           </p>
           <!-- O postmortem estava no nono bloco de uma página de case, onde só
                chega quem já decidiu que gosta. É a coisa mais sênior escrita no
@@ -365,13 +366,14 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
                módulo 25 a partir do título: com o gerado, mudar o <h2> quebraria
                este link em silêncio. A checagem 14 confere que ele existe. -->
           <p class="body-text">
-            E já quebrei coisa em produção. Um healthcheck fez o sistema aprender a
-            URL pública errada e gravar link de anexo apontando para um host que não
-            existe. Escrevi o passo a passo, do sintoma até a causa raiz, e o que
-            mudou depois: <a href="projeto-jvb.html#incidente">o incidente inteiro</a>.
+            And I have broken things in production. A healthcheck made the system
+            learn the wrong public URL and write attachment links pointing at a
+            host that does not exist. I wrote up the whole path, from symptom
+            to root cause, and what changed afterwards:
+            <a href="projeto-jvb.html#incidente">the full incident</a>.
           </p>
           <p style="margin-top: clamp(22px, 3vw, 32px);">
-            <a class="btn btn--primary" href="sobre.html">A história inteira ›</a>
+            <a class="btn btn--primary" href="sobre.html">The long version ›</a>
           </p>
         </div>
 
@@ -390,18 +392,18 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
                  o tamanho da coisa. Os dois números já estavam no site, na
                  primeira tela e na linha do tempo, e nenhum deles aparecia
                  aqui, que é onde se lê fato solto. -->
-            <div class="spec-row"><dt>Função</dt><dd>Desenvolvedor full stack</dd></div>
-            <div class="spec-row"><dt>Base</dt><dd>Salvador / BA · UTC−3</dd></div>
-            <div class="spec-row"><dt>Em produção</dt><dd>2 sistemas, mantidos e evoluídos por mim</dd></div>
-            <div class="spec-row"><dt>Escala</dt><dd>~1.000 conversas/mês · 300+ processos</dd></div>
+            <div class="spec-row"><dt>Role</dt><dd>Full stack developer</dd></div>
+            <div class="spec-row"><dt>Based in</dt><dd>Salvador, Brazil · UTC−3</dd></div>
+            <div class="spec-row"><dt>In production</dt><dd>2 systems, maintained and evolved by me</dd></div>
+            <div class="spec-row"><dt>Scale</dt><dd>~1,000 conversations/month · 300+ cases</dd></div>
             <!-- O mesmo fato da formação, na versão que carrega mais: "conclusão
                  2027" sozinho, num painel de seis linhas, ancora leitura de
                  júnior, e o trabalho listado logo ao lado não é de júnior. Ter
                  começado no primeiro semestre e não ter parado desde diz a
                  formação e a experiência na mesma linha. A UCSAL e o 2027.2
                  continuam no parágrafo aqui do lado, na sobre e no CV. -->
-            <div class="spec-row"><dt>Experiência</dt><dd>desde o 1º semestre da graduação, sem parar</dd></div>
-            <div class="spec-row"><dt>Idiomas</dt><dd>Português nativo · Inglês fluente</dd></div>
+            <div class="spec-row"><dt>Experience</dt><dd>since my first semester at university, without a break</dd></div>
+            <div class="spec-row"><dt>Languages</dt><dd>Portuguese native · English fluent</dd></div>
           </dl>
         </div>
       </div>
@@ -412,9 +414,9 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
   <section class="sec" id="projetos" data-od-id="projetos">
     <div class="wrap">
       <div class="sec__head reveal">
-        <span class="kicker">projetos/ · 05 itens</span>
-        <h2 class="h2">O que eu construí</h2>
-        <p class="lead">Sistema com usuário do outro lado, que precisa acordar funcionando toda manhã.</p>
+        <span class="kicker">work/ · 05 items</span>
+        <h2 class="h2">What I have built</h2>
+        <p class="lead">Systems with a real user on the other end, that have to wake up working every morning.</p>
       </div>
 
       <div class="grid-projects">
@@ -424,42 +426,42 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
                o que é, e o leitor de tela não ganha nada ouvindo a tela de novo -->
           <div class="card__thumb">
             <picture>
-              <source srcset="assets/shots/jvb-painel.webp" type="image/webp" />
-              <img class="card__shot" src="assets/shots/jvb-painel.png"
+              <source srcset="/assets/shots/jvb-painel.webp" type="image/webp" />
+              <img class="card__shot" src="/assets/shots/jvb-painel.png"
                    width="1440" height="900" alt="" loading="lazy" />
             </picture>
             <span class="card__veu dither-50 dither-fade" aria-hidden="true"></span>
             <span class="card__idx">01</span>
           </div>
           <div class="card__body">
-            <h3 class="h3">JVB: ERP jurídico sob medida</h3>
-            <p class="mono">Um escritório inteiro rodava em planilha e WhatsApp; hoje roda num sistema só. 124 tabelas, 881 endpoints tipados, 3.500 testes, tudo feito por uma pessoa.</p>
-            <div class="card__tags"><span class="tag">TypeScript</span><span class="tag">tRPC</span><span class="tag">PostgreSQL</span><span class="tag">MCP</span><span class="tag">em produção</span></div>
+            <h3 class="h3">JVB: a bespoke legal ERP</h3>
+            <p class="mono">An entire law firm ran on spreadsheets and WhatsApp; today it runs on one system. 124 tables, 881 typed endpoints, 3,500 tests, all built by one person.</p>
+            <div class="card__tags"><span class="tag">TypeScript</span><span class="tag">tRPC</span><span class="tag">PostgreSQL</span><span class="tag">MCP</span><span class="tag">in production</span></div>
           </div>
         </a>
 
         <a class="card card--destaque reveal" href="projeto-triagem.html">
           <div class="card__thumb">
             <picture>
-              <source srcset="assets/shots/triagem-conversa.webp" type="image/webp" />
-              <img class="card__shot" src="assets/shots/triagem-conversa.png"
+              <source srcset="/assets/shots/triagem-conversa.webp" type="image/webp" />
+              <img class="card__shot" src="/assets/shots/triagem-conversa.png"
                    width="1440" height="900" alt="" loading="lazy" />
             </picture>
             <span class="card__veu dither-25 dither-fade" aria-hidden="true"></span>
             <span class="card__idx">02</span>
           </div>
           <div class="card__body">
-            <h3 class="h3">Triagem por IA no WhatsApp</h3>
-            <p class="mono">Cerca de mil conversas por mês, 100% triadas por agente antes de chegar a alguém. Com guardrail: o bot nunca dá consultoria jurídica.</p>
-            <div class="card__tags"><span class="tag">Agentes de IA</span><span class="tag">RAG</span><span class="tag">WhatsApp</span><span class="tag">guardrails</span><span class="tag">em produção</span></div>
+            <h3 class="h3">AI triage on WhatsApp</h3>
+            <p class="mono">Around a thousand conversations a month, 100% triaged by an agent before they reach a person. With a guardrail: the bot never gives legal advice.</p>
+            <div class="card__tags"><span class="tag">AI agents</span><span class="tag">RAG</span><span class="tag">WhatsApp</span><span class="tag">guardrails</span><span class="tag">in production</span></div>
           </div>
         </a>
 
         <a class="card reveal" href="projeto-devtools.html">
           <div class="card__thumb">
             <picture>
-              <source srcset="assets/shots/devtools-dash.webp" type="image/webp" />
-              <img class="card__shot" src="assets/shots/devtools-dash.png"
+              <source srcset="/assets/shots/devtools-dash.webp" type="image/webp" />
+              <img class="card__shot" src="/assets/shots/devtools-dash.png"
                    width="1440" height="810" alt="" loading="lazy" />
             </picture>
             <span class="card__veu dither-12 dither-fade" aria-hidden="true"></span>
@@ -467,16 +469,16 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
           </div>
           <div class="card__body">
             <h3 class="h3">Dev Tools</h3>
-            <p class="mono">Dezessete utilitários de dev num painel só: OCR, remoção de fundo, QR, conversão de imagem, gerador de CSS. Roda no navegador.</p>
-            <div class="card__tags"><span class="tag">Next.js 15</span><span class="tag">React 19</span><span class="tag tag--ar">no ar ↗</span></div>
+            <p class="mono">Seventeen developer utilities in one panel: OCR, background removal, QR, image conversion, CSS generator. Runs in the browser.</p>
+            <div class="card__tags"><span class="tag">Next.js 15</span><span class="tag">React 19</span><span class="tag tag--ar">live ↗</span></div>
           </div>
         </a>
 
         <a class="card reveal" href="projeto-gesture.html">
           <div class="card__thumb">
             <picture>
-              <source srcset="assets/shots/gesture-landmarks.webp" type="image/webp" />
-              <img class="card__shot" src="assets/shots/gesture-landmarks.png"
+              <source srcset="/assets/shots/gesture-landmarks.webp" type="image/webp" />
+              <img class="card__shot" src="/assets/shots/gesture-landmarks.png"
                    width="688" height="516" alt="" loading="lazy" />
             </picture>
             <span class="card__veu dither-50 dither-fade" aria-hidden="true"></span>
@@ -484,8 +486,8 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
           </div>
           <div class="card__body">
             <h3 class="h3">Gesture AI Desk</h3>
-            <p class="mono">Controlar o computador com a mão pela webcam: 21 pontos por mão a 30fps, sete gestos, tudo offline e sem API nenhuma.</p>
-            <div class="card__tags"><span class="tag">Python</span><span class="tag">MediaPipe</span><span class="tag">WebSocket</span><span class="tag">roda local</span></div>
+            <p class="mono">Controlling the computer with your hand through the webcam: 21 landmarks per hand at 30fps, seven gestures, fully offline and with no API at all.</p>
+            <div class="card__tags"><span class="tag">Python</span><span class="tag">MediaPipe</span><span class="tag">WebSocket</span><span class="tag">runs locally</span></div>
           </div>
         </a>
 
@@ -495,8 +497,8 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
                  faixa de áudio, que um cartão mudo nunca vai carregar: o que a
                  imagem entrega é o "entra em inglês" da legenda. -->
             <picture>
-              <source srcset="assets/shots/dub-frame.webp" type="image/webp" />
-              <img class="card__shot" src="assets/shots/dub-frame.png"
+              <source srcset="/assets/shots/dub-frame.webp" type="image/webp" />
+              <img class="card__shot" src="/assets/shots/dub-frame.png"
                    width="960" height="542" alt="" loading="lazy" />
             </picture>
             <span class="card__veu dither-25 dither-fade" aria-hidden="true"></span>
@@ -504,7 +506,7 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
           </div>
           <div class="card__body">
             <h3 class="h3">Seamless AI Dub</h3>
-            <p class="mono">Vídeo em inglês entra, vídeo dublado em português sai: Whisper transcreve, o modelo traduz, o TTS fala e o corte volta sincronizado.</p>
+            <p class="mono">An English video goes in, a Portuguese dub comes out: Whisper transcribes, the model translates, TTS speaks and the cut lands back in sync.</p>
             <div class="card__tags"><span class="tag">Python</span><span class="tag">Whisper</span><span class="tag">FFmpeg</span><span class="tag">pipeline</span></div>
           </div>
         </a>
@@ -516,9 +518,9 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
         <a class="card card--mais reveal" href="https://github.com/luantaraschi" target="_blank" rel="noopener">
           <div class="card__thumb dither-12 dither-fade"><span class="card__idx">++</span></div>
           <div class="card__body">
-            <h3 class="h3">Tem mais no GitHub</h3>
-            <p class="mono">Protótipo, experimento e coisa que nasceu de curiosidade às duas da manhã. Nem tudo virou produto, mas nada disso foi perdido.</p>
-            <div class="card__tags"><span class="tag">repositórios ↗</span></div>
+            <h3 class="h3">There is more on GitHub</h3>
+            <p class="mono">Prototypes, experiments and things born out of curiosity at two in the morning. Not all of it became a product, but none of it was wasted.</p>
+            <div class="card__tags"><span class="tag">repositories ↗</span></div>
           </div>
         </a>
 
@@ -550,13 +552,13 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
   <section class="sec invert" id="games" data-od-id="games">
     <div class="wrap">
       <div class="sec__head reveal">
-        <span class="kicker">games/ · 03 itens</span>
-        <h2 class="h2">Party games de navegador</h2>
+        <span class="kicker">games/ · 03 items</span>
+        <h2 class="h2">Browser party games</h2>
         <p class="lead">
-          Jogos pra abrir numa call com os amigos, sem instalar nada. Só que o
-          problema técnico mais difícil que eu resolvo está aqui: manter dezenas de
-          pessoas vendo a mesma partida ao mesmo tempo, com quem entra atrasado e
-          quem cai no meio da rodada.
+          Games you open on a call with friends, nothing to install. Except the
+          hardest technical problem I solve lives here: keeping dozens of
+          people looking at the same match at the same time, including whoever
+          joins late and whoever drops mid-round.
         </p>
       </div>
 
@@ -565,8 +567,8 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
         <a class="card reveal" href="projeto-soms.html">
           <div class="card__thumb">
             <picture>
-              <source srcset="assets/shots/soms-home.webp" type="image/webp" />
-              <img class="card__shot" src="assets/shots/soms-home.png"
+              <source srcset="/assets/shots/soms-home.webp" type="image/webp" />
+              <img class="card__shot" src="/assets/shots/soms-home.png"
                    width="1200" height="900" alt="" loading="lazy" />
             </picture>
             <span class="card__veu dither-50 dither-fade" aria-hidden="true"></span>
@@ -574,16 +576,16 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
           </div>
           <div class="card__body">
             <h3 class="h3">SOMS</h3>
-            <p class="mono">Toca um trecho de música e todo mundo corre pra acertar o título antes dos outros. No fim, card de estatística pra jogar no grupo.</p>
-            <div class="card__tags"><span class="tag">Socket.IO</span><span class="tag">Next.js 15</span><span class="tag">Neon</span><span class="tag">tempo real</span></div>
+            <p class="mono">A snippet of a song plays and everyone races to name it first. At the end, a stats card to drop in the group chat.</p>
+            <div class="card__tags"><span class="tag">Socket.IO</span><span class="tag">Next.js 15</span><span class="tag">Neon</span><span class="tag">real time</span></div>
           </div>
         </a>
 
         <a class="card reveal" href="projeto-sus.html">
           <div class="card__thumb">
             <picture>
-              <source srcset="assets/shots/sus-home.webp" type="image/webp" />
-              <img class="card__shot" src="assets/shots/sus-home.png"
+              <source srcset="/assets/shots/sus-home.webp" type="image/webp" />
+              <img class="card__shot" src="/assets/shots/sus-home.png"
                    width="1200" height="900" alt="" loading="lazy" />
             </picture>
             <span class="card__veu dither-25 dither-fade" aria-hidden="true"></span>
@@ -591,8 +593,8 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
           </div>
           <div class="card__body">
             <h3 class="h3">SUS</h3>
-            <p class="mono">O jogo do impostor: todo mundo recebe a mesma palavra, menos um. Conversa, blefe e votação, em três modos diferentes.</p>
-            <div class="card__tags"><span class="tag">Convex</span><span class="tag">Next.js</span><span class="tag">tempo real</span><span class="tag tag--ar">no ar ↗</span></div>
+            <p class="mono">The impostor game: everyone gets the same word, except one. Talking, bluffing and voting, in three different modes.</p>
+            <div class="card__tags"><span class="tag">Convex</span><span class="tag">Next.js</span><span class="tag">real time</span><span class="tag tag--ar">live ↗</span></div>
           </div>
         </a>
 
@@ -606,7 +608,7 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
                  HTML que faria isso é surdo à preferência de movimento reduzido,
                  e o bloco do CSS que trata do resto não alcança ele. -->
 
-            <video class="card__shot" src="assets/shots/pov-agulha.mp4" data-toca
+            <video class="card__shot" src="/assets/shots/pov-agulha.mp4" data-toca
                    width="1100" height="930"
                    muted loop playsinline preload="metadata" aria-hidden="true"></video>
             <span class="card__veu dither-12 dither-fade" aria-hidden="true"></span>
@@ -614,8 +616,8 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
           </div>
           <div class="card__body">
             <h3 class="h3">POV</h3>
-            <p class="mono">Uma carta com dois extremos, um alvo escondido na escala e uma dica curta. O resto da rodada é gente discutindo o que "caro" significa.</p>
-            <div class="card__tags"><span class="tag">Svelte</span><span class="tag">Convex</span><span class="tag tag--ar">no ar ↗</span></div>
+            <p class="mono">A card with two extremes, a hidden target on the scale and one short clue. The rest of the round is people arguing about what "expensive" means.</p>
+            <div class="card__tags"><span class="tag">Svelte</span><span class="tag">Convex</span><span class="tag tag--ar">live ↗</span></div>
           </div>
         </a>
 
@@ -628,7 +630,7 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
     <div class="wrap">
       <div class="sec__head reveal">
         <span class="kicker">stack.cfg</span>
-        <h2 class="h2">Ferramentas de trabalho</h2>
+        <h2 class="h2">Tools of the trade</h2>
       </div>
 
       <div class="grid-skills">
@@ -649,21 +651,21 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
                descrevia a coisa sem nunca dizer o nome dela: o case fala em
                881 endpoints tipados e em renomear um campo estourando no build
                antes de estourar na cara do cliente. É a mesma coisa. -->
-          <p>Node.js · tRPC · Fastify · Python · tipagem de ponta a ponta com Zod · integração de APIs</p>
+          <p>Node.js · tRPC · Fastify · Python · end-to-end type safety with Zod · API integration</p>
         </article>
 
         <article class="skill reveal">
           <div class="skill__bar">
             <span class="skill__swatch dither-12" aria-hidden="true"></span>
-            <h3 class="h3">Dados &amp; infra</h3>
+            <h3 class="h3">Data &amp; infra</h3>
           </div>
-          <p>PostgreSQL · Drizzle · Convex · Docker · CI/CD no GitHub Actions · deploy e manutenção em produção</p>
+          <p>PostgreSQL · Drizzle · Convex · Docker · CI/CD on GitHub Actions · deployment and production upkeep</p>
         </article>
 
         <article class="skill reveal">
           <div class="skill__bar">
             <span class="skill__swatch dither-50" aria-hidden="true"></span>
-            <h3 class="h3">IA &amp; automação</h3>
+            <h3 class="h3">AI &amp; automation</h3>
           </div>
           <p>LangGraph · MCP · RAG · guardrails e evals · Whisper · MediaPipe · OpenRouter · Claude Code</p>
         </article>
@@ -678,9 +680,9 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
         <article class="skill reveal">
           <div class="skill__bar">
             <span class="skill__swatch dither-25" aria-hidden="true"></span>
-            <h3 class="h3">Segurança &amp; conformidade</h3>
+            <h3 class="h3">Security &amp; compliance</h3>
           </div>
-          <p>Controle de permissão · auditoria de ações · 2FA · cofre de credenciais · OAuth 2.1 · varredura de segredo no CI · backup cifrado em AES-256 · LGPD</p>
+          <p>Permission control · action auditing · 2FA · credential vault · OAuth 2.1 · secret scanning in CI · AES-256 encrypted backups · LGPD (Brazilian GDPR)</p>
         </article>
       </div>
 
@@ -746,50 +748,52 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
     <div class="wrap">
       <div class="sec__head reveal">
         <span class="kicker">experiencia.log</span>
-        <h2 class="h2">Linha do tempo</h2>
+        <h2 class="h2">Timeline</h2>
       </div>
 
       <div class="tl-grid">
       <div class="tl">
         <div class="tl__item reveal">
-          <p class="tl__year">2025 · até hoje</p>
-          <h3 class="h3 tl__role">Desenvolvedor Full Stack · Freelancer</h3>
+          <p class="tl__year">2025 · present</p>
+          <h3 class="h3 tl__role">Full Stack Developer · Freelance</h3>
           <p class="body-text">
-            Software sob medida para cinco clientes, entre escritórios de advocacia
-            e agência de viagem, com dois sistemas em produção que eu mantenho e
-            evoluo. No maior deles o CRM processa cerca de mil conversas por mês, com 100% da
-            triagem feita por IA. O agente classifica por perfil e intenção, e só o
-            lead qualificado chega ao humano. Faço o ciclo completo, da descoberta ao
-            suporte, e também a ponta comercial: proposta, apresentação e relacionamento.
+            Bespoke software for five clients, from law firms to a travel
+            agency, with two systems in production that I maintain and keep
+            evolving. In the larger one the CRM handles around a thousand
+            conversations a month, with 100% of the triage done by AI. The
+            agent classifies by profile and intent, and only the qualified lead
+            reaches a person. I run the full cycle, from discovery to support,
+            plus the commercial end: proposal, pitch and the client
+            relationship.
           </p>
         </div>
 
         <div class="tl__item reveal">
-          <p class="tl__year">2024 a 2025 · 6 meses</p>
-          <h3 class="h3 tl__role">Orquestrador de Automações · JVB Advocacia</h3>
+          <p class="tl__year">2024 to 2025 · 6 months</p>
+          <h3 class="h3 tl__role">Automation Orchestrator · JVB Advocacia</h3>
           <p class="body-text">
-            Comecei com automação simples: relatório semanal, resumo de notícia,
-            compilado de e-mail, andamento de processo. Conforme fui aprendendo,
-            fui fazendo coisa cada vez mais complexa, até nascer dali o JVB Kanban,
-            sistema de gestão de casos que tomou conta da rotina do escritório
-            inteiro. Hoje ele toca mais de 300 processos e tirou umas 10 horas de
-            trabalho manual por semana de cima da equipe. Roda em PostgreSQL na
-            Railway, com integração via MCP: a própria IA consulta o andamento dos
-            casos e delega tarefa dentro do sistema.
+            I started with simple automation: a weekly report, a news digest, an
+            email roundup, case updates. As I learned, I built increasingly
+            complex things, until the JVB Kanban came out of it: a case
+            management system that took over the routine of the whole firm.
+            Today it carries more than 300 cases and took some 10 hours of
+            manual work a week off the team. It runs on PostgreSQL on Railway,
+            integrated over MCP: the AI itself checks case progress and assigns
+            work inside the system.
           </p>
         </div>
 
         <div class="tl__item reveal">
-          <p class="tl__year">2023 a 2024 · 1 ano</p>
-          <h3 class="h3 tl__role">Estagiário de Desenvolvimento · TecnoTRENDS</h3>
+          <p class="tl__year">2023 to 2024 · 1 year</p>
+          <h3 class="h3 tl__role">Development Intern · TecnoTRENDS</h3>
           <p class="body-text">
-            Meu primeiro contato com o mercado. Um ano de desenvolvimento e
-            manutenção de aplicações web, front e back, em equipe e com Scrum.
-            O que ficou do Scrum não foi a cerimônia: foi picar o trabalho em
-            pedaço que cabe numa entrega e dizer que travei no dia em que travei,
-            não na semana seguinte. Foi ali que eu saí do modo projeto pessoal e
-            aprendi a trabalhar em código do qual outras pessoas dependiam, que é
-            uma mudança de postura que não dá para aprender sozinho em casa.
+            My first contact with the industry. A year of building and maintaining
+            web applications, front and back, on a team and with Scrum. What
+            stuck from Scrum was not the ceremony: it was slicing work into
+            pieces that fit a delivery, and saying I was stuck on the day I got
+            stuck, not the week after. That is where I left side-project mode
+            and learned to work on code other people depended on, which is a
+            shift in posture you cannot learn alone at home.
           </p>
         </div>
       </div>
@@ -809,8 +813,8 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
     <div class="wrap">
       <div class="sec__head reveal">
         <span class="kicker">contato.form</span>
-        <h2 class="h2">Bora conversar</h2>
-        <p class="lead">Conta o que você quer construir. Respondo em português ou inglês.</p>
+        <h2 class="h2">Let us talk</h2>
+        <p class="lead">Tell me what you want to build. I answer in English or Portuguese.</p>
       </div>
 
       <div class="contact__grid">
@@ -819,7 +823,7 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
             <span class="contact-row__key">E-mail</span>
             <a class="contact-row__val" data-email
                href="mailto:luantaraschi@gmail.com">luantaraschi@gmail.com</a>
-            <button class="btn btn--tiny" type="button" data-copy>copiar</button>
+            <button class="btn btn--tiny" type="button" data-copy>copy</button>
           </div>
           <div class="contact-row">
             <span class="contact-row__key">GitHub</span>
@@ -837,11 +841,11 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
           </div>
           <div class="contact-row">
             <span class="contact-row__key">Base</span>
-            <span class="contact-row__val">Salvador, BA · remoto ou presencial</span>
+            <span class="contact-row__val">Salvador, Brazil · remote or on-site</span>
           </div>
           <div class="contact-row">
-            <span class="contact-row__key">Currículo</span>
-            <a class="contact-row__val" href="assets/luan-taraschi-cv.pdf"
+            <span class="contact-row__key">Résumé</span>
+            <a class="contact-row__val" href="/assets/luan-taraschi-cv.pdf"
                download="luan-taraschi-cv.pdf">luan-taraschi-cv.pdf ↓</a>
           </div>
         </div>
@@ -854,7 +858,7 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
               action="https://formspree.io/f/SUBSTITUIR" method="post">
           <div class="panel__bar">
             <span class="panel__box" aria-hidden="true"></span>
-            <span class="panel__title">nova mensagem</span>
+            <span class="panel__title">new message</span>
             <span class="panel__conta" data-conta-msg aria-hidden="true"></span>
           </div>
           <div class="panel__body">
@@ -864,7 +868,7 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
                  ouve o motivo. Apontar para um parágrafo vazio não anuncia nada,
                  então o par pode ficar ligado o tempo todo. -->
             <div class="field">
-              <label for="f-nome">Nome</label>
+              <label for="f-nome">Name</label>
               <input id="f-nome" name="nome" type="text" autocomplete="name"
                      aria-describedby="erro-nome" required />
               <p class="field__err" id="erro-nome" data-err="nome" role="alert"></p>
@@ -876,7 +880,7 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
               <p class="field__err" id="erro-email" data-err="email" role="alert"></p>
             </div>
             <div class="field">
-              <label for="f-msg">Mensagem</label>
+              <label for="f-msg">Message</label>
               <textarea id="f-msg" name="mensagem" aria-describedby="erro-mensagem" required></textarea>
               <p class="field__err" id="erro-mensagem" data-err="mensagem" role="alert"></p>
             </div>
@@ -885,7 +889,7 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
                  o campo com nome `_gotcha` vem preenchido. `hidden` e não CSS:
                  é um campo que não existe para ninguém, inclusive leitor de tela. -->
             <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" hidden />
-            <button class="btn" type="submit">Enviar mensagem</button>
+            <button class="btn" type="submit">Send message</button>
             <p class="form__status" data-status role="status"></p>
           </div>
         </form>
@@ -903,11 +907,11 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
       <li><a class="social__l social__l--li" href="https://www.linkedin.com/in/luantaraschi/" target="_blank" rel="noopener">LinkedIn</a></li>
       <li><a class="social__l social__l--ig" href="https://www.instagram.com/luantaraschi/" target="_blank" rel="noopener">Instagram</a></li>
     </ul>
-    <span class="mono-caps">feito por mim, com muito amor</span>
+    <span class="mono-caps">made by me, with a lot of love</span>
   </div>
 </footer>
 
-<script src="js/app.js" defer></script>
+<script src="/js/app.js" defer></script>
 <!-- Prerender no hover: o navegador monta a proxima pagina inteira em segundo
      plano quando o cursor encosta no link, e a navegacao vira instantanea. Sem
      biblioteca, sem service worker, sem prefetch na mao.
@@ -923,8 +927,8 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
   "prerender": [{
     "where": {
       "or": [
-        { "href_matches": "/projeto-*.html" },
-        { "href_matches": "/sobre.html" }
+        { "href_matches": "/en/projeto-*.html" },
+        { "href_matches": "/en/sobre.html" }
       ]
     },
     "eagerness": "moderate"

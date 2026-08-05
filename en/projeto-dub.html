@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -15,8 +15,8 @@ if(t==='light')document.documentElement.setAttribute('data-theme','light')
 var m=document.querySelector('meta[name=theme-color]');if(m)m.content=t==='light'?'#eee8d5':'#1a1917'
 try{history.scrollRestoration="manual"}catch(e){}})()</script>
 <title>Seamless AI Dub · Luan Taraschi</title>
-<meta name="description" content="Estudo de caso: pipeline em Python que recebe vídeo em inglês e devolve dublado em português, com sincronia por segmento." />
-<link rel="canonical" href="https://luantaraschi.dev/projeto-dub.html" />
+<meta name="description" content="Case study: a Python pipeline that takes an English video and returns it dubbed into Portuguese, synced segment by segment." />
+<link rel="canonical" href="https://luantaraschi.dev/en/projeto-dub.html" />
 <!-- O par de idiomas, com os dois lados no ar. x-default aponta para o
      português: é a versão original, é onde o conteúdo nasce e é a língua
      de quem mais visita. As duas páginas declaram o par inteiro, nas duas
@@ -26,10 +26,10 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
 <link rel="alternate" hreflang="x-default" href="https://luantaraschi.dev/projeto-dub.html" />
 <meta property="og:type" content="article" />
 <meta property="og:site_name" content="Luan Taraschi" />
-<meta property="og:locale" content="pt_BR" />
-<meta property="og:url" content="https://luantaraschi.dev/projeto-dub.html" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:url" content="https://luantaraschi.dev/en/projeto-dub.html" />
 <meta property="og:title" content="Seamless AI Dub" />
-<meta property="og:description" content="Vídeo em inglês entra, dublado em português sai. Whisper transcreve, o modelo traduz, o TTS fala e o corte volta no tempo." />
+<meta property="og:description" content="An English video goes in, a Portuguese dub comes out. Whisper transcribes, the model translates, TTS speaks and the cut lands back in time." />
 <meta property="og:image" content="https://luantaraschi.dev/assets/og.png" />
 <meta property="og:image:width" content="2400" />
 <meta property="og:image:height" content="1260" />
@@ -47,22 +47,23 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
 <!-- Auto-hospedadas. So as duas que desenham a primeira tela entram em
      preload: o corpo de texto e a fonte do titulo. O resto chega quando o
      CSS pedir, e o unicode-range segura o latin-ext ate aparecer um "ç". -->
-<link rel="preload" href="assets/fontes/space-grotesk-300-700-latin.woff2" as="font" type="font/woff2" crossorigin />
-<link rel="preload" href="assets/fontes/silkscreen-400-latin.woff2" as="font" type="font/woff2" crossorigin />
-<link rel="stylesheet" href="assets/fontes/fontes.css" />
-<link rel="stylesheet" href="css/style.css" />
+<link rel="preload" href="/assets/fontes/space-grotesk-300-700-latin.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="/assets/fontes/silkscreen-400-latin.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="stylesheet" href="/assets/fontes/fontes.css" />
+<link rel="stylesheet" href="/css/style.css" />
 
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "Article",
   "headline": "Seamless AI Dub",
-  "description": "Estudo de caso: pipeline em Python que recebe vídeo em inglês e devolve dublado em português, com sincronia por segmento.",
+  "description": "Case study: a Python pipeline that takes an English video and returns it dubbed into Portuguese, synced segment by segment.",
   "url": "https://luantaraschi.dev/projeto-dub.html",
   "image": "https://luantaraschi.dev/assets/og.png",
   "inLanguage": "pt-BR",
   "author": {
     "@type": "Person",
+  "inLanguage": "en",
     "name": "Luan Taraschi",
     "url": "https://luantaraschi.dev/"
   }
@@ -72,7 +73,7 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
 
 <body>
 
-<a class="skip" href="#conteudo">Pular para o conteúdo</a>
+<a class="skip" href="#conteudo">Skip to content</a>
 <div class="grid-glow" data-glow aria-hidden="true"></div>
 <div class="wipe" data-wipe aria-hidden="true"></div>
 
@@ -82,23 +83,23 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
       <span class="nav__glyph" aria-hidden="true"></span>
       Luan Taraschi
     </a>
-    <nav class="nav__links" aria-label="Seções do site">
-      <a class="nav__link" href="index.html#sobre">Sobre</a>
+    <nav class="nav__links" aria-label="Site sections">
+      <a class="nav__link" href="index.html#sobre">About</a>
       <a class="nav__link" href="index.html#projetos" aria-current="page">Projetos</a>
       <a class="nav__link" href="index.html#games">Games</a>
       <a class="nav__link" href="index.html#skills">Stack</a>
-      <a class="nav__link" href="index.html#experiencia">Experiência</a>
-      <a class="nav__link" href="index.html#contato">Contato</a>
+      <a class="nav__link" href="index.html#experiencia">Experience</a>
+      <a class="nav__link" href="index.html#contato">Contact</a>
     </nav>
     <!-- O par de idiomas. Mostra a lingua para onde ele leva, nao a que
          esta aberta. O caminho e sempre /en/ mais o mesmo nome de arquivo:
          mesma estrutura dos dois lados, entao a troca nunca cai em 404. -->
-    <a class="lang" href="/en/projeto-dub.html" hreflang="en" lang="en">EN</a>
+    <a class="lang" href="/projeto-dub.html" hreflang="pt-BR" lang="pt-BR">PT</a>
 
 
     <button class="lamp" type="button" role="switch" aria-checked="false"
-            data-theme-toggle title="Luz da página"
-            aria-label="Alternar entre modo escuro e claro">
+            data-theme-toggle title="Page light"
+            aria-label="Switch between dark and light mode">
       <span class="lamp__icone lamp__icone--lua" aria-hidden="true"></span>
       <span class="lamp__track" aria-hidden="true"><span class="lamp__knob"></span></span>
       <span class="lamp__icone lamp__icone--sol" aria-hidden="true"></span>
@@ -109,12 +110,12 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
     </button>
   </div>
   <div class="nav__panel" id="menu-mobile" data-nav-panel hidden>
-    <a href="index.html#sobre">Sobre</a>
-    <a href="index.html#projetos">Projetos</a>
+    <a href="index.html#sobre">About</a>
+    <a href="index.html#projetos">Projects</a>
     <a href="index.html#games">Games</a>
     <a href="index.html#skills">Stack</a>
-    <a href="index.html#experiencia">Experiência</a>
-    <a href="index.html#contato">Contato</a>
+    <a href="index.html#experiencia">Experience</a>
+    <a href="index.html#contato">Contact</a>
   </div>
 </header>
 
@@ -122,19 +123,19 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
   <article class="wrap" data-od-id="case">
 
     <header class="case__head">
-      <a class="case__voltar" href="index.html#projetos">Todos os projetos</a>
-      <span class="kicker">projetos/05 · pipeline</span><span
+      <a class="case__voltar" href="index.html#projetos">All projects</a>
+      <span class="kicker">work/05 · pipeline</span><span
         class="kicker kicker--barra" data-progresso aria-hidden="true"></span>
       <h1 class="h1 case__title">Seamless AI Dub</h1>
       <p class="lead case__lead">
-        Vídeo em inglês entra, vídeo dublado em português sai. Sem edição manual em nenhum ponto do caminho.
+        An English video goes in, a Portuguese dub comes out. No manual editing at any point along the way.
       </p>
 
       <dl class="case__meta invert">
-        <div><dt>Ano</dt><dd>2026</dd></div>
-        <div><dt>Papel</dt><dd>Do pipeline ao empacotamento</dd></div>
+        <div><dt>Year</dt><dd>2026</dd></div>
+        <div><dt>Role</dt><dd>From the pipeline to the packaging</dd></div>
         <div><dt>Stack</dt><dd>Python · Whisper · OpenRouter · Edge-TTS / ElevenLabs · MoviePy · FFmpeg</dd></div>
-        <div><dt>Link</dt><dd><a href="https://github.com/luantaraschi/seamless-ai-dub" target="_blank" rel="noopener">código no GitHub ↗</a></dd></div>
+        <div><dt>Link</dt><dd><a href="https://github.com/luantaraschi/seamless-ai-dub" target="_blank" rel="noopener">code on GitHub ↗</a></dd></div>
       </dl>
     </header>
 
@@ -142,39 +143,39 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
       <!-- o único vídeo do site com controles e sem autoplay: aqui a prova é a
            faixa de áudio, e vídeo que toca sozinho toca mudo. Dar play é uma
            decisão de quem está lendo, não uma que a página toma por ele. -->
-      <video src="assets/shots/dub-dublado.mp4" width="960" height="542"
+      <video src="/assets/shots/dub-dublado.mp4" width="960" height="542"
              controls preload="metadata"
              aria-label="Trecho de um vídeo técnico sobre um instrumento de alinhamento, com a interface do aparelho em inglês na tela e narração em português."></video>
       <figcaption>
-        <span>vinte e seis segundos da saída real do pipeline. Dê play com som: a prova aqui é a voz</span>
+        <span>twenty-six seconds of the pipeline’s actual output. Press play with sound on: the proof here is the voice</span>
       </figcaption>
     </figure>
 
     <div class="case__body">
       <section class="case__block">
-        <h2 class="h2">O problema</h2>
+        <h2 class="h2">The problem</h2>
         <p class="body-text">
-          Muito material técnico bom só existe em inglês. Legenda resolve em parte, mas compete com a tela: num vídeo em que você precisa olhar o que a mão da pessoa está fazendo, ler embaixo atrapalha.
+          A lot of good technical material only exists in English. Subtitles solve part of it, but they compete with the screen: in a video where you need to watch what someone’s hands are doing, reading along the bottom gets in the way.
         </p>
         <p class="body-text">
-          Dublar à mão resolve melhor, mas uma hora de vídeo vira um dia de estúdio.
+          Dubbing by hand solves it better, but an hour of video turns into a day in a studio.
         </p>
       </section>
 
       <section class="case__block">
-        <h2 class="h2">A decisão</h2>
+        <h2 class="h2">The decision</h2>
         <p class="body-text">
-          Montar o caminho inteiro como pipeline, sem passo manual no meio: o áudio sai do vídeo, o Whisper transcreve em segmentos com marca de tempo, cada segmento é traduzido, a voz é sintetizada, os cortes voltam posicionados pelo timestamp original e o vídeo final é renderizado. A ausência de passo manual é o que dá valor ao projeto: com um humano no meio do caminho, ele seria só um editor de vídeo pior do que os que já existem.
+          Build the whole path as a pipeline, with no manual step in the middle: the audio comes out of the video, Whisper transcribes it into timestamped segments, each segment is translated, the voice is synthesised, the cuts go back positioned by the original timestamp and the final video is rendered. The absence of a manual step is what gives the project its value: with a human in the middle it would just be a worse video editor than the ones that already exist.
         </p>
       </section>
 
       <section class="case__block case__block--wide">
-        <h2 class="h2">Português é mais longo que inglês</h2>
+        <h2 class="h2">Portuguese is longer than English</h2>
         <p class="body-text">
-          Esse problema só aparece quando você roda o pipeline pela primeira vez. A tradução de uma frase inglesa costuma ficar mais comprida em português, e a voz sintetizada dela não cabe no espaço de tempo do segmento original. Cada segmento vaza alguns décimos pro seguinte, o erro vai se somando, e lá pelo minuto três a dublagem está falando de uma coisa que saiu da tela há muito tempo.
+          This problem only shows up the first time you run the pipeline. The translation of an English sentence usually comes out longer in Portuguese, and the synthesised voice does not fit in the original segment’s slot. Each segment spills a few tenths into the next, the error accumulates, and by minute three the dub is talking about something that left the screen a long time ago.
         </p>
         <p class="body-text">
-          A saída foi acelerar cada corte de voz individualmente, só o quanto ele precisa pra caber, sem deixar o pitch subir a ponto de virar desenho animado. Assim o sincronismo se recupera segmento a segmento, em vez de esticar o vídeo ou cortar pedaço da tradução. O áudio original fica embaixo, bem baixo, o que mantém o ambiente da cena.
+          The way out was to speed up each voice cut individually, only as much as it needs to fit, without letting the pitch climb into cartoon territory. That way sync recovers segment by segment, instead of stretching the video or cutting a chunk out of the translation. The original audio sits underneath, very quiet, which keeps the room tone of the scene.
         </p>
 
         <figure class="codigo panel">
@@ -211,25 +212,25 @@ def acelerar_audio_sem_esquilo(arquivo_mp3, fator):
       </section>
 
       <section class="case__block">
-        <h2 class="h2">Dois provedores de voz, um fallback</h2>
+        <h2 class="h2">Two voice providers, one fallback</h2>
         <p class="body-text">
-          A síntese usa ElevenLabs quando tem chave configurada e cai pro Edge-TTS quando não tem. Os dois provedores existem por razão econômica: um cobra por caractere, o outro é gratuito, e a escolha muda no meio do uso conforme o que você está disposto a gastar. Quem só quer ver o pipeline rodando não precisa botar cartão em lugar nenhum.
+          Synthesis uses ElevenLabs when a key is configured and falls back to Edge-TTS when there is none. The two providers exist for an economic reason: one charges per character, the other is free, and the choice changes mid-use depending on what you are willing to spend. Anyone who just wants to watch the pipeline run does not have to put a card anywhere.
         </p>
       </section>
 
       <section class="case__block">
-        <h2 class="h2">Sobre o vídeo aqui de cima</h2>
+        <h2 class="h2">About the video above</h2>
         <p class="body-text">
-          É conteúdo técnico de outra pessoa, e está aqui como demonstração curta do que o pipeline produz, não como material meu. Botei um trecho porque esse é o único projeto do portfólio em que print nenhum prova coisa alguma: a qualidade está inteira na faixa de áudio, então ou você ouve ou não dá pra avaliar.
+          It is someone else’s technical content, and it is here as a short demonstration of what the pipeline produces, not as material of mine. I put an excerpt in because this is the only project in the portfolio where no screenshot proves anything: the quality lives entirely in the audio track, so either you hear it or you cannot judge it.
         </p>
       </section>
 
     </div>
 
-    <nav class="case__nav" aria-label="Navegação entre projetos">
-      <a class="btn btn--ghost" href="projeto-gesture.html">‹ Anterior: Gesture AI Desk</a>
-      <a class="btn btn--ghost" href="index.html#projetos">Todos os projetos</a>
-      <a class="btn" href="projeto-soms.html">Próximo: SOMS ›</a>
+    <nav class="case__nav" aria-label="Project navigation">
+      <a class="btn btn--ghost" href="projeto-gesture.html">‹ Previous: Gesture AI Desk</a>
+      <a class="btn btn--ghost" href="index.html#projetos">All projects</a>
+      <a class="btn" href="projeto-soms.html">Next: SOMS ›</a>
     </nav>
 
   </article>
@@ -243,11 +244,11 @@ def acelerar_audio_sem_esquilo(arquivo_mp3, fator):
       <li><a class="social__l social__l--li" href="https://www.linkedin.com/in/luantaraschi/" target="_blank" rel="noopener">LinkedIn</a></li>
       <li><a class="social__l social__l--ig" href="https://www.instagram.com/luantaraschi/" target="_blank" rel="noopener">Instagram</a></li>
     </ul>
-    <span class="mono-caps">feito por mim, com muito amor</span>
+    <span class="mono-caps">made by me, with a lot of love</span>
   </div>
 </footer>
 
-<script src="js/app.js" defer></script>
+<script src="/js/app.js" defer></script>
 <!-- Prerender no hover: o navegador monta a proxima pagina inteira em segundo
      plano quando o cursor encosta no link, e a navegacao vira instantanea. Sem
      biblioteca, sem service worker, sem prefetch na mao.
@@ -263,8 +264,8 @@ def acelerar_audio_sem_esquilo(arquivo_mp3, fator):
   "prerender": [{
     "where": {
       "or": [
-        { "href_matches": "/projeto-*.html" },
-        { "href_matches": "/sobre.html" }
+        { "href_matches": "/en/projeto-*.html" },
+        { "href_matches": "/en/sobre.html" }
       ]
     },
     "eagerness": "moderate"

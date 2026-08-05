@@ -805,6 +805,28 @@ span.codigo__repo { border-style: dashed; }
 .lamp:hover  .lamp__track { transform: translate(-2px, -2px); box-shadow: 4px 4px 0 var(--ink); }
 .lamp:active .lamp__track { transform: translate(2px, 2px);   box-shadow: 0 0 0 var(--ink); }
 
+/* 5.3b o seletor de idioma. Um link só, mostrando a língua para a qual ele
+   leva, e não a que está aberta: dois botões com um marcado obrigam a pessoa a
+   descobrir qual dos dois é o estado e qual é a ação.
+   O `lang` no elemento é o que faz o leitor de tela pronunciar "English" com
+   sotaque inglês no meio de uma página em português, em vez de soletrar. */
+.lang {
+  flex: none;
+  padding: 5px 9px;
+  border: 2px solid var(--rule-soft);
+  color: var(--ink-2);
+  text-decoration: none;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.4;
+  letter-spacing: 0.12em;
+  transition: color 110ms steps(2, end), border-color 110ms steps(2, end),
+              transform 110ms steps(2, end);
+}
+.lang:hover,
+.lang:focus-visible { color: var(--ink); border-color: var(--ink); transform: translate(-1px, -1px); }
+.lang:active { transform: translate(1px, 1px); }
+
 .nav__toggle {
   display: inline-flex;
   align-items: center;

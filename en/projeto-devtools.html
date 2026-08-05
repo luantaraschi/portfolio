@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -15,8 +15,8 @@ if(t==='light')document.documentElement.setAttribute('data-theme','light')
 var m=document.querySelector('meta[name=theme-color]');if(m)m.content=t==='light'?'#eee8d5':'#1a1917'
 try{history.scrollRestoration="manual"}catch(e){}})()</script>
 <title>Dev Tools · Luan Taraschi</title>
-<meta name="description" content="Estudo de caso: 17 utilitários de desenvolvedor num painel só, servidos por uma rota dinâmica única em Next.js 15. No ar." />
-<link rel="canonical" href="https://luantaraschi.dev/projeto-devtools.html" />
+<meta name="description" content="Case study: 17 developer utilities in a single panel, served by one dynamic route in Next.js 15. Live." />
+<link rel="canonical" href="https://luantaraschi.dev/en/projeto-devtools.html" />
 <!-- O par de idiomas, com os dois lados no ar. x-default aponta para o
      português: é a versão original, é onde o conteúdo nasce e é a língua
      de quem mais visita. As duas páginas declaram o par inteiro, nas duas
@@ -26,10 +26,10 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
 <link rel="alternate" hreflang="x-default" href="https://luantaraschi.dev/projeto-devtools.html" />
 <meta property="og:type" content="article" />
 <meta property="og:site_name" content="Luan Taraschi" />
-<meta property="og:locale" content="pt_BR" />
-<meta property="og:url" content="https://luantaraschi.dev/projeto-devtools.html" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:url" content="https://luantaraschi.dev/en/projeto-devtools.html" />
 <meta property="og:title" content="Dev Tools" />
-<meta property="og:description" content="Dezessete utilitários num painel só: OCR, remoção de fundo, compressão, QR, cor. Uma rota dinâmica serve todos." />
+<meta property="og:description" content="Seventeen utilities in one panel: OCR, background removal, compression, QR, colour. One dynamic route serves them all." />
 <meta property="og:image" content="https://luantaraschi.dev/assets/og.png" />
 <meta property="og:image:width" content="2400" />
 <meta property="og:image:height" content="1260" />
@@ -47,22 +47,23 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
 <!-- Auto-hospedadas. So as duas que desenham a primeira tela entram em
      preload: o corpo de texto e a fonte do titulo. O resto chega quando o
      CSS pedir, e o unicode-range segura o latin-ext ate aparecer um "ç". -->
-<link rel="preload" href="assets/fontes/space-grotesk-300-700-latin.woff2" as="font" type="font/woff2" crossorigin />
-<link rel="preload" href="assets/fontes/silkscreen-400-latin.woff2" as="font" type="font/woff2" crossorigin />
-<link rel="stylesheet" href="assets/fontes/fontes.css" />
-<link rel="stylesheet" href="css/style.css" />
+<link rel="preload" href="/assets/fontes/space-grotesk-300-700-latin.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="/assets/fontes/silkscreen-400-latin.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="stylesheet" href="/assets/fontes/fontes.css" />
+<link rel="stylesheet" href="/css/style.css" />
 
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "Article",
   "headline": "Dev Tools",
-  "description": "Estudo de caso: 17 utilitários de desenvolvedor num painel só, servidos por uma rota dinâmica única em Next.js 15. No ar.",
+  "description": "Case study: 17 developer utilities in a single panel, served by one dynamic route in Next.js 15. Live.",
   "url": "https://luantaraschi.dev/projeto-devtools.html",
   "image": "https://luantaraschi.dev/assets/og.png",
   "inLanguage": "pt-BR",
   "author": {
     "@type": "Person",
+  "inLanguage": "en",
     "name": "Luan Taraschi",
     "url": "https://luantaraschi.dev/"
   }
@@ -71,7 +72,7 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
 </head>
 <body>
 
-<a class="skip" href="#conteudo">Pular para o conteúdo</a>
+<a class="skip" href="#conteudo">Skip to content</a>
 <div class="grid-glow" data-glow aria-hidden="true"></div>
 <div class="wipe" data-wipe aria-hidden="true"></div>
 
@@ -81,23 +82,23 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
       <span class="nav__glyph" aria-hidden="true"></span>
       Luan Taraschi
     </a>
-    <nav class="nav__links" aria-label="Seções do site">
-      <a class="nav__link" href="index.html#sobre">Sobre</a>
+    <nav class="nav__links" aria-label="Site sections">
+      <a class="nav__link" href="index.html#sobre">About</a>
       <a class="nav__link" href="index.html#projetos" aria-current="page">Projetos</a>
       <a class="nav__link" href="index.html#games">Games</a>
       <a class="nav__link" href="index.html#skills">Stack</a>
-      <a class="nav__link" href="index.html#experiencia">Experiência</a>
-      <a class="nav__link" href="index.html#contato">Contato</a>
+      <a class="nav__link" href="index.html#experiencia">Experience</a>
+      <a class="nav__link" href="index.html#contato">Contact</a>
     </nav>
     <!-- O par de idiomas. Mostra a lingua para onde ele leva, nao a que
          esta aberta. O caminho e sempre /en/ mais o mesmo nome de arquivo:
          mesma estrutura dos dois lados, entao a troca nunca cai em 404. -->
-    <a class="lang" href="/en/projeto-devtools.html" hreflang="en" lang="en">EN</a>
+    <a class="lang" href="/projeto-devtools.html" hreflang="pt-BR" lang="pt-BR">PT</a>
 
 
     <button class="lamp" type="button" role="switch" aria-checked="false"
-            data-theme-toggle title="Luz da página"
-            aria-label="Alternar entre modo escuro e claro">
+            data-theme-toggle title="Page light"
+            aria-label="Switch between dark and light mode">
       <span class="lamp__icone lamp__icone--lua" aria-hidden="true"></span>
       <span class="lamp__track" aria-hidden="true"><span class="lamp__knob"></span></span>
       <span class="lamp__icone lamp__icone--sol" aria-hidden="true"></span>
@@ -108,12 +109,12 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
     </button>
   </div>
   <div class="nav__panel" id="menu-mobile" data-nav-panel hidden>
-    <a href="index.html#sobre">Sobre</a>
-    <a href="index.html#projetos">Projetos</a>
+    <a href="index.html#sobre">About</a>
+    <a href="index.html#projetos">Projects</a>
     <a href="index.html#games">Games</a>
     <a href="index.html#skills">Stack</a>
-    <a href="index.html#experiencia">Experiência</a>
-    <a href="index.html#contato">Contato</a>
+    <a href="index.html#experiencia">Experience</a>
+    <a href="index.html#contato">Contact</a>
   </div>
 </header>
 
@@ -121,114 +122,96 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
   <article class="wrap" data-od-id="case">
 
     <header class="case__head">
-      <a class="case__voltar" href="index.html#projetos">Todos os projetos</a>
-      <span class="kicker">projetos/03 · no ar</span><span
+      <a class="case__voltar" href="index.html#projetos">All projects</a>
+      <span class="kicker">work/03 · live</span><span
         class="kicker kicker--barra" data-progresso aria-hidden="true"></span>
       <h1 class="h1 case__title">Dev Tools</h1>
       <p class="lead case__lead">
-        Dezessete utilitários que eu cansei de procurar no Google toda semana,
-        reunidos num painel só. Não pede cadastro e não tem limite de uso.
+        Seventeen utilities I got tired of googling every week, gathered into one panel. No sign-up and no usage limit.
       </p>
 
       <dl class="case__meta invert">
-        <div><dt>Ano</dt><dd>2026 · no ar</dd></div>
-        <div><dt>Papel</dt><dd>Do primeiro commit ao deploy</dd></div>
+        <div><dt>Year</dt><dd>2026 · live</dd></div>
+        <div><dt>Role</dt><dd>From the first commit to deployment</dd></div>
         <div><dt>Stack</dt><dd>Next.js 15 (App Router) · React 19 · TypeScript · Tailwind · shadcn/ui</dd></div>
-        <div><dt>Link</dt><dd><a href="https://dev-tools-xi-beige.vercel.app/" target="_blank" rel="noopener">abrir o painel ↗</a></dd></div>
+        <div><dt>Link</dt><dd><a href="https://dev-tools-xi-beige.vercel.app/" target="_blank" rel="noopener">open the panel ↗</a></dd></div>
       </dl>
     </header>
 
     <figure class="shot dither-25">
       <picture>
-        <source srcset="assets/shots/devtools-dash.webp" type="image/webp" />
-        <img src="assets/shots/devtools-dash.png" width="1440" height="810" loading="lazy"
+        <source srcset="/assets/shots/devtools-dash.webp" type="image/webp" />
+        <img src="/assets/shots/devtools-dash.png" width="1440" height="810" loading="lazy"
              alt="Painel do Dev Tools: barra lateral com as ferramentas agrupadas em Formatters and Text, Images and Colors e Generators and Utilities, e no corpo da página os cartões de cada ferramenta com um campo de busca acima." />
       </picture>
       <figcaption>
-        <span>o painel: barra lateral por categoria, busca no topo, e cada ferramenta a um clique</span>
-        <span class="shot__cor">passe o cursor para ver em cor</span>
+        <span>the panel: a sidebar by category, search at the top, and every tool one click away</span>
+        <span class="shot__cor">hover to see it in colour</span>
       </figcaption>
     </figure>
 
     <div class="case__body">
       <section class="case__block">
-        <h2 class="h2">O problema</h2>
+        <h2 class="h2">The problem</h2>
         <p class="body-text">
-          Converter um PNG pra WebP, tirar o fundo de uma imagem, formatar um JSON,
-          gerar um QR, ler texto de um print. Coisa de dois minutos que sempre acaba
-          no mesmo lugar: um site coberto de anúncio, com marca d'água na saída e um
-          botão de assinar plano no meio do caminho. Nenhuma dessas tarefas é
-          difícil, e mesmo assim todas cobram pedágio.
+          Converting a PNG to WebP, removing an image background, formatting JSON,
+          generating a QR code, reading text out of a screenshot. Two-minute jobs
+          that always end up in the same place: a site plastered with ads, a
+          watermark on the output and a subscribe button halfway through. None of
+          these tasks is hard, and every one of them still charges a toll.
         </p>
       </section>
 
       <section class="case__block">
-        <h2 class="h2">A decisão</h2>
+        <h2 class="h2">The decision</h2>
         <p class="body-text">
-          Fazer as dezessete de uma vez, num painel único, e deixar no ar de graça.
-          A decisão que sustenta o resto foi de escopo: cada ferramenta faz uma coisa
-          só e não pede nada em troca. Não existe conta pra criar nem plano pra
-          assinar.
+          Build all seventeen at once, in a single panel, and leave it up for free. The decision that holds the rest together was one of scope: each tool does one thing and asks for nothing in return. There is no account to create and no plan to subscribe to.
         </p>
       </section>
 
       <section class="case__block case__block--wide">
-        <h2 class="h2">Dezessete ferramentas, uma rota</h2>
+        <h2 class="h2">Seventeen tools, one route</h2>
         <p class="body-text">
-          O caminho óbvio seria dezessete pastas, dezessete páginas e dezessete cópias
-          da mesma casca. Funciona até a hora de mexer no layout: aí é a mesma correção
-          dezessete vezes, e a décima sétima é a que fica esquecida.
+          The obvious path would be seventeen folders, seventeen pages and seventeen copies of the same shell. That works right up until you touch the layout: then it is the same fix seventeen times, and the seventeenth is the one that gets forgotten.
         </p>
         <p class="body-text">
-          Então o painel inteiro é uma rota dinâmica só, a /[tool], servida
-          por um registro central. Cada ferramenta se declara ali com nome, categoria,
-          descrição e componente; a barra lateral, a busca e os cartões da home leem
-          desse mesmo registro. Adicionar a décima oitava é escrever a ferramenta e
-          registrar uma linha. A navegação se atualiza sozinha, e a busca nunca
-          discorda do menu porque os dois leem a mesma lista.
+          So the whole panel is a single dynamic route, /[tool], served from a central registry. Every tool declares itself there with a name, category, description and component; the sidebar, the search and the cards on the home page all read from that same registry. Adding the eighteenth means writing the tool and registering one line. Navigation updates itself, and search never disagrees with the menu because both read the same list.
         </p>
         <div class="case__nums">
-          <div class="case__num"><b>17</b><span>ferramentas no ar</span></div>
-          <div class="case__num"><b>1</b><span>rota serve todas</span></div>
-          <div class="case__num"><b>0</b><span>cadastro, anúncio ou limite</span></div>
+          <div class="case__num"><b>17</b><span>tools live</span></div>
+          <div class="case__num"><b>1</b><span>route serves them all</span></div>
+          <div class="case__num"><b>0</b><span>sign-ups, ads or limits</span></div>
         </div>
       </section>
 
       <section class="case__block">
-        <h2 class="h2">O arquivo não sai da sua máquina</h2>
+        <h2 class="h2">The file never leaves your machine</h2>
         <p class="body-text">
-          O processamento acontece na aba, não num servidor meu. Isso resolve junto o
-          custo de infraestrutura, a espera do upload e a questão da privacidade,
-          porque um arquivo que nunca sobe não precisa de política de retenção.
+          Processing happens in the tab, not on a server of mine. That solves infrastructure cost, upload waiting time and the privacy question all at once, because a file that never goes up needs no retention policy.
         </p>
         <figure class="shot dither-12">
-          <video src="assets/shots/devtools-uso.mp4" width="1440" height="810"
+          <video src="/assets/shots/devtools-uso.mp4" width="1440" height="810"
                  data-toca muted loop playsinline preload="metadata"
                  aria-label="Gravação do compressor de imagem em uso: uma imagem de 146 KB é arrastada para a área de upload e sai com 58 KB, uma redução de 60,5 por cento."></video>
           <figcaption>
-            <span>o compressor rodando: 146 KB entram, 58 KB saem, 60,5% a menos e nada trafegou</span>
-            <span class="shot__cor">passe o cursor para ver em cor</span>
+            <span>the compressor at work: 146 KB in, 58 KB out, 60.5% smaller and nothing left the machine</span>
+            <span class="shot__cor">hover to see it in colour</span>
           </figcaption>
         </figure>
       </section>
 
       <section class="case__block">
-        <h2 class="h2">Copiar e colar até o padrão aparecer</h2>
+        <h2 class="h2">Copy and paste until the pattern shows up</h2>
         <p class="body-text">
-          Aqui eu aprendi a diferença entre repetir e generalizar cedo demais. As três
-          primeiras ferramentas eu escrevi copiando e colando de propósito, sem abstrair
-          nada. Só quando a terceira ficou pronta o formato comum apareceu sozinho, e aí
-          o registro central virou consequência de uma coisa que eu já tinha visto três
-          vezes acontecer. Se eu tivesse abstraído na primeira, teria acertado a casca
-          por sorte.
+          This is where I learned the difference between repeating yourself and generalising too early. I wrote the first three tools by copying and pasting on purpose, abstracting nothing. Only when the third was done did the common shape show up on its own, and the central registry then became the consequence of something I had already watched happen three times. Had I abstracted on the first one, getting the shell right would have been luck.
         </p>
       </section>
     </div>
 
-    <nav class="case__nav" aria-label="Navegação entre projetos">
-      <a class="btn btn--ghost" href="projeto-triagem.html">‹ Anterior: Triagem por IA</a>
-      <a class="btn btn--ghost" href="index.html#projetos">Todos os projetos</a>
-      <a class="btn" href="projeto-gesture.html">Próximo: Gesture AI Desk ›</a>
+    <nav class="case__nav" aria-label="Project navigation">
+      <a class="btn btn--ghost" href="projeto-triagem.html">‹ Previous: AI triage</a>
+      <a class="btn btn--ghost" href="index.html#projetos">All projects</a>
+      <a class="btn" href="projeto-gesture.html">Next: Gesture AI Desk ›</a>
     </nav>
 
   </article>
@@ -242,11 +225,11 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
       <li><a class="social__l social__l--li" href="https://www.linkedin.com/in/luantaraschi/" target="_blank" rel="noopener">LinkedIn</a></li>
       <li><a class="social__l social__l--ig" href="https://www.instagram.com/luantaraschi/" target="_blank" rel="noopener">Instagram</a></li>
     </ul>
-    <span class="mono-caps">feito por mim, com muito amor</span>
+    <span class="mono-caps">made by me, with a lot of love</span>
   </div>
 </footer>
 
-<script src="js/app.js" defer></script>
+<script src="/js/app.js" defer></script>
 <!-- Prerender no hover: o navegador monta a proxima pagina inteira em segundo
      plano quando o cursor encosta no link, e a navegacao vira instantanea. Sem
      biblioteca, sem service worker, sem prefetch na mao.
@@ -262,8 +245,8 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
   "prerender": [{
     "where": {
       "or": [
-        { "href_matches": "/projeto-*.html" },
-        { "href_matches": "/sobre.html" }
+        { "href_matches": "/en/projeto-*.html" },
+        { "href_matches": "/en/sobre.html" }
       ]
     },
     "eagerness": "moderate"

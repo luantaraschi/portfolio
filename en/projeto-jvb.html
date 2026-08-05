@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- A barra do browser no celular veste a cor da página. Uma meta só, sem
+     media query: quem trocou o tema no interruptor esperava que a barra
+     acompanhasse a escolha dele, e não o que o sistema operacional acha. Os
+     dois valores são o --paper de cada tema no style.css, e ela fica acima do
+     script de propósito: o script logo abaixo precisa alcançá-la. -->
+<meta name="theme-color" content="#1a1917" />
+<script>(function(){var t=null;try{t=localStorage.getItem('lt-tema')}catch(e){}
+if(!t)t=window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';
+if(t==='light')document.documentElement.setAttribute('data-theme','light')
+var m=document.querySelector('meta[name=theme-color]');if(m)m.content=t==='light'?'#eee8d5':'#1a1917'
+try{history.scrollRestoration="manual"}catch(e){}})()</script>
+<title>JVB · bespoke legal ERP · Luan Taraschi</title>
+<meta name="description" content="Case study: a legal ERP in production built by a single developer. 124 tables, 881 typed endpoints, 3,500 tests and an MCP server with 67 tools. TypeScript, React 19, tRPC, PostgreSQL." />
+<link rel="canonical" href="https://luantaraschi.dev/en/projeto-jvb.html" />
+<!-- O par de idiomas, com os dois lados no ar. x-default aponta para o
+     português: é a versão original, é onde o conteúdo nasce e é a língua
+     de quem mais visita. As duas páginas declaram o par inteiro, nas duas
+     direções - hreflang que só um lado declara o Google descarta. -->
+<link rel="alternate" hreflang="pt-BR" href="https://luantaraschi.dev/projeto-jvb.html" />
+<link rel="alternate" hreflang="en" href="https://luantaraschi.dev/en/projeto-jvb.html" />
+<link rel="alternate" hreflang="x-default" href="https://luantaraschi.dev/projeto-jvb.html" />
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="Luan Taraschi" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:url" content="https://luantaraschi.dev/en/projeto-jvb.html" />
+<meta property="og:title" content="JVB · a bespoke legal ERP" />
+<meta property="og:description" content="An entire law firm ran on spreadsheets and WhatsApp; today it runs on one system. 124 tables, 881 typed endpoints, 3,500 tests, all built by one person." />
+<meta property="og:image" content="https://luantaraschi.dev/assets/og.png" />
+<meta property="og:image:width" content="2400" />
+<meta property="og:image:height" content="1260" />
+<meta property="og:image:alt" content="O nome Luan Taraschi em tipografia bitmap ao lado de uma esfera renderizada com dithering de 1 bit." />
+<meta name="twitter:card" content="summary_large_image" />
+<!-- Arquivos de verdade, e nao mais data: URI. O Googlebot NAO busca data URI
+     para favicon: ele quer endereco rastreavel, quadrado, em multiplo de 48px.
+     Enquanto o desenho morava embutido aqui o resultado de busca mostrava o
+     globo generico - o icone existia e o Google nunca o via.
+     Gerados por tools/gerar-favicon.py, a partir do mesmo monograma. -->
+<link rel="icon" href="/favicon.ico" sizes="32x32" />
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+<link rel="icon" href="/assets/favicon-96.png" type="image/png" sizes="96x96" />
+<link rel="apple-touch-icon" href="/assets/favicon-180.png" />
+<!-- Auto-hospedadas. So as duas que desenham a primeira tela entram em
+     preload: o corpo de texto e a fonte do titulo. O resto chega quando o
+     CSS pedir, e o unicode-range segura o latin-ext ate aparecer um "ç". -->
+<link rel="preload" href="/assets/fontes/space-grotesk-300-700-latin.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="/assets/fontes/silkscreen-400-latin.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="stylesheet" href="/assets/fontes/fontes.css" />
+<link rel="stylesheet" href="/css/style.css" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "JVB · a bespoke legal ERP",
+  "description": "Case study: a legal ERP in production built by a single developer. 124 tables, 881 typed endpoints, 3,500 tests and an MCP server with 67 tools. TypeScript, React 19, tRPC, PostgreSQL.",
+  "url": "https://luantaraschi.dev/projeto-jvb.html",
+  "image": "https://luantaraschi.dev/assets/og.png",
+  "inLanguage": "pt-BR",
+  "author": {
+    "@type": "Person",
+  "inLanguage": "en",
+    "name": "Luan Taraschi",
+    "url": "https://luantaraschi.dev/"
+  }
+}
+</script>
+</head>
+<body>
+
+<a class="skip" href="#conteudo">Skip to content</a>
+<div class="grid-glow" data-glow aria-hidden="true"></div>
+<div class="wipe" data-wipe aria-hidden="true"></div>
+
+<header class="nav" data-od-id="nav">
+  <div class="wrap nav__inner">
+    <a class="nav__mark" href="index.html">
+      <span class="nav__glyph" aria-hidden="true"></span>
+      Luan Taraschi
+    </a>
+    <nav class="nav__links" aria-label="Site sections">
+      <a class="nav__link" href="index.html#sobre">About</a>
+      <a class="nav__link" href="index.html#projetos" aria-current="page">Projetos</a>
+      <a class="nav__link" href="index.html#games">Games</a>
+      <a class="nav__link" href="index.html#skills">Stack</a>
+      <a class="nav__link" href="index.html#experiencia">Experience</a>
+      <a class="nav__link" href="index.html#contato">Contact</a>
+    </nav>
+    <!-- O par de idiomas. Mostra a lingua para onde ele leva, nao a que
+         esta aberta. O caminho e sempre /en/ mais o mesmo nome de arquivo:
+         mesma estrutura dos dois lados, entao a troca nunca cai em 404. -->
+    <a class="lang" href="/projeto-jvb.html" hreflang="pt-BR" lang="pt-BR">PT</a>
+
+
+    <button class="lamp" type="button" role="switch" aria-checked="false"
+            data-theme-toggle title="Page light"
+            aria-label="Switch between dark and light mode">
+      <span class="lamp__icone lamp__icone--lua" aria-hidden="true"></span>
+      <span class="lamp__track" aria-hidden="true"><span class="lamp__knob"></span></span>
+      <span class="lamp__icone lamp__icone--sol" aria-hidden="true"></span>
+    </button>
+
+    <button class="nav__toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="menu-mobile">
+      Menu
+    </button>
+  </div>
+  <div class="nav__panel" id="menu-mobile" data-nav-panel hidden>
+    <a href="index.html#sobre">About</a>
+    <a href="index.html#projetos">Projects</a>
+    <a href="index.html#games">Games</a>
+    <a href="index.html#skills">Stack</a>
+    <a href="index.html#experiencia">Experience</a>
+    <a href="index.html#contato">Contact</a>
+  </div>
+</header>
+
+<main id="conteudo">
+  <article class="wrap" data-od-id="case">
+
+    <header class="case__head">
+      <a class="case__voltar" href="index.html#projetos">All projects</a>
+      <span class="kicker">work/01 · production</span><span
+        class="kicker kicker--barra" data-progresso aria-hidden="true"></span>
+      <h1 class="h1 case__title">JVB: a bespoke legal ERP</h1>
+      <p class="lead case__lead">
+        From WhatsApp and spreadsheets to a single system: intake, cases, deadlines, filings, billing and AI in one product, in production and used daily.
+      </p>
+
+      <dl class="case__meta invert">
+        <div><dt>Year</dt><dd>2026 · in production</dd></div>
+        <div><dt>Role</dt><dd>Product, architecture, back end, front end and infra</dd></div>
+        <div><dt>Stack</dt><dd>TypeScript · React 19 · tRPC · Drizzle · PostgreSQL · MCP · Railway</dd></div>
+        <div><dt>Link</dt><dd>private client system</dd></div>
+      </dl>
+    </header>
+
+    <figure class="shot dither-50">
+      <picture>
+        <source srcset="/assets/shots/jvb-painel.webp" type="image/webp" />
+        <img src="/assets/shots/jvb-painel.png" width="1440" height="900" loading="lazy"
+             alt="Central de comando do ERP: um prazo vencido e um vencendo hoje em destaque no topo, e abaixo os catorze módulos do sistema em cartões, de kanban de tarefas a limite de OAB." />
+      </picture>
+      <figcaption>
+        <span>command centre · the whole system on one screen</span>
+        <span class="shot__cor">hover to see it in colour</span>
+      </figcaption>
+    </figure>
+
+    <div class="case__body">
+      <section class="case__block">
+        <h2 class="h2">The problem</h2>
+        <p class="body-text">
+          A small law firm ran the way almost every small firm runs: a spreadsheet for cases, WhatsApp for client contact, email for deadlines and a generic legal SaaS for the rest. The same information was typed into four places, deadlines showed up late, leads got lost inside personal chat threads, and nobody could answer "where is so-and-so’s case?" quickly.
+        </p>
+        <p class="body-text">
+          What was missing was a tool that knew the firm’s whole flow. A lead arrives on WhatsApp, becomes a client, becomes a case, produces deadlines, hearings, filings and fees. Each piece of software covered one stretch of that path and none covered the seams between them, which is exactly where information went missing.
+        </p>
+      </section>
+
+      <section class="case__block">
+        <h2 class="h2">The decision</h2>
+        <p class="body-text">
+          Build one system, with one database and one login, that follows the whole funnel instead of becoming another island. tRPC with Zod so the types are shared between client and server, which means renaming a field breaks the build before it breaks production. Drizzle for real SQL when the domain calls for it. Railway with a single replica, because speculative scale in a five-person firm only generates cost.
+        </p>
+        <p class="body-text">
+          And a multi-provider AI layer of my own, so switching models is a line of configuration rather than an architectural decision.
+        </p>
+      </section>
+
+      <section class="case__block case__block--wide">
+        <h2 class="h2">The scale</h2>
+        <p class="body-text">
+          The system covers intake, cases, deadlines and hearings, filings, intelligence on official court gazettes, billing and permission management, with action auditing, 2FA and a credential vault. All built, maintained and supported by one person.
+        </p>
+        <div class="case__nums">
+          <div class="case__num"><b>124</b><span>tables in Postgres</span></div>
+          <div class="case__num"><b>881</b><span>tRPC procedures</span></div>
+          <div class="case__num"><b>3.500+</b><span>automated tests</span></div>
+          <div class="case__num"><b>1</b><span>developer</span></div>
+        </div>
+      </section>
+
+      <!-- largo por causa do código: numa coluna de 542px cada linha do motor
+           pedia rolagem horizontal, e é o trecho que mais importa da página. Na
+           largura inteira ele cabe, e a captura logo abaixo mostra esse mesmo
+           cálculo tendo acontecido de verdade. -->
+      <section class="case__block case__block--wide">
+        <h2 class="h2">Counting a legal deadline is harder than it looks</h2>
+        <p class="body-text">
+          The Brazilian Code of Civil Procedure counts deadlines in business days (art. 219), excludes the starting day (art. 224), rolls a due date falling on a non-business day forward (art. 224 §1) and suspends everything during the court recess from 20 December to 20 January (art. 220). "Business day" also has to account for movable holidays derived from Easter, court holidays and holidays specific to each individual court.
+        </p>
+        <p class="body-text">
+          I wrote a pure engine, no calendar library, with all the arithmetic done in UTC at midday to rule out timezone and daylight-saving bugs. Easter comes from the Meeus/Jones/Butcher algorithm, every rule covered by tests. It is the most tested code in the system: nobody praises code that counts holidays, but if it is off by one day the client loses the case.
+        </p>
+
+        <figure class="codigo panel">
+          <figcaption class="panel__bar">
+            <span class="panel__box" aria-hidden="true"></span>
+            <span class="panel__title">server/businessDays.ts</span>
+            <span class="codigo__repo">private client repository</span>
+          </figcaption>
+          <pre tabindex="0" role="region"
+               aria-label="An excerpt from the deadline engine: the UTC-at-midday normalisation and the function that says why a day is not a business day"><code><span class="c">// Datas são strings ISO "YYYY-MM-DD". Toda a aritmética é feita em UTC ao meio-dia</span>
+<span class="c">// para evitar problemas de fuso/horário de verão.</span>
+
+function toUtcNoon(iso: string): Date {
+  return new Date(`${iso}T12:00:00Z`);
+}
+
+<span class="c">// ...</span>
+
+<span class="c">// Motivo de um dia não ser útil (ou null se for útil). Considera, na ordem:</span>
+<span class="c">// fim de semana, recesso forense, feriado forense específico (extra) e feriado</span>
+<span class="c">// nacional/forense usual.</span>
+function reasonForNonBusinessDay(
+  d: Date,
+  extra: Map&lt;string, string&gt;
+): string | null {
+  if (isWeekend(d)) return d.getUTCDay() === 0 ? "Domingo" : "Sábado";
+  if (isInRecess(d)) return "Recesso forense (20/12–20/01)";
+  const iso = formatISO(d);
+  if (extra.has(iso)) return extra.get(iso) || "Feriado forense";
+  const names = holidayNamesForYear(d.getUTCFullYear());
+  if (names.has(iso)) return `Feriado: ${names.get(iso)}`;
+  return null;
+}</code></pre>
+        </figure>
+        <!-- o motor mostrando o próprio raciocínio: a captura vale mais que o
+             parágrafo acima, porque o vencimento e os dias pulados são o que ele
+             calculou de verdade quando este prazo foi cadastrado -->
+        <figure class="shot dither-25">
+          <picture>
+            <source srcset="/assets/shots/jvb-prazos.webp" type="image/webp" />
+            <img src="/assets/shots/jvb-prazos.png" width="1262" height="568" loading="lazy"
+                 alt="Cadastro de prazo: o sistema mostra a data fatal calculada em 17/08/2026, segunda-feira, avisa que começou a contar em 01/08 e lista os dois dias não úteis que pulou, o sábado 15/08 e o domingo 16/08." />
+          </picture>
+          <figcaption>
+            <span>the deadline lands on a Saturday, so it rolls to Monday: it says which day it skipped and why</span>
+            <span class="shot__cor">hover to see it in colour</span>
+          </figcaption>
+        </figure>
+      </section>
+
+      <section class="case__block case__block--wide">
+        <h2 class="h2">The firm talks to the system</h2>
+        <p class="body-text">
+          The ERP exposes an MCP server with 67 tools, 46 read and 21 write. In practice a lawyer opens Claude and asks "what do I have today?", "log this deadline", "summarise this conversation". The system is what executes, under the permissions of the person who asked, and every call is logged.
+        </p>
+        <p class="body-text">
+          The laborious part was authentication. For claude.ai to connect as a Custom Connector an API key was not enough: it needed a real OAuth 2.1 server, with dynamic client registration, authorization code, refresh and a consent screen of its own, which is where the person sees what they are authorising before they authorise it.
+        </p>
+        <p class="body-text">
+          Then came the decision that scares you. The owner wanted Claude to send WhatsApp messages directly, without going through a draft. That changes the damage ceiling: it stops being "nothing leaves the system". A model in a loop, with one reasoning error, becomes dozens of messages on a real client’s phone.
+        </p>
+        <p class="body-text">
+          Three guards hold the send back, each against a different way of going wrong. The sender is revalidated on the spot, and that check fails closed: without confirming they are still an active manager, nothing goes out. The connector’s reads fail open on purpose, because there a database hiccup should not bring anything down, but here the effect is external and there is no undo. The second is a daily send ceiling. The third is idempotency, and it uses no key table: the conversation itself is the source of truth, so an identical message, in the same place, inside a short window, is a retry and does not go out again.
+        </p>
+        <p class="body-text">
+          The tools that call a model (transcribe audio, summarise a conversation) have a different problem and a different breaker. It sums the real dollar cost of the last 24 hours and refuses once that is blown, with a call count underneath as a net: the cost record is fire-and-forget and can go missing, and without that net one failed write would swing the whole breaker open.
+        </p>
+        <div class="case__nums">
+          <div class="case__num"><b>67</b><span>tools exposed over MCP</span></div>
+          <div class="case__num"><b>3</b><span>guards before a message goes out</span></div>
+          <div class="case__num"><b>24h</b><span>window of the cost breaker</span></div>
+        </div>
+      </section>
+
+      <section class="case__block">
+        <h2 class="h2">What runs without anyone asking</h2>
+        <p class="body-text">
+          There are 307 test files and more than 3,500 cases across unit and integration, on Vitest, plus two Playwright smoke tests that boot the real system.
+        </p>
+        <p class="body-text">
+          Two things run on GitHub Actions. The first is a secret scan on every push and every pull request: if an API key, a password or a connection string lands in the diff, the check fails and it never reaches the main branch.
+        </p>
+        <p class="body-text">
+          The second wakes at three in the morning, when nobody is on the system: a dump of the entire database, attachments included, encrypted with AES-256 and shipped outside the infrastructure, with thirty days of retention. That is not diligence, it is obligation. This is privileged client data from a law firm, and the LGPD, the Brazilian data protection act, does not accept "the platform should have had backups".
+        </p>
+      </section>
+
+      <section class="case__block">
+        <h2 class="h2">I know nothing about law</h2>
+        <p class="body-text">
+          I am the only developer on the project and almost nothing here was decided alone. I did not know what makes a deadline peremptory, why a filing needs a second person to check it, or what makes a case turn urgent before it is due. The people who knew were the team who would use the system every day.
+        </p>
+        <p class="body-text">
+          So every module came out of conversation: I brought the proposal, they pointed at where it would not survive the real routine, and the screen changed before it became code. Writing the software was the easy part. The hard part was building alongside people who understand the subject, and accepting that my first version almost always had to go through them before it became something anyone would actually use.
+        </p>
+      </section>
+
+      <!-- id fixo, e não o que o módulo 25 gera a partir do título: a home
+           aponta para cá, e com âncora derivada do <h2> qualquer ajuste de
+           título quebraria o link sem avisar. O módulo respeita id que já
+           existe. A checagem 14 confere o par. -->
+      <section class="case__block" id="incidente">
+        <h2 class="h2">The healthcheck that poisoned the database</h2>
+        <p class="body-text">
+          A real incident. The system learned its own public URL from the first
+          request after a deploy, and the first request after a deploy is the
+          platform&rsquo;s healthcheck, carrying a <code>Host</code> that does not
+          resolve publicly. The result: attachment links written to the database
+          pointing at a host that does not exist.
+        </p>
+        <p class="body-text">
+          The diagnosis ran from the symptom ("the attachment will not open") to the root cause, and the fix was a guard at the source plus an idempotent repair on boot for the data already written wrong. The user reported as a product failure something that happened in the infrastructure layer.
+        </p>
+      </section>
+
+      <section class="case__block case__block--wide">
+        <h2 class="h2">Doing less, on purpose</h2>
+        <p class="body-text">
+          Every deferral in this project has a written trigger: virtualise the message list only above ~1,500 messages, move media to a bucket only when the volume justifies it. A five-person firm does not pay for SaaS-grade architecture, and the biggest risk for a solo developer is building for a problem that never arrives.
+        </p>
+        <p class="body-text">
+          It was the first project where I was product and engineering at once, with a real user on the other side who loses money if I get it wrong. Working alone, I spent more energy deciding what to leave out than choosing the stack. And a good part of the work was not programming at all: it was understanding the procedural code, the electronic court system and the firm’s routine well enough to turn all of it into screens.
+        </p>
+        <div class="case__gallery">
+          <figure class="shot shot--tall dither-25">
+            <picture>
+              <source srcset="/assets/shots/jvb-processos.webp" type="image/webp" />
+              <img src="/assets/shots/jvb-processos.png" width="1440" height="900" loading="lazy"
+                   alt="Tela de processos e casos com seis processos do escritório, cada um com o número CNJ, as partes e uma etiqueta de situação: tratada pelo gestor, analisado, em análise ou pendente de análise." />
+            </picture>
+            <figcaption><span>cases and matters</span></figcaption>
+          </figure>
+          <figure class="shot shot--tall dither-12">
+            <picture>
+              <source srcset="/assets/shots/jvb-prazos-lista.webp" type="image/webp" />
+              <img src="/assets/shots/jvb-prazos-lista.png" width="1440" height="900" loading="lazy"
+                   alt="Agenda de prazos com cinco prazos em curso, cada um com a data fatal, o modo de contagem em dias úteis ou corridos, o processo e quantos dias faltam." />
+            </picture>
+            <figcaption><span>deadline calendar</span></figcaption>
+          </figure>
+          <figure class="shot shot--tall dither-50">
+            <picture>
+              <source srcset="/assets/shots/jvb-permissoes.webp" type="image/webp" />
+              <img src="/assets/shots/jvb-permissoes.png" width="1440" height="900" loading="lazy"
+                   alt="Log de auditoria do painel do gestor: cada linha traz hora, ação, usuário, alvo e IP, com registros de login e de criação de prazo." />
+            </picture>
+            <figcaption><span>audit log: who did what, when and from where</span></figcaption>
+          </figure>
+        </div>
+      </section>
+    </div>
+
+    <nav class="case__nav" aria-label="Project navigation">
+      <a class="btn btn--ghost" href="index.html#projetos">‹ All projects</a>
+      <a class="btn" href="projeto-triagem.html">Next: AI triage ›</a>
+    </nav>
+
+  </article>
+</main>
+
+<footer class="foot" data-od-id="footer">
+  <div class="wrap foot__inner">
+    <span class="mono-caps">Luan Taraschi · MMXXVI</span>
+    <ul class="social">
+      <li><a class="social__l social__l--gh" href="https://github.com/luantaraschi" target="_blank" rel="noopener">GitHub</a></li>
+      <li><a class="social__l social__l--li" href="https://www.linkedin.com/in/luantaraschi/" target="_blank" rel="noopener">LinkedIn</a></li>
+      <li><a class="social__l social__l--ig" href="https://www.instagram.com/luantaraschi/" target="_blank" rel="noopener">Instagram</a></li>
+    </ul>
+    <span class="mono-caps">made by me, with a lot of love</span>
+  </div>
+</footer>
+
+<script src="/js/app.js" defer></script>
+<!-- Prerender no hover: o navegador monta a proxima pagina inteira em segundo
+     plano quando o cursor encosta no link, e a navegacao vira instantanea. Sem
+     biblioteca, sem service worker, sem prefetch na mao.
+
+     `moderate` so dispara depois de uns 200ms parado sobre o link, entao passar
+     o mouse varrendo a grade de projetos nao pre-renderiza nove paginas de uma
+     vez. Navegador que nao conhece o formato ignora a tag e nada muda.
+
+     A lista e explicita em vez de um curinga: prerender roda o JS da pagina de
+     verdade, e eu quero escolher quais paginas pagam esse custo. -->
+<script type="speculationrules">
+{
+  "prerender": [{
+    "where": {
+      "or": [
+        { "href_matches": "/en/projeto-*.html" },
+        { "href_matches": "/en/sobre.html" }
+      ]
+    },
+    "eagerness": "moderate"
+  }]
+}
+</script>
+</body>
+</html>
+

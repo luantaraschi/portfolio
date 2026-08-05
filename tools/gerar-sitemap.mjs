@@ -33,6 +33,17 @@ const PAGINAS = [
   ['projeto-pov.html', '/projeto-pov.html', '0.6'],
 ];
 
+// A versão em inglês entra com a mesma prioridade e o mesmo nome de arquivo.
+// Prioridade igual e não menor de propósito: as duas são a página, cada uma na
+// sua língua, e é o hreflang que diz isso ao buscador - rebaixar o inglês aqui
+// contradiria o par que as duas declaram lá.
+const EN = PAGINAS.map(([arquivo, caminho, prioridade]) => [
+  `en/${arquivo}`,
+  caminho === '/' ? '/en/' : `/en${caminho}`,
+  prioridade,
+]);
+PAGINAS.push(...EN);
+
 const git = (...args) =>
   execFileSync('git', ['-C', RAIZ, ...args], { encoding: 'utf8' }).trim();
 

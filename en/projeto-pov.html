@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -15,8 +15,8 @@ if(t==='light')document.documentElement.setAttribute('data-theme','light')
 var m=document.querySelector('meta[name=theme-color]');if(m)m.content=t==='light'?'#eee8d5':'#1a1917'
 try{history.scrollRestoration="manual"}catch(e){}})()</script>
 <title>POV · Luan Taraschi</title>
-<meta name="description" content="Estudo de caso: party game de percepção em Svelte e Convex, com um medidor que tem que parecer peça mecânica." />
-<link rel="canonical" href="https://luantaraschi.dev/projeto-pov.html" />
+<meta name="description" content="Case study: a perception party game in Svelte and Convex, with a dial that has to feel like a mechanical part." />
+<link rel="canonical" href="https://luantaraschi.dev/en/projeto-pov.html" />
 <!-- O par de idiomas, com os dois lados no ar. x-default aponta para o
      português: é a versão original, é onde o conteúdo nasce e é a língua
      de quem mais visita. As duas páginas declaram o par inteiro, nas duas
@@ -26,10 +26,10 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
 <link rel="alternate" hreflang="x-default" href="https://luantaraschi.dev/projeto-pov.html" />
 <meta property="og:type" content="article" />
 <meta property="og:site_name" content="Luan Taraschi" />
-<meta property="og:locale" content="pt_BR" />
-<meta property="og:url" content="https://luantaraschi.dev/projeto-pov.html" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:url" content="https://luantaraschi.dev/en/projeto-pov.html" />
 <meta property="og:title" content="POV" />
-<meta property="og:description" content="Um jogo onde você tenta acertar como outra pessoa enxerga o mundo. Svelte, Convex e um ponteiro com travas." />
+<meta property="og:description" content="A game where you try to guess how someone else sees the world. Svelte, Convex and a needle with catches." />
 <meta property="og:image" content="https://luantaraschi.dev/assets/og.png" />
 <meta property="og:image:width" content="2400" />
 <meta property="og:image:height" content="1260" />
@@ -47,22 +47,23 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
 <!-- Auto-hospedadas. So as duas que desenham a primeira tela entram em
      preload: o corpo de texto e a fonte do titulo. O resto chega quando o
      CSS pedir, e o unicode-range segura o latin-ext ate aparecer um "ç". -->
-<link rel="preload" href="assets/fontes/space-grotesk-300-700-latin.woff2" as="font" type="font/woff2" crossorigin />
-<link rel="preload" href="assets/fontes/silkscreen-400-latin.woff2" as="font" type="font/woff2" crossorigin />
-<link rel="stylesheet" href="assets/fontes/fontes.css" />
-<link rel="stylesheet" href="css/style.css" />
+<link rel="preload" href="/assets/fontes/space-grotesk-300-700-latin.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="/assets/fontes/silkscreen-400-latin.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="stylesheet" href="/assets/fontes/fontes.css" />
+<link rel="stylesheet" href="/css/style.css" />
 
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "Article",
   "headline": "POV",
-  "description": "Estudo de caso: party game de percepção em Svelte e Convex, com um medidor que tem que parecer peça mecânica.",
+  "description": "Case study: a perception party game in Svelte and Convex, with a dial that has to feel like a mechanical part.",
   "url": "https://luantaraschi.dev/projeto-pov.html",
   "image": "https://luantaraschi.dev/assets/og.png",
   "inLanguage": "pt-BR",
   "author": {
     "@type": "Person",
+  "inLanguage": "en",
     "name": "Luan Taraschi",
     "url": "https://luantaraschi.dev/"
   }
@@ -72,7 +73,7 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
 
 <body>
 
-<a class="skip" href="#conteudo">Pular para o conteúdo</a>
+<a class="skip" href="#conteudo">Skip to content</a>
 <div class="grid-glow" data-glow aria-hidden="true"></div>
 <div class="wipe" data-wipe aria-hidden="true"></div>
 
@@ -82,23 +83,23 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
       <span class="nav__glyph" aria-hidden="true"></span>
       Luan Taraschi
     </a>
-    <nav class="nav__links" aria-label="Seções do site">
-      <a class="nav__link" href="index.html#sobre">Sobre</a>
+    <nav class="nav__links" aria-label="Site sections">
+      <a class="nav__link" href="index.html#sobre">About</a>
       <a class="nav__link" href="index.html#projetos" aria-current="page">Projetos</a>
       <a class="nav__link" href="index.html#games">Games</a>
       <a class="nav__link" href="index.html#skills">Stack</a>
-      <a class="nav__link" href="index.html#experiencia">Experiência</a>
-      <a class="nav__link" href="index.html#contato">Contato</a>
+      <a class="nav__link" href="index.html#experiencia">Experience</a>
+      <a class="nav__link" href="index.html#contato">Contact</a>
     </nav>
     <!-- O par de idiomas. Mostra a lingua para onde ele leva, nao a que
          esta aberta. O caminho e sempre /en/ mais o mesmo nome de arquivo:
          mesma estrutura dos dois lados, entao a troca nunca cai em 404. -->
-    <a class="lang" href="/en/projeto-pov.html" hreflang="en" lang="en">EN</a>
+    <a class="lang" href="/projeto-pov.html" hreflang="pt-BR" lang="pt-BR">PT</a>
 
 
     <button class="lamp" type="button" role="switch" aria-checked="false"
-            data-theme-toggle title="Luz da página"
-            aria-label="Alternar entre modo escuro e claro">
+            data-theme-toggle title="Page light"
+            aria-label="Switch between dark and light mode">
       <span class="lamp__icone lamp__icone--lua" aria-hidden="true"></span>
       <span class="lamp__track" aria-hidden="true"><span class="lamp__knob"></span></span>
       <span class="lamp__icone lamp__icone--sol" aria-hidden="true"></span>
@@ -109,12 +110,12 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
     </button>
   </div>
   <div class="nav__panel" id="menu-mobile" data-nav-panel hidden>
-    <a href="index.html#sobre">Sobre</a>
-    <a href="index.html#projetos">Projetos</a>
+    <a href="index.html#sobre">About</a>
+    <a href="index.html#projetos">Projects</a>
     <a href="index.html#games">Games</a>
     <a href="index.html#skills">Stack</a>
-    <a href="index.html#experiencia">Experiência</a>
-    <a href="index.html#contato">Contato</a>
+    <a href="index.html#experiencia">Experience</a>
+    <a href="index.html#contato">Contact</a>
   </div>
 </header>
 
@@ -122,82 +123,82 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
   <article class="wrap" data-od-id="case">
 
     <header class="case__head">
-      <a class="case__voltar" href="index.html#projetos">Todos os projetos</a>
-      <span class="kicker">games/03 · no ar</span><span
+      <a class="case__voltar" href="index.html#projetos">All projects</a>
+      <span class="kicker">games/03 · live</span><span
         class="kicker kicker--barra" data-progresso aria-hidden="true"></span>
       <h1 class="h1 case__title">POV</h1>
       <p class="lead case__lead">
-        Uma carta com dois extremos, um alvo escondido na escala e uma dica curta. O resto da rodada é gente discutindo o que "caro" significa.
+        A card with two extremes, a hidden target on the scale and one short clue. The rest of the round is people arguing about what "expensive" means.
       </p>
 
       <dl class="case__meta invert">
-        <div><dt>Ano</dt><dd>2026 · no ar</dd></div>
-        <div><dt>Papel</dt><dd>Do conceito ao deploy</dd></div>
+        <div><dt>Year</dt><dd>2026 · live</dd></div>
+        <div><dt>Role</dt><dd>From the concept to deployment</dd></div>
         <div><dt>Stack</dt><dd>Svelte · Convex · TypeScript · Vite</dd></div>
-        <div><dt>Link</dt><dd><a href="https://pov-beige.vercel.app/" target="_blank" rel="noopener">jogar agora ↗</a></dd></div>
+        <div><dt>Link</dt><dd><a href="https://pov-beige.vercel.app/" target="_blank" rel="noopener">play it now ↗</a></dd></div>
       </dl>
     </header>
 
     <figure class="shot dither-12">
-      <video src="assets/shots/pov-agulha.mp4" width="1100" height="930"
+      <video src="/assets/shots/pov-agulha.mp4" width="1100" height="930"
              data-toca muted loop playsinline preload="metadata"
              aria-label="O medidor do POV com a agulha girando pela escala entre dois extremos opostos."></video>
       <figcaption>
-        <span>a agulha não desliza: ela passa por casas, e cada casa trava</span>
-        <span class="shot__cor">passe o cursor para ver em cor</span>
+        <span>the needle does not glide: it steps through notches, and every notch catches</span>
+        <span class="shot__cor">hover to see it in colour</span>
       </figcaption>
     </figure>
 
     <div class="case__body">
       <section class="case__block">
-        <h2 class="h2">O problema</h2>
+        <h2 class="h2">The problem</h2>
         <p class="body-text">
-          É o único projeto daqui que nasceu de uma frase antes de nascer de um requisito: um jogo onde você tenta acertar como outra pessoa enxerga o mundo. A rodada não tem resposta certa absoluta, tem o ponto de vista de quem deu a dica.
+          It is the only project here that came out of a sentence before it came out of a requirement: a game where you try to guess how someone else sees the world. The round has no absolute right answer, it has the point of view of whoever gave the clue.
         </p>
         <p class="body-text">
-          Construir isso é difícil porque a diversão é quase toda sensorial. Com cara de formulário, um jogo assim vira outra coisa, e uma coisa que ninguém quer jogar.
+          Building that is hard because the fun is almost entirely sensory. Looking like a form, a game like this becomes something else, and something nobody wants to play.
         </p>
       </section>
 
       <section class="case__block">
-        <h2 class="h2">A decisão</h2>
+        <h2 class="h2">The decision</h2>
         <p class="body-text">
-          Perseguir a sensação de peça física antes de qualquer outra coisa. O medidor é o coração do jogo e não podia se comportar como um slider de HTML. A referência que eu usei o tempo todo foi um objeto de mesa, com dentes internos, tampa que desliza e trava sonora no encaixe.
+          Chase the feel of a physical object before anything else. The dial is the heart of the game and could not behave like an HTML slider. The reference I kept coming back to was a tabletop object, with internal teeth, a sliding lid and an audible catch when it seats.
         </p>
       </section>
 
       <section class="case__block case__block--wide">
-        <h2 class="h2">A agulha não desliza, ela encaixa</h2>
+        <h2 class="h2">The needle does not glide, it seats</h2>
         <p class="body-text">
-          Um slider comum é contínuo e macio, e macio aqui é justamente o defeito. A agulha do POV passa por casas discretas, com microtravamento em cada uma, feedback a cada passagem e um encaixe mais firme quando você solta. Dá muito mais código do que um input de intervalo pra chegar, na descrição funcional, no mesmo lugar: um número entre dois extremos.
+          An ordinary slider is continuous and smooth, and smooth is precisely the defect here. The POV needle steps through discrete notches, with a micro-catch at each one, feedback on every step and a firmer seat when you let go. It takes far more code than a range input to arrive, functionally described, at the same place: a number between two extremes.
         </p>
         <p class="body-text">
-          Só que nesse projeto a descrição funcional importa pouco. Arrastar, sentir as travas, soltar e ouvir o encaixe é metade da rodada.
-        </p>
-      </section>
-
-      <section class="case__block">
-        <h2 class="h2">O alvo nunca chega no cliente errado</h2>
-        <p class="body-text">
-          Todo jogo de dica trinca no mesmo lugar: o alvo secreto é visível só pro Dono do POV. Se ele viajar pra todos os navegadores e ficar escondido só na interface, a trapaça está a um clique de distância.
-        </p>
-        <p class="body-text">
-          Então a consulta que alimenta a tela decide, jogador por jogador, se aquele número pode ser enviado. Quem não é o Dono recebe o campo nulo até a fase de revelação, ou seja, o segredo nunca chega na máquina errada pra depois ser escondido lá.
+          Except in this project the functional description barely matters. Dragging, feeling the catches, letting go and hearing it seat is half the round.
         </p>
       </section>
 
       <section class="case__block">
-        <h2 class="h2">Por que Svelte, e não React</h2>
+        <h2 class="h2">The target never reaches the wrong client</h2>
         <p class="body-text">
-          É o único dos meus jogos fora do React. Uma agulha com travas é estado que muda muitas vezes por segundo, e eu queria escrever isso sem ficar pensando em memoização. Foi também o projeto mais rápido de sair do papel, o que me deixou com uma dúvida que eu ainda não resolvi: se foi mérito do Svelte ou só de o escopo ser menor.
+          Every clue game cracks in the same place: the secret target is visible only to the POV owner. If it travels to every browser and is hidden only in the interface, cheating is one click away.
+        </p>
+        <p class="body-text">
+          So the query feeding the screen decides, player by player, whether that number may be sent. Anyone who is not the owner gets a null field until the reveal phase, which means the secret never reaches the wrong machine to then be hidden there.
+        </p>
+      </section>
+
+      <section class="case__block">
+        <h2 class="h2">Why Svelte, and not React</h2>
+        <p class="body-text">
+          It is the only one of my games outside React. A needle with catches is state that changes many times a second, and I wanted to write that without thinking about memoisation. It was also the fastest project to get off the ground, which left me with a question I still have not settled: whether that was down to Svelte or simply to the smaller scope.
         </p>
       </section>
 
     </div>
 
-    <nav class="case__nav" aria-label="Navegação entre projetos">
-      <a class="btn btn--ghost" href="projeto-sus.html">‹ Anterior: SUS</a>
-      <a class="btn" href="index.html#projetos">Todos os projetos ›</a>
+    <nav class="case__nav" aria-label="Project navigation">
+      <a class="btn btn--ghost" href="projeto-sus.html">‹ Previous: SUS</a>
+      <a class="btn" href="index.html#projetos">All projects ›</a>
     </nav>
 
   </article>
@@ -211,11 +212,11 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
       <li><a class="social__l social__l--li" href="https://www.linkedin.com/in/luantaraschi/" target="_blank" rel="noopener">LinkedIn</a></li>
       <li><a class="social__l social__l--ig" href="https://www.instagram.com/luantaraschi/" target="_blank" rel="noopener">Instagram</a></li>
     </ul>
-    <span class="mono-caps">feito por mim, com muito amor</span>
+    <span class="mono-caps">made by me, with a lot of love</span>
   </div>
 </footer>
 
-<script src="js/app.js" defer></script>
+<script src="/js/app.js" defer></script>
 <!-- Prerender no hover: o navegador monta a proxima pagina inteira em segundo
      plano quando o cursor encosta no link, e a navegacao vira instantanea. Sem
      biblioteca, sem service worker, sem prefetch na mao.
@@ -231,8 +232,8 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
   "prerender": [{
     "where": {
       "or": [
-        { "href_matches": "/projeto-*.html" },
-        { "href_matches": "/sobre.html" }
+        { "href_matches": "/en/projeto-*.html" },
+        { "href_matches": "/en/sobre.html" }
       ]
     },
     "eagerness": "moderate"

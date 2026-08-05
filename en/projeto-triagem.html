@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -14,9 +14,9 @@ if(!t)t=window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark
 if(t==='light')document.documentElement.setAttribute('data-theme','light')
 var m=document.querySelector('meta[name=theme-color]');if(m)m.content=t==='light'?'#eee8d5':'#1a1917'
 try{history.scrollRestoration="manual"}catch(e){}})()</script>
-<title>Triagem por IA no WhatsApp · Luan Taraschi</title>
-<meta name="description" content="Estudo de caso: agente de IA que tria cerca de mil conversas por mês no WhatsApp de um escritório jurídico, com RAG sobre a base do escritório e guardrails para nunca dar consultoria jurídica." />
-<link rel="canonical" href="https://luantaraschi.dev/projeto-triagem.html" />
+<title>AI triage on WhatsApp · Luan Taraschi</title>
+<meta name="description" content="Case study: an AI agent that triages around a thousand conversations a month on a law firm’s WhatsApp, with RAG over the firm’s own material and guardrails so it never gives legal advice." />
+<link rel="canonical" href="https://luantaraschi.dev/en/projeto-triagem.html" />
 <!-- O par de idiomas, com os dois lados no ar. x-default aponta para o
      português: é a versão original, é onde o conteúdo nasce e é a língua
      de quem mais visita. As duas páginas declaram o par inteiro, nas duas
@@ -26,10 +26,10 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
 <link rel="alternate" hreflang="x-default" href="https://luantaraschi.dev/projeto-triagem.html" />
 <meta property="og:type" content="article" />
 <meta property="og:site_name" content="Luan Taraschi" />
-<meta property="og:locale" content="pt_BR" />
-<meta property="og:url" content="https://luantaraschi.dev/projeto-triagem.html" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:url" content="https://luantaraschi.dev/en/projeto-triagem.html" />
 <meta property="og:title" content="Triagem por IA no WhatsApp" />
-<meta property="og:description" content="Cerca de mil conversas por mês, 100% triadas por agente antes de chegar a alguém. Com guardrail: o bot nunca dá consultoria jurídica." />
+<meta property="og:description" content="Around a thousand conversations a month, 100% triaged by an agent before they reach a person. With a guardrail: the bot never gives legal advice." />
 <meta property="og:image" content="https://luantaraschi.dev/assets/og.png" />
 <meta property="og:image:width" content="2400" />
 <meta property="og:image:height" content="1260" />
@@ -47,22 +47,23 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
 <!-- Auto-hospedadas. So as duas que desenham a primeira tela entram em
      preload: o corpo de texto e a fonte do titulo. O resto chega quando o
      CSS pedir, e o unicode-range segura o latin-ext ate aparecer um "ç". -->
-<link rel="preload" href="assets/fontes/space-grotesk-300-700-latin.woff2" as="font" type="font/woff2" crossorigin />
-<link rel="preload" href="assets/fontes/silkscreen-400-latin.woff2" as="font" type="font/woff2" crossorigin />
-<link rel="stylesheet" href="assets/fontes/fontes.css" />
-<link rel="stylesheet" href="css/style.css" />
+<link rel="preload" href="/assets/fontes/space-grotesk-300-700-latin.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="/assets/fontes/silkscreen-400-latin.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="stylesheet" href="/assets/fontes/fontes.css" />
+<link rel="stylesheet" href="/css/style.css" />
 
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "Article",
   "headline": "Triagem por IA no WhatsApp",
-  "description": "Estudo de caso: agente de IA que tria cerca de mil conversas por mês no WhatsApp de um escritório jurídico, com RAG sobre a base do escritório e guardrails para nunca dar consultoria jurídica.",
+  "description": "Case study: an AI agent that triages around a thousand conversations a month on a law firm’s WhatsApp, with RAG over the firm’s own material and guardrails so it never gives legal advice.",
   "url": "https://luantaraschi.dev/projeto-triagem.html",
   "image": "https://luantaraschi.dev/assets/og.png",
   "inLanguage": "pt-BR",
   "author": {
     "@type": "Person",
+  "inLanguage": "en",
     "name": "Luan Taraschi",
     "url": "https://luantaraschi.dev/"
   }
@@ -71,7 +72,7 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
 </head>
 <body>
 
-<a class="skip" href="#conteudo">Pular para o conteúdo</a>
+<a class="skip" href="#conteudo">Skip to content</a>
 <div class="grid-glow" data-glow aria-hidden="true"></div>
 <div class="wipe" data-wipe aria-hidden="true"></div>
 
@@ -81,23 +82,23 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
       <span class="nav__glyph" aria-hidden="true"></span>
       Luan Taraschi
     </a>
-    <nav class="nav__links" aria-label="Seções do site">
-      <a class="nav__link" href="index.html#sobre">Sobre</a>
+    <nav class="nav__links" aria-label="Site sections">
+      <a class="nav__link" href="index.html#sobre">About</a>
       <a class="nav__link" href="index.html#projetos" aria-current="page">Projetos</a>
       <a class="nav__link" href="index.html#games">Games</a>
       <a class="nav__link" href="index.html#skills">Stack</a>
-      <a class="nav__link" href="index.html#experiencia">Experiência</a>
-      <a class="nav__link" href="index.html#contato">Contato</a>
+      <a class="nav__link" href="index.html#experiencia">Experience</a>
+      <a class="nav__link" href="index.html#contato">Contact</a>
     </nav>
     <!-- O par de idiomas. Mostra a lingua para onde ele leva, nao a que
          esta aberta. O caminho e sempre /en/ mais o mesmo nome de arquivo:
          mesma estrutura dos dois lados, entao a troca nunca cai em 404. -->
-    <a class="lang" href="/en/projeto-triagem.html" hreflang="en" lang="en">EN</a>
+    <a class="lang" href="/projeto-triagem.html" hreflang="pt-BR" lang="pt-BR">PT</a>
 
 
     <button class="lamp" type="button" role="switch" aria-checked="false"
-            data-theme-toggle title="Luz da página"
-            aria-label="Alternar entre modo escuro e claro">
+            data-theme-toggle title="Page light"
+            aria-label="Switch between dark and light mode">
       <span class="lamp__icone lamp__icone--lua" aria-hidden="true"></span>
       <span class="lamp__track" aria-hidden="true"><span class="lamp__knob"></span></span>
       <span class="lamp__icone lamp__icone--sol" aria-hidden="true"></span>
@@ -108,12 +109,12 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
     </button>
   </div>
   <div class="nav__panel" id="menu-mobile" data-nav-panel hidden>
-    <a href="index.html#sobre">Sobre</a>
-    <a href="index.html#projetos">Projetos</a>
+    <a href="index.html#sobre">About</a>
+    <a href="index.html#projetos">Projects</a>
     <a href="index.html#games">Games</a>
     <a href="index.html#skills">Stack</a>
-    <a href="index.html#experiencia">Experiência</a>
-    <a href="index.html#contato">Contato</a>
+    <a href="index.html#experiencia">Experience</a>
+    <a href="index.html#contato">Contact</a>
   </div>
 </header>
 
@@ -121,21 +122,21 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
   <article class="wrap" data-od-id="case">
 
     <header class="case__head">
-      <a class="case__voltar" href="index.html#projetos">Todos os projetos</a>
-      <span class="kicker">projetos/02 · produção</span><span
+      <a class="case__voltar" href="index.html#projetos">All projects</a>
+      <span class="kicker">work/02 · production</span><span
         class="kicker kicker--barra" data-progresso aria-hidden="true"></span>
-      <h1 class="h1 case__title">Triagem por IA no WhatsApp</h1>
+      <h1 class="h1 case__title">AI triage on WhatsApp</h1>
       <p class="lead case__lead">
-        O canal onde o escritório realmente atende: cerca de mil conversas por mês,
-        organizadas por um agente antes de chegar a qualquer pessoa. É o módulo de
-        captação do <a href="projeto-jvb.html">ERP JVB</a>.
+        The channel where the firm actually deals with people: around a thousand
+        conversations a month, sorted by an agent before they reach anyone. It is
+        the intake module of the <a href="projeto-jvb.html">JVB ERP</a>.
       </p>
 
       <dl class="case__meta invert">
-        <div><dt>Ano</dt><dd>2025 · em produção</dd></div>
-        <div><dt>Papel</dt><dd>Dev full stack, do requisito ao suporte</dd></div>
-        <div><dt>Stack</dt><dd>TypeScript · tRPC · PostgreSQL · Whapi/Evolution · RAG · IA multi-provedor</dd></div>
-        <div><dt>Link</dt><dd>sistema privado do cliente</dd></div>
+        <div><dt>Year</dt><dd>2025 · in production</dd></div>
+        <div><dt>Role</dt><dd>Full stack dev, from requirements to support</dd></div>
+        <div><dt>Stack</dt><dd>TypeScript · tRPC · PostgreSQL · Whapi/Evolution · RAG · multi-provider AI</dd></div>
+        <div><dt>Link</dt><dd>private client system</dd></div>
       </dl>
     </header>
 
@@ -144,97 +145,68 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
          sigilo em SHOTS.md -->
     <figure class="shot dither-50">
       <picture>
-        <source srcset="assets/shots/triagem-conversa.webp" type="image/webp" />
-        <img src="assets/shots/triagem-conversa.png" width="1440" height="900" loading="lazy"
+        <source srcset="/assets/shots/triagem-conversa.webp" type="image/webp" />
+        <img src="/assets/shots/triagem-conversa.png" width="1440" height="900" loading="lazy"
              alt="Conversa de WhatsApp dentro do sistema: alguém pergunta se ganha a causa e em quanto tempo, e o atendimento responde que avaliar chance de êxito, prazo e valor é consultoria jurídica e quem faz isso é sempre um advogado. No topo da conversa, o nome do advogado que assumiu e o botão Assumir." />
       </picture>
       <figcaption>
-        <span>o guardrail em uso: perguntaram se ganha a causa, e o bot recusou a resposta em vez de arriscar</span>
-        <span class="shot__cor">passe o cursor para ver em cor</span>
+        <span>the guardrail at work: they asked whether they would win the case, and the bot refused to answer rather than risk it</span>
+        <span class="shot__cor">hover to see it in colour</span>
       </figcaption>
     </figure>
 
     <div class="case__body">
       <section class="case__block">
-        <h2 class="h2">O problema</h2>
+        <h2 class="h2">The problem</h2>
         <p class="body-text">
-          Todo contato novo chegava pelo WhatsApp, no mesmo lugar onde já corria a
-          conversa dos casos em andamento. Quem atendia gastava o dia separando
-          curioso de cliente, e o histórico de cada processo ficava espalhado em
-          conversas soltas, sem ligação nenhuma com o sistema de gestão do
-          escritório.
+          Every new contact arrived on WhatsApp, in the same place where conversations about ongoing cases were already running. Whoever was on duty spent the day separating the merely curious from actual clients, and the history of each case was scattered across loose threads with no link at all to the firm’s management system.
         </p>
       </section>
 
       <section class="case__block">
-        <h2 class="h2">A decisão</h2>
+        <h2 class="h2">The decision</h2>
         <p class="body-text">
-          Colocar a IA na triagem, não na resposta. O agente lê a conversa,
-          classifica por perfil e intenção e decide se aquilo vira lead. A partir daí
-          quem fala é o humano. Triar é a parte repetitiva de verdade, e é também a
-          única em que errar sai barato: um lead mal classificado se corrige na tela em
-          dois cliques, enquanto uma resposta jurídica errada já saiu de casa.
+          Put the AI on triage, not on the reply. The agent reads the conversation, classifies by profile and intent and decides whether it becomes a lead. From there on a human does the talking. Triage is the genuinely repetitive part, and it is also the only one where being wrong is cheap: a misclassified lead is fixed on screen in two clicks, while a wrong piece of legal advice has already left the building.
         </p>
       </section>
 
       <section class="case__block case__block--wide">
-        <h2 class="h2">Guarda-corpo, não prompt</h2>
+        <h2 class="h2">A guardrail, not a prompt</h2>
         <p class="body-text">
-          Um assistente que responde no WhatsApp de um escritório de advocacia não
-          pode dar consultoria jurídica. O risco aqui é disciplinar, não é de
-          experiência de uso, então a defesa precisava ser mais dura que uma instrução
-          no prompt. Ela é uma camada de guardrails com escopo explícito (triar e
-          coletar dado, nunca aconselhar), defesa contra prompt injection, disjuntor de
-          custo, e handoff que pausa o bot no instante em que um advogado assume a
-          conversa.
+          An assistant answering on a law firm’s WhatsApp cannot give legal advice. The risk here is a disciplinary one, not a user-experience one, so the defence had to be harder than an instruction in a prompt. It is a guardrail layer with an explicit scope (triage and collect data, never advise), defence against prompt injection, a cost breaker, and a handoff that pauses the bot the instant a lawyer takes over the conversation.
         </p>
         <p class="body-text">
-          A checagem roda antes do modelo. Uma pergunta de mérito jurídico nunca chega
-          a ser respondida: ela é encaminhada para um humano.
+          The check runs before the model. A question on the legal merits is never answered at all: it is routed to a human.
         </p>
         <div class="case__nums">
-          <div class="case__num"><b>~1.000</b><span>conversas por mês</span></div>
-          <div class="case__num"><b>100%</b><span>da triagem por IA</span></div>
-          <div class="case__num"><b>0</b><span>consultoria dada pelo bot</span></div>
+          <div class="case__num"><b>~1.000</b><span>conversations a month</span></div>
+          <div class="case__num"><b>100%</b><span>of the triage done by AI</span></div>
+          <div class="case__num"><b>0</b><span>advice given by the bot</span></div>
         </div>
       </section>
 
       <!-- largo por causa do código, mesmo motivo do motor de prazos no case do
            JVB: numa coluna de 542px o cosseno pedia rolagem horizontal. -->
       <section class="case__block case__block--wide">
-        <h2 class="h2">RAG: responder com o material da casa</h2>
+        <h2 class="h2">RAG: answering from the firm’s own material</h2>
         <p class="body-text">
-          Um agente que só tem o prompt responde bonito e responde errado. Esse
-          precisava do contrário: falar a partir do material do próprio escritório,
-          e ficar quieto quando o material não cobre a pergunta.
+          An agent with nothing but a prompt answers beautifully and answers wrong. This one needed the opposite: to speak from the firm’s own material, and to stay quiet when that material does not cover the question.
         </p>
         <p class="body-text">
-          Cada documento carregado é quebrado em trechos e guardado junto com o
-          vetor dele. Na conversa, a pergunta também vira vetor, e sobem para o
-          modelo os quatro trechos mais próximos por similaridade de cosseno. Sem
-          banco vetorial: os vetores moram numa coluna e a comparação acontece em
-          memória, porque nessa ordem de grandeza o pgvector seria infraestrutura
-          para um problema que ainda não chegou. O ponto que mudaria está isolado
-          numa função só, para o dia em que chegar.
+          Every uploaded document is broken into chunks and stored alongside its vector. In the conversation the question becomes a vector too, and the four nearest chunks by cosine similarity go up to the model. No vector database: the vectors live in a column and the comparison happens in memory, because at this order of magnitude pgvector would be infrastructure for a problem that has not arrived. The point that would change is isolated in a single function, ready for the day it does.
         </p>
         <p class="body-text">
-          Duas decisões que não aparecem em tutorial de RAG. A primeira é o escopo
-          da busca: ela só enxerga trechos das fontes ligadas àquele agente e
-          àquela instância, então documento de um cliente não aparece na conversa
-          de outro nem quando a ligação entre agente e fonte está errada no banco.
-          A segunda é como ela falha. Sem chave de API, ou com erro em qualquer
-          ponto do caminho, a busca devolve vazio e o turno segue sem RAG. O agente
-          perde contexto, o cliente não perde o atendimento.
+          Two decisions that do not show up in RAG tutorials. The first is the scope of the search: it only sees chunks from sources tied to that agent and that instance, so one client’s document never surfaces in another client’s conversation, not even when the link between agent and source is wrong in the database. The second is how it fails. With no API key, or with an error anywhere along the path, the search returns empty and the turn carries on without RAG. The agent loses context; the client does not lose the conversation.
         </p>
 
         <figure class="codigo panel">
           <figcaption class="panel__bar">
             <span class="panel__box" aria-hidden="true"></span>
             <span class="panel__title">server/ai/embeddings.ts</span>
-            <span class="codigo__repo">repositório privado do cliente</span>
+            <span class="codigo__repo">private client repository</span>
           </figcaption>
           <pre tabindex="0" role="region"
-               aria-label="Trecho do módulo de embeddings: o cabeçalho que documenta a degradação best-effort e a função de similaridade do cosseno"><code><span class="c">/**</span>
+               aria-label="An excerpt from the embeddings module: the header documenting the best-effort degradation and the cosine similarity function"><code><span class="c">/**</span>
 <span class="c"> * embeddings.ts — Embeddings de texto para a BUSCA POR RELEVÂNCIA (RAG #3).</span>
 <span class="c"> *</span>
 <span class="c"> * Usa o GEMINI (chave do Google já configurada no sistema) — a Anthropic, usada</span>
@@ -265,81 +237,53 @@ export function cosineSim(a: number[], b: number[]): number {
       </section>
 
       <section class="case__block">
-        <h2 class="h2">Como eu sei que ele não está errando</h2>
+        <h2 class="h2">How I know it is not getting things wrong</h2>
         <p class="body-text">
-          "A IA está funcionando?" é a pergunta que decide se o agente continua
-          ligado, e responder no olho não serve. São três instrumentos, e nenhum
-          deles é o modelo se avaliando.
+          "Is the AI working?" is the question that decides whether the agent stays switched on, and eyeballing it does not count as an answer. There are three instruments, and none of them is the model grading itself.
         </p>
         <p class="body-text">
-          O primeiro é um banco de casos de guardrail dentro da suíte de testes: 88
-          casos e 160 asserções só nesse arquivo, cobrindo as perguntas que a gente
-          sabe que o cliente faz. "Eu vou ganhar essa causa?", "quanto vou
-          receber?", "qual o prazo pra recorrer?". Em todas a resposta esperada é a
-          recusa. Junto vão os casos de prompt injection, incluindo o do cliente
-          que fecha a tag do próprio bloco pra tentar escrever fora dele.
+          The first is a bank of guardrail cases inside the test suite: 88 cases and 160 assertions in that file alone, covering the questions we know clients ask. "Am I going to win this case?", "how much will I get?", "what is the deadline to appeal?". In all of them the expected answer is a refusal. Alongside them sit the prompt injection cases, including the one where the client closes the tag of their own block to try to write outside it.
         </p>
         <p class="body-text">
-          O segundo é um simulador que roda um turno inteiro pelo caminho de
-          produção, com o modelo mockado e todo o resto real: o mesmo prompt, os
-          mesmos guardrails, a mesma cota. O teste conta as linhas das quatro
-          tabelas de conversa antes e depois e falha se o simulador tiver escrito
-          uma linha que fosse. Simulador que grava em conversa de cliente é pior
-          que simulador nenhum.
+          The second is a simulator that runs a whole turn down the production path, with the model mocked and everything else real: the same prompt, the same guardrails, the same quota. The test counts the rows in the four conversation tables before and after and fails if the simulator wrote so much as one row. A simulator that writes into a real client conversation is worse than no simulator at all.
         </p>
         <p class="body-text">
-          O terceiro fica na tela do gestor, e é o que mede em produção: quantas
-          conversas cada agente atendeu, quantas escalou para uma pessoa, quantos
-          rascunhos esperam revisão. Conversa antiga, de antes de o sistema saber
-          separar um agente do outro, fica de fora da conta em vez de ser chutada
-          para o agente atual. O número menor e honesto vale mais que o número
-          maior e falso.
+          The third lives on the manager’s screen, and it is what measures in production: how many conversations each agent handled, how many it escalated to a person, how many drafts are waiting for review. Old conversations, from before the system could tell one agent from another, are left out of the count rather than guessed onto the current agent. The smaller honest number is worth more than the bigger false one.
         </p>
       </section>
 
       <section class="case__block">
-        <h2 class="h2">O nono dígito duplicava as conversas</h2>
+        <h2 class="h2">The ninth digit was duplicating conversations</h2>
         <p class="body-text">
-          O WhatsApp entrega o identificador do contato às vezes com o nono dígito do
-          celular brasileiro, às vezes sem. O mesmo cliente aparecia como duas
-          conversas, com o histórico partido ao meio.
+          WhatsApp hands over the contact identifier sometimes with the ninth digit of the Brazilian mobile number and sometimes without it. The same client showed up as two conversations, with the history split down the middle.
         </p>
         <p class="body-text">
-          Mascarar na tela resolveria a aparência e deixaria o histórico partido do
-          mesmo jeito. A correção foi definir um identificador canônico e casar as
-          variantes já na entrada do webhook, antes de qualquer coisa tocar o banco. É o
-          tipo de armadilha regional que a documentação de nenhuma API estrangeira
-          avisa.
+          Papering over it on screen would have fixed the appearance and left the history just as split. The fix was to define a canonical identifier and reconcile the variants right at the webhook entry, before anything touched the database. It is the kind of regional trap that no foreign API’s documentation warns you about.
         </p>
       </section>
 
       <section class="case__block">
-        <h2 class="h2">Como ficou</h2>
+        <h2 class="h2">How it turned out</h2>
         <p class="body-text">
-          Hoje a triagem roda inteira por IA e só o lead qualificado chega à equipe.
-          As conversas ficam amarradas ao processo dentro do próprio sistema, então o
-          histórico deixou de morar no celular de alguém. Está em produção sob meu
-          suporte direto, e isso muda o tipo de trabalho: não existe data de entrega
-          depois da qual eu saio de cena, existe um sistema que precisa acordar
-          funcionando toda manhã.
+          Today the triage runs entirely on AI and only the qualified lead reaches the team. Conversations are tied to the case inside the system itself, so the history stopped living on somebody’s phone. It is in production under my direct support, and that changes the kind of work: there is no delivery date after which I walk off, there is a system that has to wake up working every morning.
         </p>
         <div class="case__gallery">
           <!-- slot: assets/shots/triagem-lead.mp4 · o gif de maior retorno da lista -->
           <figure class="shot shot--tall dither-25">
-            <figcaption><span>mensagem → lead → card no funil</span></figcaption>
+            <figcaption><span>message → lead → card in the pipeline</span></figcaption>
           </figure>
           <!-- slot: assets/shots/triagem-handoff.png -->
           <figure class="shot shot--tall dither-12">
-            <figcaption><span>o advogado assume e o bot pausa</span></figcaption>
+            <figcaption><span>the lawyer takes over and the bot pauses</span></figcaption>
           </figure>
         </div>
       </section>
     </div>
 
-    <nav class="case__nav" aria-label="Navegação entre projetos">
-      <a class="btn btn--ghost" href="projeto-jvb.html">‹ Anterior: ERP JVB</a>
-      <a class="btn btn--ghost" href="index.html#projetos">Todos os projetos</a>
-      <a class="btn" href="projeto-devtools.html">Próximo: Dev Tools ›</a>
+    <nav class="case__nav" aria-label="Project navigation">
+      <a class="btn btn--ghost" href="projeto-jvb.html">‹ Previous: JVB ERP</a>
+      <a class="btn btn--ghost" href="index.html#projetos">All projects</a>
+      <a class="btn" href="projeto-devtools.html">Next: Dev Tools ›</a>
     </nav>
 
   </article>
@@ -353,11 +297,11 @@ export function cosineSim(a: number[], b: number[]): number {
       <li><a class="social__l social__l--li" href="https://www.linkedin.com/in/luantaraschi/" target="_blank" rel="noopener">LinkedIn</a></li>
       <li><a class="social__l social__l--ig" href="https://www.instagram.com/luantaraschi/" target="_blank" rel="noopener">Instagram</a></li>
     </ul>
-    <span class="mono-caps">feito por mim, com muito amor</span>
+    <span class="mono-caps">made by me, with a lot of love</span>
   </div>
 </footer>
 
-<script src="js/app.js" defer></script>
+<script src="/js/app.js" defer></script>
 <!-- Prerender no hover: o navegador monta a proxima pagina inteira em segundo
      plano quando o cursor encosta no link, e a navegacao vira instantanea. Sem
      biblioteca, sem service worker, sem prefetch na mao.
@@ -373,8 +317,8 @@ export function cosineSim(a: number[], b: number[]): number {
   "prerender": [{
     "where": {
       "or": [
-        { "href_matches": "/projeto-*.html" },
-        { "href_matches": "/sobre.html" }
+        { "href_matches": "/en/projeto-*.html" },
+        { "href_matches": "/en/sobre.html" }
       ]
     },
     "eagerness": "moderate"
