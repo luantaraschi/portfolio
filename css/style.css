@@ -283,6 +283,55 @@ img, canvas, svg { display: block; max-width: 100%; }
 
 a { color: inherit; }
 
+/* 2.3 os lugares onde o navegador pinta por cima do sistema.
+   O cursor, a cortina e a retícula são escolha minha. Isto aqui é defesa: a
+   seleção de texto, a barra de rolagem e o preenchimento automático são
+   desenhados pelo sistema operacional, e cada um entra na tela com uma cor
+   que não existe em lugar nenhum da paleta. Numa página de duas cores, um
+   azul de seleção é a coisa mais visível que tem. */
+
+/* selecionar texto é inverter a polaridade, que é o único acento do site.
+   Em token e não em literal: dentro de um .invert a seleção vira sozinha, e
+   no modo claro ela é ardósia sobre areia sem precisar de segunda regra. */
+::selection {
+  background: var(--ink);
+  color: var(--paper);
+  text-shadow: none;
+}
+
+/* a barra de rolagem. Em token, então ela troca de lado junto com o tema -
+   inclusive a do bloco de código, que rola na horizontal dentro do painel.
+   Sem isso, a única faixa de cinza do sistema operacional ficava encostada na
+   borda da página o tempo todo, do lado direito, sempre visível.
+
+   As duas linhas padrão bastam em Chrome 121+, Firefox e Safari 18.2+. O bloco
+   -webkit- embaixo é só para quem veio antes: onde a propriedade padrão existe
+   ela desliga esses pseudo-elementos, e os dois nunca valem ao mesmo tempo.
+   Medido: com as duas linhas a barra sai 10px, e o `width: 13px` de baixo é
+   simplesmente ignorado. Sem o @supports isso seria código morto se passando
+   por regra viva. */
+:root {
+  scrollbar-width: thin;
+  scrollbar-color: var(--ink) var(--paper);
+}
+@supports not (scrollbar-color: auto) {
+  ::-webkit-scrollbar { width: 13px; height: 13px; }
+  /* o trilho é a mesma retícula de 10px do fundo da página, sem interrupção */
+  ::-webkit-scrollbar-track {
+    background-color: var(--paper);
+    background-image: radial-gradient(var(--tex) 0.8px, transparent 0.9px);
+    background-size: 10px 10px;
+  }
+  /* a alça engorda no hover encolhendo a própria borda: a caixa não muda de
+     tamanho, só de recheio - o mesmo gesto de afundar que os botões usam */
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--ink);
+    border: 3px solid var(--paper);
+  }
+  ::-webkit-scrollbar-thumb:hover { border-width: 1px; }
+  ::-webkit-scrollbar-corner { background-color: var(--paper); }
+}
+
 .wrap {
   width: 100%;
   max-width: var(--wrap);
@@ -313,6 +362,12 @@ a { color: inherit; }
   font-weight: 400;
 }
 
+/* `balance` e não o `pretty` do corpo de texto: os dois consertam quebra de
+   linha, mas problemas diferentes. O `pretty` cuida da viúva no fim de um
+   parágrafo longo; o `balance` reparte as linhas de um bloco curto em larguras
+   parecidas, que é o defeito de título - duas linhas cheias e uma terceira com
+   uma palavra sozinha. Fica fora do .h1: o nome do hero é medido em JS letra
+   por letra, e reequilibrar por baixo do JS é uma briga sem prêmio. */
 .h2 {
   font-family: var(--font-display);
   font-size: clamp(24px, 3.6vw, 40px);
@@ -320,6 +375,7 @@ a { color: inherit; }
   letter-spacing: 0.06em;
   text-transform: uppercase;
   font-weight: 400;
+  text-wrap: balance;
 }
 
 .h3 {
@@ -329,6 +385,7 @@ a { color: inherit; }
   letter-spacing: 0.06em;
   text-transform: uppercase;
   font-weight: 400;
+  text-wrap: balance;
 }
 
 .kicker {
@@ -555,6 +612,11 @@ span.codigo__repo { border-style: dashed; }
   font-size: 13px;
   line-height: 1.65;
   tab-size: 2;
+  /* chegando ao fim da linha de código, o gesto continuava na página: em
+     trackpad o navegador lê rolagem horizontal que passou do batente como
+     "voltar", e a pessoa saía do case sem ter clicado em nada. `contain`
+     segura o gesto dentro da caixa. */
+  overscroll-behavior-x: contain;
 }
 /* rolar com o teclado exige poder focar a caixa; sem isto quem não usa mouse
    não alcança o fim da linha */
@@ -793,6 +855,25 @@ span.codigo__repo { border-style: dashed; }
 .sec__head { margin-bottom: clamp(28px, 4vw, 48px); }
 .sec__head .h2 { margin-top: 12px; }
 .sec__head .lead { margin-top: 16px; }
+
+/* Chegar por link de âncora era a única navegação do site que acontecia em
+   silêncio. Quem clica em "projetos" no topo, ou volta de um case pelo
+   "‹ todos os projetos", é jogado no meio de uma página comprida sem nada
+   dizendo onde caiu - e como todas as seções têm a mesma cara, dá aquele
+   segundo de dúvida se o link levou ao lugar certo.
+
+   O kicker da seção alvo pisca duas vezes invertido. É o rótulo, não o
+   título: ele é pequeno, é exatamente o nome que a pessoa clicou, e piscar
+   um H2 de 40px seria escândalo pra uma confirmação. Dois piscos e para -
+   isto responde uma pergunta, não chama atenção pra si.
+
+   `steps(1, end)` de propósito: sem passo intermediário nenhum, aceso ou
+   apagado, que é como todo o resto do site se acende. */
+.sec:target .sec__head .kicker { animation: alvo 260ms steps(1, end) 2; }
+@keyframes alvo {
+  0%, 49%   { background: var(--ink); color: var(--paper); box-shadow: 0 0 0 4px var(--ink); }
+  50%, 100% { background: transparent; color: var(--ink-2); box-shadow: none; }
+}
 
 /* 5.5 cards de projeto */
 .grid-projects {
@@ -1156,8 +1237,39 @@ span.codigo__repo { border-style: dashed; }
   font-family: var(--font-body);
   font-size: 16px;
   border-radius: 0;
+  /* o traço que pisca é o último detalhe do campo que ainda vinha do sistema */
+  caret-color: var(--accent);
 }
 .field textarea { min-height: 132px; resize: vertical; line-height: 1.5; }
+
+/* O preenchimento automático do Chrome pinta o campo de #e8f0fe e escreve o
+   valor em azul-escuro. É a única cor de terceiro que consegue entrar na
+   página, e ela entra justamente no formulário, que é onde a visita termina.
+
+   Não dá para trocar o `background`: o navegador ganha de qualquer declaração
+   nessa propriedade, com !important e tudo. O que ele não toca é o
+   `box-shadow`, então uma sombra interna de 100px cobre o campo inteiro com o
+   papel do tema, e o -webkit-text-fill-color devolve a tinta ao valor. Truque
+   velho, mas é o único que funciona, e o site é escuro por padrão: sem isto o
+   campo autopreenchido vira um retângulo claro no meio do painel. */
+.field input:-webkit-autofill,
+.field input:-webkit-autofill:hover,
+.field input:-webkit-autofill:focus,
+.field textarea:-webkit-autofill {
+  -webkit-box-shadow: inset 0 0 0 100px var(--paper);
+  -webkit-text-fill-color: var(--ink);
+  caret-color: var(--accent);
+}
+
+/* a caixa de mensagem cresce com o que está sendo escrito, em vez de rolar
+   dentro de uma altura fixa. Um campo de 132px é convite pra três linhas; se
+   ele acompanha, a pessoa escreve o que veio escrever. Dentro de @supports
+   porque é recente: quem não tem continua com a caixa fixa e a alça de
+   arrastar, que é o comportamento de sempre. O teto existe pra mensagem longa
+   não empurrar o botão de enviar pra fora da tela. */
+@supports (field-sizing: content) {
+  .field textarea { field-sizing: content; max-height: 46vh; }
+}
 .field input:focus-visible,
 .field textarea:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
 .field input[aria-invalid='true'],
@@ -1519,8 +1631,16 @@ span.codigo__repo { border-style: dashed; }
   text-transform: uppercase;
   color: var(--ink-2);
 }
-/* o rótulo é mono miúdo, então o valor precisa de peso pra segurar a linha */
-.ficha dd { margin: 0; text-align: right; font-weight: 500; }
+/* o rótulo é mono miúdo, então o valor precisa de peso pra segurar a linha.
+   `tabular-nums` porque os valores estão alinhados à direita numa coluna: com
+   algarismo de largura proporcional, o "1" é mais estreito que o "9" e as
+   linhas que terminam em número deixam de bater com as de cima e de baixo. */
+.ficha dd {
+  margin: 0;
+  text-align: right;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
 /* Rótulo à esquerda e valor à direita só funciona enquanto os dois cabem na
    mesma linha. Numa coluna curta "LangGraph, MCP e Claude Code" não cabia,
    quebrava pra linha de baixo e ia pro canto esquerdo - e aí uma linha da
@@ -2468,6 +2588,27 @@ span.codigo__repo { border-style: dashed; }
 :where(a, button, input, textarea, [tabindex]):focus-visible {
   outline: 3px solid var(--accent);
   outline-offset: 3px;
+}
+
+/* O sistema tem duas preferências de acessibilidade que o navegador entrega de
+   graça, e o site só atendia uma. Quem liga "aumentar contraste" no Windows ou
+   no macOS está dizendo que o cinza do meio não serve: o --ink-2 existe só pra
+   baixar hierarquia, e aqui ele deixa de existir. A régua fina vira a régua
+   cheia pelo mesmo motivo.
+
+   Redeclarado nos quatro escopos, e não só no :root, porque var() dentro de
+   custom property resolve no elemento que declara - a mesma armadilha do
+   comentário lá do topo. Se isto morasse só no :root, o painel invertido
+   herdaria a tinta da página em vez da dele e o texto sumiria dentro dele. */
+@media (prefers-contrast: more) {
+  :root,
+  :root[data-theme='light'],
+  .invert, .guia--inv,
+  :root[data-theme='light'] .invert,
+  :root[data-theme='light'] .guia--inv {
+    --ink-2: var(--ink);
+    --rule-soft: var(--rule);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -84,6 +84,13 @@ antes de animar, e o CSS tem um bloco que zera duração e atraso — inclusive 
 atraso, senão a escada de entrada deixaria elemento invisível por meio segundo
 mesmo com a animação já cortada.
 
+**E quem pede mais contraste no sistema não recebe o cinza do meio.** O
+`--ink-2` existe só para baixar hierarquia; sob `prefers-contrast: more` ele
+deixa de existir e a régua fina vira a régua cheia. Está redeclarado nos quatro
+escopos de tema e não só no `:root`, porque `var()` dentro de custom property
+resolve no elemento que declara — se morasse só no `:root`, o painel invertido
+herdaria a tinta da página em vez da dele e o texto sumiria lá dentro.
+
 **As fontes são hospedadas aqui.** O Google Fonts punha um terceiro domínio no
 caminho crítico de todo carregamento, e o nome do hero é medido em JS depois que
 a fonte chega — ou seja, o maior elemento da tela esperava uma conexão externa
@@ -92,6 +99,23 @@ Google mesmo serve, com o `unicode-range` segurando o latin-ext até aparecer um
 "ç". Para atualizar: `python tools/baixar-fontes.py`, que rebaixa tudo e regera
 o `assets/fontes/fontes.css`. As quatro famílias são SIL Open Font License e as
 licenças estão ao lado dos arquivos.
+
+**Os lugares onde o navegador pinta por cima do sistema.** O cursor, a cortina
+e a retícula são escolha; a seleção de texto, a barra de rolagem e o
+preenchimento automático não são — vêm do sistema operacional, cada um com uma
+cor que não existe na paleta. Numa página de duas cores isso aparece muito. A
+seleção passou a ser a inversão de polaridade, a barra de rolagem lê os mesmos
+tokens do tema, e o campo autopreenchido do Chrome é coberto por uma sombra
+interna de 100px, que é o único jeito: o `background` dele o navegador não
+entrega, com `!important` e tudo.
+
+A barra de rolagem tem duas implementações e só uma vale por vez. As duas
+linhas padrão (`scrollbar-width` e `scrollbar-color`) atendem Chrome 121+,
+Firefox e Safari 18.2+; o bloco `::-webkit-scrollbar` fica dentro de um
+`@supports not` porque, onde a propriedade padrão existe, ela desliga esses
+pseudo-elementos. Medido: com as duas juntas a barra sai com 10px e o
+`width: 13px` do bloco webkit é ignorado. Sem o `@supports`, aquilo seria
+código morto se passando por regra viva.
 
 **O tema é aplicado antes da primeira pintura.** Um script inline no `<head>` de
 cada página lê o `localStorage` e marca o `<html>` antes do CSS carregar, para o
