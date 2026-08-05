@@ -34,6 +34,7 @@ SHOTS.md                roteiro de captura dos prints
 vercel.json             headers de produção: CSP, cache dos assets, hardening
 tools/check.mjs         verificação estrutural das páginas (node tools/check.mjs)
 tools/gerar-sitemap.mjs regera o sitemap com o lastmod tirado do git
+tools/gerar-favicon.py  assa o monograma nos tamanhos que o Google aceita
 ```
 
 As ferramentas de `tools/` são de desenvolvimento e não vão para o navegador —
@@ -63,6 +64,14 @@ checagem 11 do `check.mjs` recalcula o hash das onze páginas e compara com o qu
 está na CSP, então o descasamento vira falha antes do commit. Ela normaliza CRLF
 para LF de propósito: os arquivos aqui estão em CRLF, o git guarda em LF, e é o
 LF que vai ao ar. O hash tem que ser o dos bytes servidos.
+
+**O favicon é arquivo, não `data:` URI.** O desenho vivia embutido no `<head>`,
+funcionava em todo navegador, e por isso ninguém percebeu: o Googlebot não busca
+`data:` URI para favicon. Ele quer endereço rastreável, quadrado, em múltiplo de
+48px. O ícone existia e o único que precisava vê-lo nunca via, então o resultado
+de busca mostrava o globo genérico. Para mudar o desenho: edite `GLIFO` em
+`tools/gerar-favicon.py` e rode. A checagem 12 recusa o retorno do `data:` URI e
+confere que cada arquivo referenciado existe.
 
 **O cache é longo só onde o nome do arquivo é promessa.** Os `.woff2` levam um
 ano com `immutable` porque nunca mudam sem mudar de nome. As capturas levam trinta

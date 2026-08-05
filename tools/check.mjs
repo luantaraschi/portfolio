@@ -222,6 +222,24 @@ for (const [nome, src] of html) {
   }
 }
 
+// --- 12. o favicon é arquivo de verdade, não data: URI ---
+// O desenho vivia embutido no <head> como data: URI. Funcionava em todo
+// navegador e por isso ninguém percebeu o problema: o Googlebot NÃO busca
+// data URI para favicon, e o resultado de busca mostrava o globo genérico.
+// O ícone existia e o único que precisava vê-lo nunca via.
+// Quem gera os arquivos é tools/gerar-favicon.py.
+for (const [nome, src] of html) {
+  const icones = src.match(/<link rel="(?:icon|apple-touch-icon)"[^>]*>/g) ?? [];
+  exigir(icones.length > 0, `${nome}: sem <link rel="icon">`);
+  for (const tag of icones) {
+    exigir(!/href="data:/.test(tag),
+      `${nome}: favicon em data: URI - o Google não busca, cai no globo genérico`);
+    const href = tag.match(/href="([^"]+)"/)?.[1] ?? '';
+    exigir(existsSync(join(RAIZ, href.replace(/^\//, ''))),
+      `${nome}: o favicon ${href} não existe no repositório`);
+  }
+}
+
 if (falhas.length) {
   console.error(`\n${falhas.length} falha(s):\n`);
   for (const f of falhas) console.error(`  x ${f}`);

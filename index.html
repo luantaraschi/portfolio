@@ -44,7 +44,15 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
 <meta property="og:image:alt" content="O nome Luan Taraschi em tipografia bitmap ao lado de uma esfera renderizada com dithering de 1 bit." />
 <meta name="twitter:card" content="summary_large_image" />
 
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='16' height='16' fill='%231a1917'/><g fill='%23fce4a6' shape-rendering='crispEdges'><rect x='2' y='4' width='2' height='8'/><rect x='2' y='10' width='5' height='2'/><rect x='9' y='4' width='6' height='2'/><rect x='11' y='4' width='2' height='8'/></g></svg>" />
+<!-- Arquivos de verdade, e nao mais data: URI. O Googlebot NAO busca data URI
+     para favicon: ele quer endereco rastreavel, quadrado, em multiplo de 48px.
+     Enquanto o desenho morava embutido aqui o resultado de busca mostrava o
+     globo generico - o icone existia e o Google nunca o via.
+     Gerados por tools/gerar-favicon.py, a partir do mesmo monograma. -->
+<link rel="icon" href="/favicon.ico" sizes="32x32" />
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+<link rel="icon" href="/assets/favicon-96.png" type="image/png" sizes="96x96" />
+<link rel="apple-touch-icon" href="/assets/favicon-180.png" /><g fill='%23fce4a6' shape-rendering='crispEdges'><rect x='2' y='4' width='2' height='8'/><rect x='2' y='10' width='5' height='2'/><rect x='9' y='4' width='6' height='2'/><rect x='11' y='4' width='2' height='8'/></g></svg>" />
 <!-- Auto-hospedadas. So as duas que desenham a primeira tela entram em
      preload: o corpo de texto e a fonte do titulo. O resto chega quando o
      CSS pedir, e o unicode-range segura o latin-ext ate aparecer um "ç". -->
