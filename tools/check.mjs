@@ -144,6 +144,20 @@ for (const [nome, src] of html) {
     exigir(nav.includes(`href="${proximo}"`),
       `${pagina}: a navegação não leva ao próximo case (${proximo})`);
   });
+
+  // Toda página de case tem saída para a grade nas DUAS pontas. Seis das oito
+  // só tinham "anterior" e "próximo" no rodapé: quem entrava por um case do
+  // meio (link direto, busca, compartilhamento) só voltava pela barra do topo,
+  // e no começo da leitura não havia saída nenhuma. Um case é uma folha da
+  // árvore, e folha sem caminho de volta é beco.
+  for (const pagina of CADEIA) {
+    const src = html.get(pagina);
+    exigir(/<a class="case__voltar" href="index\.html#projetos"/.test(src),
+      `${pagina}: sem o link de volta no topo do case`);
+    const nav = src.match(/<nav class="case__nav"[\s\S]*?<\/nav>/)?.[0] ?? '';
+    exigir(nav.includes('href="index.html#projetos"'),
+      `${pagina}: o rodapé não oferece caminho de volta para a grade`);
+  }
 }
 
 // --- 10. todo bloco de código aponta para o arquivo de onde ele saiu ---

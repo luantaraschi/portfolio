@@ -2020,7 +2020,47 @@ span.codigo__repo { border-style: dashed; }
 /* ---------- 7b. PÁGINA DE CASE ------------------------------------------- */
 /* Estava inline no projeto.html. Saiu de lá quando o segundo case nasceu:
    oito páginas carregando o mesmo bloco de estilo é o mesmo CSS oito vezes. */
-.case__head { padding-block: clamp(36px, 6vw, 68px) clamp(24px, 4vw, 40px); }
+.case__head { padding-block: clamp(28px, 4.5vw, 52px) clamp(24px, 4vw, 40px); }
+
+/* A saída, no começo da leitura e não só no fim. Seis dos oito cases só tinham
+   "anterior" e "próximo" no rodapé: quem abria um case pelo meio da corrente
+   não tinha nenhum caminho de volta para a grade sem usar a barra do topo.
+
+   Fica acima do kicker, alinhado com ele, na mesma mono em caixa alta: é
+   navegação, não chamada para ação, e competir com o título seria pior que o
+   problema que resolve. A seta desloca no hover em vez de acender, que é o
+   vocabulário que o resto do site já usa. */
+.case__voltar {
+  /* `flex` e não `inline-flex`: o kicker logo abaixo é inline-block, e os dois
+     inline dividiam a mesma linha ("‹ todos os projetos projetos/05"). O
+     fit-content devolve a largura do texto, senão o sublinhado do hover
+     atravessaria a coluna inteira. */
+  display: flex;
+  width: fit-content;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 18px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  padding-bottom: 3px;
+}
+.case__voltar::before {
+  content: '‹';
+  font-size: 15px;
+  transition: transform 140ms steps(3, end);
+}
+.case__voltar:hover { color: var(--ink); border-bottom-color: var(--ink); }
+.case__voltar:hover::before { transform: translateX(-3px); }
+@media (prefers-reduced-motion: reduce) {
+  .case__voltar::before { transition: none; }
+  .case__voltar:hover::before { transform: none; }
+}
 .case__title { margin-top: 16px; font-size: clamp(30px, 5.4vw, 56px); }
 .case__lead { margin-top: 18px; }
 .case__meta {
