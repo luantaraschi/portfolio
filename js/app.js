@@ -850,9 +850,13 @@
 
   function subirNumero(el) {
     var fim = el.textContent;
-    var m = fim.trim().match(/^(\D*)([\d.]+)(\D*)$/);
+    // aceita o separador de milhar das duas línguas: 3.500 em português e
+    // 3,500 em inglês. Os dois viram dígito puro antes do parseInt - sem a
+    // vírgula no grupo, "3,500" no /en/ seria lido como 3 e a placa contaria
+    // até três antes de fechar no texto original, que é 3.500.
+    var m = fim.trim().match(/^(\D*)([\d.,]+)(\D*)$/);
     if (!m) return;                       // placa sem número: fica como está
-    var alvo = parseInt(m[2].replace(/\./g, ''), 10);
+    var alvo = parseInt(m[2].replace(/[.,]/g, ''), 10);
     // zero não sobe de lugar nenhum, e "1" não é contagem, é o número
     if (!alvo || alvo < 2) return;
     var pre = m[1], pos = m[3];
@@ -862,7 +866,10 @@
       var p = (t - t0) / DUR;
       if (p >= 1) { el.textContent = fim; return; }   // fecha no texto original
       var degrau = Math.ceil(p * DEGRAUS) / DEGRAUS;
-      el.textContent = pre + Math.round(alvo * degrau).toLocaleString('pt-BR') + pos;
+      // a contagem formata na língua da página: ponto de milhar em português,
+      // vírgula em inglês, senão o número tremeria de formato ao subir e
+      // fecharia num terceiro, que é o do texto original
+      el.textContent = pre + Math.round(alvo * degrau).toLocaleString(EN ? 'en-US' : 'pt-BR') + pos;
       requestAnimationFrame(passo);
     });
   }
