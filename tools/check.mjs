@@ -97,10 +97,16 @@ for (const [nome, src] of html) {
 }
 
 // --- 8. hreflang preparado para a versão em inglês ---
+// Enquanto /en/ não existe, o par fica comentado no HTML: hreflang apontando
+// para 404 é erro no Search Console. O que se exige aqui é que o comentário
+// exista com o caminho certo, pronto para descomentar em uma linha.
+// Quando /en/ for ao ar, troque este bloco por uma exigência de <link> de
+// verdade - e aí o comentário vira o que ele sempre foi, um lembrete cumprido.
 for (const [nome, src] of html) {
   if (nome === '404.html') continue;
-  exigir(/hreflang=["']pt-BR["']/.test(src), `${nome}: sem <link hreflang="pt-BR">`);
-  exigir(/hreflang=["']x-default["']/.test(src), `${nome}: sem <link hreflang="x-default">`);
+  const alvo = nome === 'index.html' ? 'luantaraschi.dev/en/"' : `en/${nome}"`;
+  exigir(src.includes('hreflang="en"'), `${nome}: sem o par hreflang preparado`);
+  exigir(src.includes(alvo), `${nome}: o hreflang de inglês não aponta para ${alvo}`);
 }
 
 // --- 9. a caminhada entre os cases não tem beco sem saída ---
