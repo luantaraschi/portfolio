@@ -353,7 +353,11 @@ function reasonForNonBusinessDay(
         </p>
       </section>
 
-      <section class="case__block">
+      <!-- id fixo, e não o que o módulo 25 gera a partir do título: a home
+           aponta para cá, e com âncora derivada do <h2> qualquer ajuste de
+           título quebraria o link sem avisar. O módulo respeita id que já
+           existe. A checagem 14 confere o par. -->
+      <section class="case__block" id="incidente">
         <h2 class="h2">O healthcheck que envenenou o banco</h2>
         <p class="body-text">
           Um incidente real. O sistema aprendia a própria URL pública a partir do

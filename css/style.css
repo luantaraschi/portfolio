@@ -1759,6 +1759,13 @@ span.codigo__repo { border-style: dashed; }
   display: grid;
   gap: clamp(28px, 4vw, 48px);
   grid-template-columns: minmax(0, 1fr);
+  /* `start` e não o `stretch` que a grade dá de graça. A coluna da direita tem
+     uma ficha de seis linhas ao lado de uma coluna de texto bem mais alta:
+     esticada, ela virava um painel emoldurado com 480px de nada dentro, e
+     moldura vazia lê como conteúdo que não carregou. Terminando na última
+     linha, o que sobra vira fundo de página, que não promete nada.
+     Medido: 929px de painel para 449px de conteúdo. */
+  align-items: start;
 }
 .spec-row {
   display: flex;

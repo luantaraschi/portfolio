@@ -269,6 +269,28 @@ for (const [nome, src] of html) {
   }
 }
 
+// --- 14. link entre páginas com âncora aponta para âncora que existe ---
+// A home manda o leitor para o postmortem dentro do case do JVB. Âncora entre
+// arquivos é o tipo de link que apodrece calado: quem edita o case não tem
+// como saber que alguém lá de fora aponta para um id dele, e o navegador não
+// reclama de #âncora inexistente - ele só abre a página no topo, e o visitante
+// acha que o link era decorativo.
+//
+// Só ids escritos à mão contam. Os que o módulo 25 gera a partir dos <h2> não
+// existem no HTML, então um link para eles passaria aqui e falharia no ar: é
+// justamente por isso que o alvo do postmortem ganhou id fixo no arquivo.
+{
+  for (const [nome, src] of html) {
+    for (const [, alvo, ancora] of src.matchAll(/href="([\w.-]+\.html)#([\w-]+)"/g)) {
+      const destino = html.get(alvo);
+      if (!destino) { falhas.push(`${nome}: link para ${alvo}, que não é uma página do site`); continue; }
+      exigir(new RegExp(`id="${ancora}"`).test(destino),
+        `${nome}: aponta para ${alvo}#${ancora} e esse id não existe lá - ` +
+        `o link abre a página no topo, sem erro nenhum`);
+    }
+  }
+}
+
 if (falhas.length) {
   console.error(`\n${falhas.length} falha(s):\n`);
   for (const f of falhas) console.error(`  x ${f}`);

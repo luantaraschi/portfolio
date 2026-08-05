@@ -18,7 +18,7 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
      nome espremido. Os termos que caíram daqui continuam na description e no
      og:title, que é onde eles servem pra alguma coisa. -->
 <title>Luan Taraschi · Dev Full Stack</title>
-<meta name="description" content="Luan Taraschi, desenvolvedor full stack em Salvador (BA). SaaS, automação e agentes de IA em produção: RAG, MCP e guardrails, com React, Next.js, Node.js, PostgreSQL e Docker." />
+<meta name="description" content="Desenvolvedor full stack em Salvador (BA). SaaS, automação e agentes de IA em produção: mil conversas por mês triadas por IA e dez horas semanais devolvidas à equipe." />
 <link rel="canonical" href="https://luantaraschi.dev/" />
 <!-- O par de idiomas. O /en/ ainda não existe: enquanto não existir, estas
      três linhas ficam COMENTADAS. hreflang apontando para 404 é erro no
@@ -37,7 +37,7 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
 <meta property="og:locale" content="pt_BR" />
 <meta property="og:url" content="https://luantaraschi.dev/" />
 <meta property="og:title" content="Luan Taraschi · Desenvolvedor Full Stack e Agentes de IA" />
-<meta property="og:description" content="SaaS, automações e agentes de IA em produção. Cinco clientes, dois sistemas que eu mantenho de pé, cerca de mil conversas por mês triadas por IA." />
+<meta property="og:description" content="Construo o sistema que a empresa passa a usar todo dia. Cinco clientes, dois sistemas em produção que eu mantenho, mil conversas por mês triadas por IA." />
 <meta property="og:image" content="https://luantaraschi.dev/assets/og.png" />
 <meta property="og:image:width" content="2400" />
 <meta property="og:image:height" content="1260" />
@@ -89,7 +89,8 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
   "knowsAbout": [
     "React", "Next.js", "Node.js", "TypeScript", "Python",
     "PostgreSQL", "Docker", "CI/CD", "LangGraph", "Model Context Protocol",
-    "RAG", "Agentes de IA", "Automação"
+    "RAG", "Agentes de IA", "Automação", "tRPC", "OAuth 2.1",
+    "Segurança de aplicação", "LGPD"
   ],
   "sameAs": [
     "https://github.com/luantaraschi",
@@ -184,10 +185,17 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
     <div class="wrap hero__grid">
       <div>
         <p class="hero__role">Desenvolvedor full stack · automações e agentes de IA</p>
+        <!-- A frase abre pelo que mudou, e não pelo que eu uso. A versão
+             anterior listava o que eu construo (SaaS, automação, agentes) e
+             deixava o resultado para a linha do tempo, na oitava tela: as dez
+             horas por semana estavam escritas no site desde sempre, no lugar
+             onde ninguém que está decidindo se continua rolando ia chegar.
+             Os três números aqui são os mesmos que já estavam em outras
+             seções - nada novo, só na ordem em que interessa a quem lê. -->
         <p class="lead hero__desc">
-          Construo SaaS e automação de ponta a ponta e coloco agentes de IA para
-          trabalhar em operação real: CRMs de WhatsApp e fluxos de atendimento
-          que processam cerca de mil conversas por mês.
+          Construo o sistema que a empresa passa a usar todo dia. No último,
+          um escritório inteiro saiu da planilha e do WhatsApp: mil conversas
+          por mês triadas por IA e dez horas por semana devolvidas à equipe.
         </p>
         <div class="hero__cta">
           <a class="btn btn--primary" href="#projetos">Ver projetos</a>
@@ -315,6 +323,18 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
             produção. Prefiro entregar o fluxo que resolve o problema do cliente a
             entregar tecnologia bonita que ninguém usa.
           </p>
+          <!-- Isto estava escrito no site, numa oração subordinada no fim de um
+               parágrafo da linha do tempo, na oitava tela. Para cliente que vai
+               contratar, saber que não vai precisar traduzir o próprio problema
+               é decisivo; para recrutador, é a diferença entre quem escreve
+               código e quem entende para quem o código está sendo escrito. -->
+          <p class="body-text">
+            Boa parte do trabalho acontece antes do código. Nos projetos por conta
+            própria eu faço também a ponta comercial: proposta, apresentação e
+            relacionamento. E no JVB eu não entendia nada de Direito, então o
+            sistema saiu de conversa com quem vive a rotina. O que ficou de pé foi
+            o que era útil no dia a dia deles, não o que era bonito no meu editor.
+          </p>
           <p class="body-text">
             A parte que mais me interessa agora é orquestração de agentes: fazer a IA
             assumir a triagem repetitiva e devolver para o humano só o que exige
@@ -332,6 +352,19 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
             sistema operacional e passa no contraste. Dá pra conferir sem acreditar
             em mim: é só apertar Tab.
           </p>
+          <!-- O postmortem estava no nono bloco de uma página de case, onde só
+               chega quem já decidiu que gosta. É a coisa mais sênior escrita no
+               site inteiro: júnior esconde incidente. Aqui ele vira uma frase
+               com endereço, e quem quiser o passo a passo clica.
+               O #incidente é id fixo no HTML do case, e não o gerado pelo
+               módulo 25 a partir do título: com o gerado, mudar o <h2> quebraria
+               este link em silêncio. A checagem 14 confere que ele existe. -->
+          <p class="body-text">
+            E já quebrei coisa em produção. Um healthcheck fez o sistema aprender a
+            URL pública errada e gravar link de anexo apontando para um host que não
+            existe. Escrevi o passo a passo, do sintoma até a causa raiz, e o que
+            mudou depois: <a href="projeto-jvb.html#incidente">o incidente inteiro</a>.
+          </p>
           <p style="margin-top: clamp(22px, 3vw, 32px);">
             <a class="btn btn--primary" href="sobre.html">A história inteira ›</a>
           </p>
@@ -343,9 +376,19 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
             <span class="panel__title">ficha.txt</span>
           </div>
           <dl class="panel__body">
+            <!-- Ficha serve pro que não cabe em parágrafo. Saíram duas linhas
+                 que não pagavam o próprio espaço: "Foco: SaaS, automação e
+                 agentes de IA", que os quatro cards de stack logo abaixo dizem
+                 com precisão, e "Status: aberto a projetos", que a ficha do
+                 hero já diz melhor em "Disponível: freela e efetivo".
+                 Entraram duas que o painel não tinha: o que está de pé agora e
+                 o tamanho da coisa. Os dois números já estavam no site, na
+                 primeira tela e na linha do tempo, e nenhum deles aparecia
+                 aqui, que é onde se lê fato solto. -->
             <div class="spec-row"><dt>Função</dt><dd>Desenvolvedor full stack</dd></div>
-            <div class="spec-row"><dt>Base</dt><dd>Salvador / BA</dd></div>
-            <div class="spec-row"><dt>Foco</dt><dd>SaaS, automação e agentes de IA</dd></div>
+            <div class="spec-row"><dt>Base</dt><dd>Salvador / BA · UTC−3</dd></div>
+            <div class="spec-row"><dt>Em produção</dt><dd>2 sistemas, mantidos e evoluídos por mim</dd></div>
+            <div class="spec-row"><dt>Escala</dt><dd>~1.000 conversas/mês · 300+ processos</dd></div>
             <!-- O mesmo fato da formação, na versão que carrega mais: "conclusão
                  2027" sozinho, num painel de seis linhas, ancora leitura de
                  júnior, e o trabalho listado logo ao lado não é de júnior. Ter
@@ -353,7 +396,6 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
                  formação e a experiência na mesma linha. A UCSAL e o 2027.2
                  continuam no parágrafo aqui do lado, na sobre e no CV. -->
             <div class="spec-row"><dt>Experiência</dt><dd>desde o 1º semestre da graduação, sem parar</dd></div>
-            <div class="spec-row"><dt>Status</dt><dd>aberto a projetos</dd></div>
             <div class="spec-row"><dt>Idiomas</dt><dd>Português nativo · Inglês fluente</dd></div>
           </dl>
         </div>
@@ -598,7 +640,11 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
             <span class="skill__swatch dither-25" aria-hidden="true"></span>
             <h3 class="h3">Back-end</h3>
           </div>
-          <p>Node.js · tRPC · Fastify · Python · integração de APIs</p>
+          <!-- "tipagem de ponta a ponta" é o termo que se procura, e o site
+               descrevia a coisa sem nunca dizer o nome dela: o case fala em
+               881 endpoints tipados e em renomear um campo estourando no build
+               antes de estourar na cara do cliente. É a mesma coisa. -->
+          <p>Node.js · tRPC · Fastify · Python · tipagem de ponta a ponta com Zod · integração de APIs</p>
         </article>
 
         <article class="skill reveal">
@@ -615,6 +661,21 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
             <h3 class="h3">IA &amp; automação</h3>
           </div>
           <p>LangGraph · MCP · RAG · guardrails e evals · Whisper · MediaPipe · OpenRouter · Claude Code</p>
+        </article>
+
+        <!-- Card novo, e o mais desperdiçado dos cinco: tudo aqui já estava
+             construído e escrito, no nono bloco do case do JVB, onde só chega
+             quem já decidiu que gosta. Segurança e conformidade em portfólio
+             de quem está começando é raro o bastante para separar do resto da
+             pilha, e "LGPD" é palavra decisiva para cliente jurídico
+             brasileiro. Nada de enfeite: cada item aqui existe no sistema e
+             está descrito em projeto-jvb.html. -->
+        <article class="skill reveal">
+          <div class="skill__bar">
+            <span class="skill__swatch dither-25" aria-hidden="true"></span>
+            <h3 class="h3">Segurança &amp; conformidade</h3>
+          </div>
+          <p>Controle de permissão · auditoria de ações · 2FA · cofre de credenciais · OAuth 2.1 · varredura de segredo no CI · backup cifrado em AES-256 · LGPD</p>
         </article>
       </div>
 
