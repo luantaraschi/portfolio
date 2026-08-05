@@ -103,6 +103,26 @@ for (const [nome, src] of html) {
   exigir(/hreflang=["']x-default["']/.test(src), `${nome}: sem <link hreflang="x-default">`);
 }
 
+// --- 9. a caminhada entre os cases não tem beco sem saída ---
+// Cada case aponta pro seguinte pelo nome, e por um tempo o Dev Tools apontava
+// pra grade em vez do Gesture: quem lia na ordem nunca chegava no quarto e no
+// quinto projeto. Nada quebra visivelmente quando isso acontece, e é por isso
+// que ficou assim por tanto tempo.
+{
+  const CADEIA = [
+    'projeto-jvb.html', 'projeto-triagem.html', 'projeto-devtools.html',
+    'projeto-gesture.html', 'projeto-dub.html', 'projeto-soms.html',
+    'projeto-sus.html', 'projeto-pov.html',
+  ];
+  CADEIA.forEach((pagina, i) => {
+    const proximo = CADEIA[i + 1];
+    if (!proximo) return;
+    const nav = html.get(pagina).match(/<nav class="case__nav"[\s\S]*?<\/nav>/)?.[0] ?? '';
+    exigir(nav.includes(`href="${proximo}"`),
+      `${pagina}: a navegação não leva ao próximo case (${proximo})`);
+  });
+}
+
 if (falhas.length) {
   console.error(`\n${falhas.length} falha(s):\n`);
   for (const f of falhas) console.error(`  x ${f}`);
