@@ -22,16 +22,10 @@
   // ponytail: fonte única do e-mail - o link, o botão copiar e o form leem daqui.
   var EMAIL = 'luantaraschi@gmail.com';
 
-  // Endpoint do formulário. Crie um form em formspree.io (plano free dá conta
-  // de portfólio) e cole aqui o URL que ele mostra, no formato
-  // 'https://formspree.io/f/xxxxxxxx'.
-  //
-  // Enquanto isto for null o envio cai no mailto:, que é o que o site fazia
-  // antes - só que mailto: não abre nada em máquina sem cliente de e-mail
-  // configurado, que é a maioria das corporativas. Por isso o caminho de baixo
-  // é temporário: assim que a constante estiver preenchida, apague o ramo do
-  // mailto em `enviar` e a variável de mensagem que só ele usa.
-  var FORM_ENDPOINT = null;
+  // Endpoint do formulário. O mesmo valor está no `action` do <form> em
+  // index.html: lá ele serve a quem está sem JS, aqui a quem tem.
+  // Se os dois divergirem, metade dos envios some sem ninguém perceber.
+  var FORM_ENDPOINT = 'https://formspree.io/f/SUBSTITUIR';
 
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -153,36 +147,12 @@
       }
       var data = new FormData(form);
 
-      if (!FORM_ENDPOINT || !window.fetch) {
-        // assinatura separada por um traço em linha própria: é a convenção que
-        // todo cliente de e-mail entende, e sem ela o nome de quem escreve
-        // ficava colado no fim da mensagem como se fosse parte dela
-        var corpo = data.get('mensagem') + '\n\n--\n' +
-          data.get('nome') + '\n' + data.get('email') + '\n' +
-          'Enviado pelo formulário do luantaraschi.dev';
-        var url = 'mailto:' + EMAIL +
-          '?subject=' + encodeURIComponent('Contato do portfólio: ' + data.get('nome')) +
-          '&body=' + encodeURIComponent(corpo);
-
-        // aba nova, não a mesma: com o Gmail registrado como handler, um
-        // location.href aqui trocava o portfólio pela tela de escrever e-mail e
-        // a pessoa perdia a página que estava lendo. Âncora sintética em vez de
-        // window.open porque bloqueador de popup deixa o clique em link passar.
-        // ela entra no documento antes do clique e sai logo depois: âncora solta
-        // funciona no Chrome mas o Firefox ignora o clique de quem não está na
-        // árvore, e aí o envio não fazia nada em metade dos browsers
-        var saida = document.createElement('a');
-        saida.href = url;
-        saida.target = '_blank';
-        saida.rel = 'noopener';
-        saida.style.display = 'none';
-        document.body.appendChild(saida);
-        saida.click();
-        document.body.removeChild(saida);
-
-        dizer('› abri seu cliente de e-mail numa aba nova.');
-        return;
-      }
+      // Sem fetch (navegador muito antigo), entrega pelo caminho nativo: o
+      // `action` do <form> leva ao mesmo endpoint, só trocando de página.
+      // form.submit() e não `return`: o preventDefault lá em cima já cancelou o
+      // envio, e um return seco aqui deixaria o botão sem fazer nada. O submit
+      // programático também não dispara este listener de novo, então não gira.
+      if (!window.fetch) { form.submit(); return; }
 
       // trava o botão: dois cliques no envio viram duas mensagens iguais na
       // caixa de entrada, e quem clicou não tem como saber que mandou duas

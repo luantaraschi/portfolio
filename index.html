@@ -608,7 +608,12 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
           </div>
         </div>
 
-        <form class="panel reveal" data-form novalidate>
+        <!-- `action` e `method` de verdade: sem JS o navegador posta direto no
+             Formspree e a pessoa vê a página de obrigado dele. O `data-form` faz
+             o JS interceptar e enviar por fetch, sem sair da página. Os dois
+             caminhos entregam no mesmo lugar; o de baixo é só mais bonito. -->
+        <form class="panel reveal" data-form novalidate
+              action="https://formspree.io/f/SUBSTITUIR" method="post">
           <div class="panel__bar">
             <span class="panel__box" aria-hidden="true"></span>
             <span class="panel__title">nova mensagem</span>
@@ -617,19 +622,25 @@ try{history.scrollRestoration="manual"}catch(e){}})()</script>
           <div class="panel__body">
             <div class="field">
               <label for="f-nome">Nome</label>
-              <input id="f-nome" name="nome" type="text" autocomplete="name" />
+              <input id="f-nome" name="nome" type="text" autocomplete="name" required />
               <p class="field__err" data-err="nome" role="alert"></p>
             </div>
             <div class="field">
               <label for="f-email">E-mail</label>
-              <input id="f-email" name="email" type="email" autocomplete="email" />
+              <input id="f-email" name="email" type="email" autocomplete="email"
+                     spellcheck="false" required />
               <p class="field__err" data-err="email" role="alert"></p>
             </div>
             <div class="field">
               <label for="f-msg">Mensagem</label>
-              <textarea id="f-msg" name="mensagem"></textarea>
+              <textarea id="f-msg" name="mensagem" required></textarea>
               <p class="field__err" data-err="mensagem" role="alert"></p>
             </div>
+            <!-- Armadilha de robô: humano nunca vê este campo, robô de spam
+                 preenche tudo que encontra. O Formspree descarta o envio quando
+                 o campo com nome `_gotcha` vem preenchido. `hidden` e não CSS:
+                 é um campo que não existe para ninguém, inclusive leitor de tela. -->
+            <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" hidden />
             <button class="btn" type="submit">Enviar mensagem</button>
             <p class="form__status" data-status role="status"></p>
           </div>

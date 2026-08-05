@@ -43,6 +43,11 @@ a promessa de "sem dependência" continua valendo para quem abre o site.
 estático, o estado cabe em duas classes e o custo de um build seria maior que o
 código que ele substituiria.
 
+**O formulário tem dois caminhos para o mesmo lugar.** O `action` do `<form>`
+posta direto no Formspree quando não há JS; com JS, o `fetch` intercepta e a
+pessoa não sai da página. O endpoint aparece nos dois lugares e precisa ser o
+mesmo — se divergirem, metade dos envios some sem ninguém perceber.
+
 **Tudo respeita `prefers-reduced-motion`.** Os dezessete módulos de JS checam
 antes de animar, e o CSS tem um bloco que zera duração e atraso — inclusive o
 atraso, senão a escada de entrada deixaria elemento invisível por meio segundo
