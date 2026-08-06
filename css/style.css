@@ -477,37 +477,83 @@ a { color: inherit; }
           mask-image: linear-gradient(155deg, #000 8%, rgba(0, 0, 0, 0.45) 52%, transparent 92%);
 }
 
-/* faixa divisória: a erosão da referência 2 em três degraus reais de densidade.
-   Uma banda por densidade, cada uma esmaecendo dentro da seguinte. */
+/* Faixa divisória: a erosão da referência 2 em degraus reais de densidade.
+   Nove fileiras de 9px, o ponto encolhendo de uma para a outra, e a cor
+   trocando de três em três - é onde o acento do modo claro aparece de verdade.
+
+   A primeira versão fazia a rampa com `mask-image` em degradê de alfa, e era o
+   erro que dava para ver da outra ponta da sala: alfa parcial em cima de um
+   ponto sólido produz ponto meio transparente, ou seja meio-tom, e meio-tom é
+   exatamente o que um sistema de 1 bit não tem. A faixa saía como um borrão
+   liso enquanto tudo em volta era ponto cheio ou papel. Pior ainda, cada banda
+   esmaecia dentro de si mesma e a seguinte recomeçava opaca: a densidade
+   subia e descia três vezes em vez de cair uma só, e o serrilhado disso é o
+   que fazia a faixa ler como mancha.
+
+   Agora a densidade cai monotonicamente, do quase-cheio ao quase-nada, e o que
+   muda é o tamanho do ponto - nunca a opacidade dele. Mesma conta da faixa que
+   dissolve a virada de polaridade (6.5c), e de propósito: são o mesmo gesto em
+   escalas diferentes, e resolvê-los de dois jeitos seria inventar um segundo
+   vocabulário para dizer a mesma coisa.
+
+   Altura fixa em múltiplo de 9 porque as fileiras são posicionadas em pixel: a
+   altura elástica de antes deixava a última fileira cortada no meio do ponto. */
 .ramp {
   display: grid;
-  grid-template-rows: repeat(3, 1fr);
-  height: clamp(56px, 7vw, 100px);
+  grid-template-rows: repeat(3, 27px);
+  height: 81px;
 }
-.ramp > span { background-color: transparent; }
-.ramp > span:nth-child(1) { --dot: var(--pop-1); }
-.ramp > span:nth-child(2) { --dot: var(--pop-2); }
-.ramp > span:nth-child(3) { --dot: var(--pop-3); }
+.ramp > span {
+  background-color: transparent;
+  background-repeat: repeat-x;
+  background-size: 9px 9px;
+}
+/* O raio vai de 3.9 a 0.7 em nove passos iguais de 0.4. O teto é 3.9 e não o
+   4.7 da dissolução de polaridade, e a diferença é de propósito: aquela faixa
+   encosta num bloco de cor cheia e precisa de uma fileira quase sólida para
+   emendar sem costura; esta aqui flutua no meio da página e não emenda em
+   nada. Com 4.7 num ladrilho de 9px os círculos se tocam, a cobertura passa de
+   85% e a primeira fileira deixa de ser retícula: vira uma tarja. No modo
+   claro, onde cada terço tem uma cor, três tarjas eram exatamente o que se
+   via. Em 3.9 a cobertura de topo fica em 60% e nenhuma fileira chega a
+   fechar. */
 .ramp > span:nth-child(1) {
-  -webkit-mask-image: linear-gradient(to bottom, #000, rgba(0, 0, 0, 0.3));
-          mask-image: linear-gradient(to bottom, #000, rgba(0, 0, 0, 0.3));
+  background-image:
+    radial-gradient(circle, var(--pop-1) 3.9px, transparent 4.1px),
+    radial-gradient(circle, var(--pop-1) 3.5px, transparent 3.7px),
+    radial-gradient(circle, var(--pop-1) 3.1px, transparent 3.3px);
+  background-position: 0 0, 0 9px, 0 18px;
 }
 .ramp > span:nth-child(2) {
-  -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.22));
-          mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.22));
+  background-image:
+    radial-gradient(circle, var(--pop-2) 2.7px, transparent 2.9px),
+    radial-gradient(circle, var(--pop-2) 2.3px, transparent 2.5px),
+    radial-gradient(circle, var(--pop-2) 1.9px, transparent 2.1px);
+  background-position: 0 0, 0 9px, 0 18px;
 }
 .ramp > span:nth-child(3) {
-  -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.45), transparent);
-          mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.45), transparent);
+  background-image:
+    radial-gradient(circle, var(--pop-3) 1.5px, transparent 1.7px),
+    radial-gradient(circle, var(--pop-3) 1.1px, transparent 1.3px),
+    radial-gradient(circle, var(--pop-3) 0.7px, transparent 0.9px);
+  background-position: 0 0, 0 9px, 0 18px;
 }
 
-/* a rampa erode ao entrar em cena: as três bandas nascem densas e se abrem até
-   a própria densidade de repouso. Uma vez só, junto com o .reveal do módulo 6.
-   ponytail: `from` sozinho porque o `to` é o valor que a classe já define. */
-@keyframes erodir { from { background-size: 3px 3px; } }
-.ramp.is-in > span { animation: erodir 640ms steps(4, end) backwards; }
-.ramp.is-in > span:nth-child(2) { animation-delay: 90ms; }
-.ramp.is-in > span:nth-child(3) { animation-delay: 180ms; }
+/* A rampa se escreve fileira a fileira ao entrar em cena, uma vez só, junto com
+   o .reveal do módulo 5. Era `background-size` animado, que agora deslocaria as
+   fileiras umas por cima das outras - com posição em pixel, encolher o ladrilho
+   embaralha a pilha inteira. `clip-path` não mexe em nada disso: ele só decide
+   quanto já apareceu. `steps(3)` com três fileiras por banda dá uma fileira por
+   degrau, e os atrasos fazem as três bandas caírem em cascata.
+   O `to` é escrito: `inset()` não interpola com o `none` do repouso, e sem ele
+   a banda pularia de invisível a inteira num quadro só. */
+@keyframes erodir {
+  from { clip-path: inset(0 0 100% 0); }
+  to   { clip-path: inset(0 0 0 0); }
+}
+.ramp.is-in > span { animation: erodir 420ms steps(3, end) backwards; }
+.ramp.is-in > span:nth-child(2) { animation-delay: 120ms; }
+.ramp.is-in > span:nth-child(3) { animation-delay: 240ms; }
 
 /* ---------- 5. COMPONENTES ---------------------------------------------- */
 

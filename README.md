@@ -198,6 +198,23 @@ armadilha: sem escrever o `to`, o valor de chegada é o `clip-path: none` do
 repouso, e `inset()` não interpola com `none` — a faixa pulava de invisível a
 inteira num quadro só.
 
+**E a `.ramp` passou a falar a mesma língua.** Ela fazia o degradê pontilhado
+com `mask-image` em rampa de alfa, e era o erro que dava para ver da outra
+ponta da sala: alfa parcial sobre ponto sólido produz ponto meio transparente,
+ou seja meio-tom, e meio-tom é exatamente o que um sistema de 1 bit não tem. A
+faixa saía como um borrão liso no meio de uma página que é toda ponto cheio ou
+papel. E cada banda esmaecia dentro de si mesma enquanto a seguinte recomeçava
+opaca, então a densidade subia e descia três vezes em vez de cair uma só.
+Agora são nove fileiras de 9px com o raio caindo 0,4 de uma para a outra, a
+cor trocando de três em três, e nenhuma opacidade envolvida.
+
+O teto do raio é 3.9 aqui e 4.7 na faixa da polaridade, e a diferença tem
+motivo: aquela encosta num bloco de cor cheia e precisa de uma fileira quase
+sólida para emendar sem costura; esta flutua no meio da página e não emenda em
+nada. Com 4.7 num ladrilho de 9px os círculos se tocam e a primeira fileira
+deixa de ser retícula — vira tarja. No modo claro, onde cada terço tem sua cor,
+três tarjas era exatamente o que se via.
+
 **O nome também obedece à altura da janela.** Ele só respondia à largura, e no
 notebook isso engolia a tela de abertura: medido em 1440×900, o masthead tomava
 618px e a linha "Desenvolvedor full stack" nascia em y=884, dezesseis pixels
