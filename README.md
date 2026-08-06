@@ -27,7 +27,7 @@ sobre.html              a versão longa da história
 projeto-*.html          os oito cases: jvb, triagem, devtools, gesture, dub,
                         soms, sus, pov
 css/style.css           tokens, componentes, seções, responsivo, acessibilidade
-js/app.js               27 módulos, todos com guarda de prefers-reduced-motion
+js/app.js               26 módulos, todos com guarda de prefers-reduced-motion
 en/                     as mesmas 11 páginas em inglês, mesmos nomes de arquivo
 assets/shots/           prints e capturas dos projetos
 brand-spec.md           paleta, tipografia e as referências que originaram o sistema
@@ -80,7 +80,7 @@ dias. O CSS, o JS, o HTML, o PDF do currículo e o `fontes.css` seguem revalidan
 a cada visita: eles mudam mantendo o mesmo endereço, e `immutable` neles deixaria
 quem já visitou preso na versão velha por um ano.
 
-**Tudo respeita `prefers-reduced-motion`.** Os vinte e sete módulos de JS checam
+**Tudo respeita `prefers-reduced-motion`.** Os vinte e seis módulos de JS checam
 antes de animar, e o CSS tem um bloco que zera duração e atraso — inclusive o
 atraso, senão a escada de entrada deixaria elemento invisível por meio segundo
 mesmo com a animação já cortada.
@@ -176,31 +176,6 @@ A checagem 8 exige o par nos dois sentidos. hreflang que só um lado declara o
 Google descarta inteiro, e o sintoma disso é nenhum: as duas páginas continuam
 indexadas, cada uma por conta própria, competindo entre si.
 
-**As capturas são ditherizadas de verdade, não cobertas por pontos.** O cartão
-em repouso era uma foto escurecida com um padrão de pontos do CSS por cima:
-era o único lugar do site onde a retícula era enfeite e não desenho. Agora a
-imagem passa pela mesma matriz de Bayer do módulo 4 e vira duas cores, lidas do
-escopo onde o cartão mora — os games estão no `.invert` e ditherizam com a
-polaridade de lá sem saber disso. O hover apaga o canvas e a captura real
-aparece por baixo.
-
-O que separa dither de chuvisco são os níveis automáticos. Captura de painel
-escuro vive num pedaço estreito da escala: sem esticar, todo pixel cai perto do
-limiar da matriz e sai uma tela inteira de meio a meio, ruído com forma de nada.
-Esticando entre o 2º e o 98º percentil, o fundo vira papel limpo, a barra
-lateral vira faixa de pontos e o texto vira tinta cheia. Percentil e não
-mínimo/máximo porque um pixel branco de cursor decidiria a escala da imagem toda.
-
-O POV é vídeo, e cobrir vídeo com uma foto parada custaria o que ele tem de
-melhor — então ele ditheriza quadro a quadro, com `requestVideoFrameCallback`,
-que dispara uma vez por quadro decodificado em vez de uma por quadro de tela.
-Os níveis desse são calculados uma vez e ficam: refeitos a cada quadro, a escala
-mudaria junto com o conteúdo e a imagem pulsaria de brilho sozinha.
-
-Só na home, e isso é decisão. Na página do case a captura é a prova, e quem
-abriu o case foi ver o produto: trocar prova por desenho ali custaria informação
-a quem já decidiu que quer olhar.
-
 **A virada de polaridade dissolve em vez de cortar.** O site inteiro fala em
 retícula e as seis trocas de cor eram seis linhas retas de régua atravessando a
 tela. A `.ramp` que já existia não resolve isso e nem tentava: ela mora dentro
@@ -247,9 +222,7 @@ para o `@media print` igual, e faltava justo onde ninguém testa: `.invert`
 declara os próprios tokens, então zerar só o `:root` deixava a seção invertida
 com a tinta dela. Medido, imprimindo do modo claro: texto `#eee8d5` sobre papel
 `#f0f0ee`, 1,04:1 de contraste — "Como eu trabalho" saía em branco na folha, e
-não tem como perceber isso olhando a tela. O canvas ditherizado também sai da
-impressão, porque ele guarda as duas cores da tela assadas em pixel e no papel
-viraria um retângulo escuro por cima da captura de verdade.
+não tem como perceber isso olhando a tela.
 
 **O tema é aplicado antes da primeira pintura.** Um script inline no `<head>` de
 cada página lê o `localStorage` e marca o `<html>` antes do CSS carregar, para o

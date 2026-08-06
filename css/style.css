@@ -1089,43 +1089,6 @@ span.codigo__repo { border-style: dashed; }
 .card:hover .card__veu,
 .card:focus-visible .card__veu { opacity: 0.18; }
 
-/* 5.5.2 a captura ditherizada de verdade (módulo 26).
-   O canvas nasce em JS e cobre a <img> com a mesma imagem passada pela matriz
-   de Bayer, em duas cores. Sem z-index de propósito: assim o ::after do thumb,
-   que é a erosão sob o cursor, continua caindo por cima dele - e o véu, que
-   tem z-index 1, continua sendo o repouso de quem não tem canvas nenhum.
-
-   `object-fit` e `object-position` repetem os da <img> porque o canvas tem a
-   proporção da imagem inteira: quem recorta é o CSS, nos dois, com a mesma
-   conta. Um pixel fora e a troca no hover piscaria deslocada.
-
-   `pixelated` é obrigatório: o canvas é pequeno de propósito (um pixel dele
-   vale três na tela) e a interpolação do navegador desmancharia justamente o
-   ponto que o dither existe para fazer. */
-.card__1bit {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: top left;
-  image-rendering: pixelated;
-  transition: opacity 260ms steps(4, end);
-}
-.card:hover .card__1bit,
-.card:focus-visible .card__1bit { opacity: 0; }
-
-/* Onde o canvas existe, o véu vira redundância: eram duas retículas empilhadas
-   e a de baixo agora é desenho. E a captura por baixo já pode ficar em tinta
-   cheia nos dois temas, porque em repouso ela está coberta - quem escurecia
-   e quem fantasmava era justamente o disfarce que o dither substituiu. */
-.card.tem-1bit .card__veu { display: none; }
-.card.tem-1bit .card__shot,
-:root[data-theme='light'] .card.tem-1bit .card__shot {
-  opacity: 1;
-  filter: grayscale(1) contrast(1.02);
-}
-
 .card__idx {
   position: absolute;
   z-index: 2;                  /* acima do véu e do papel que o cursor derrama */
@@ -2599,9 +2562,6 @@ span.codigo__repo { border-style: dashed; }
      toque é o módulo 22. Sem isto o toque só deslocava a textura em bloco,
      que é resposta de card inteiro - não de onde a pessoa tocou. */
   .card:active .card__thumb::after { opacity: 1; }
-  /* e o dither abre no toque pelo mesmo motivo: sem ponteiro, o :active é a
-     única chance de ver o produto sem sair da home */
-  .card:active .card__1bit { opacity: 0; }
 }
 
 /* ---------- 7b. PÁGINA DE CASE ------------------------------------------- */
@@ -3199,11 +3159,6 @@ span.codigo__repo { border-style: dashed; }
   .nav, .nav__panel, .hero__figure, .grid-glow, .wipe, .guia, .click-fx,
   .lang, .lupa, .shot__lupa, .ramp, [data-progresso], .orb { display: none !important; }
   .sec.invert::before, .sec.invert::after { display: none; }
-
-  /* O canvas ditherizado guarda as duas cores da TELA, assadas em pixel: na
-     folha ele sairia como um retângulo escuro por cima da captura de verdade,
-     que é justamente o que interessa imprimir. */
-  .card__1bit { display: none !important; }
 
   body { background: #fff; background-image: none; }
   /* o corpo do masthead vem do JS, medido em pixel de tela - no papel não serve */
