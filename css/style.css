@@ -517,25 +517,31 @@ a { color: inherit; }
    claro, onde cada terço tem uma cor, três tarjas eram exatamente o que se
    via. Em 3.9 a cobertura de topo fica em 60% e nenhuma fileira chega a
    fechar. */
+/* A rampa cresce PARA BAIXO, e a faixa da polaridade decresce a partir da
+   borda: juntas, as duas fazem um pico só, centrado exatamente na virada.
+   Antes as duas afinavam no mesmo sentido e se encontravam de frente - medido,
+   as duas rampas terminam no mesmo pixel em que a seção invertida começa, sem
+   um pixel de folga - então a densidade afinava até quase nada e no pixel
+   seguinte voltava a engrossar. Um V, e V lê como erro de montagem. */
 .ramp > span:nth-child(1) {
   background-image:
-    radial-gradient(circle, var(--pop-1) 3.9px, transparent 4.1px),
-    radial-gradient(circle, var(--pop-1) 3.5px, transparent 3.7px),
-    radial-gradient(circle, var(--pop-1) 3.1px, transparent 3.3px);
+    radial-gradient(circle, var(--pop-3) 0.7px, transparent 0.9px),
+    radial-gradient(circle, var(--pop-3) 1.1px, transparent 1.3px),
+    radial-gradient(circle, var(--pop-3) 1.5px, transparent 1.7px);
   background-position: 0 0, 0 9px, 0 18px;
 }
 .ramp > span:nth-child(2) {
   background-image:
-    radial-gradient(circle, var(--pop-2) 2.7px, transparent 2.9px),
+    radial-gradient(circle, var(--pop-2) 1.9px, transparent 2.1px),
     radial-gradient(circle, var(--pop-2) 2.3px, transparent 2.5px),
-    radial-gradient(circle, var(--pop-2) 1.9px, transparent 2.1px);
+    radial-gradient(circle, var(--pop-2) 2.7px, transparent 2.9px);
   background-position: 0 0, 0 9px, 0 18px;
 }
 .ramp > span:nth-child(3) {
   background-image:
-    radial-gradient(circle, var(--pop-3) 1.5px, transparent 1.7px),
-    radial-gradient(circle, var(--pop-3) 1.1px, transparent 1.3px),
-    radial-gradient(circle, var(--pop-3) 0.7px, transparent 0.9px);
+    radial-gradient(circle, var(--pop-1) 3.1px, transparent 3.3px),
+    radial-gradient(circle, var(--pop-1) 3.5px, transparent 3.7px),
+    radial-gradient(circle, var(--pop-1) 3.9px, transparent 4.1px);
   background-position: 0 0, 0 9px, 0 18px;
 }
 
@@ -3130,8 +3136,26 @@ span.codigo__repo { border-style: dashed; }
   background-image: radial-gradient(var(--tex) 0.8px, transparent 0.9px);
   background-size: 10px 10px;
 }
-.lupa[open] { display: grid; place-items: center; }
+/* `minmax(0, 1fr)` e não a faixa automática: numa faixa `auto` a largura sai do
+   max-content do conteúdo, e o conteúdo aqui é uma barra de painel em `nowrap`.
+   Num celular de 390px ela pedia 413, a faixa obedecia, e o quadro inteiro
+   ficava mais largo que a tela - o botão de fechar e o fim da legenda saíam
+   pela direita, sem barra de rolagem nenhuma dizendo isso, porque o véu é
+   `overflow: hidden`. Medido depois que o botão 1:1 entrou e empurrou a conta
+   para fora; antes dele passava raspando, o que é a mesma falha esperando. */
+.lupa[open] { display: grid; grid-template-columns: minmax(0, 1fr); place-items: center; }
 .lupa::backdrop { background: transparent; }
+
+/* e a barra pode quebrar em duas linhas em vez de empurrar: são seis coisas
+   nela, e num aparelho estreito seis não cabem em fila. O nome do arquivo é o
+   que cede primeiro - ele é o rótulo, não o controle. */
+.lupa .panel__bar { flex-wrap: wrap; }
+.lupa .panel__title {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
 /* 100% e max-* do próprio pai pelo mesmo motivo: o padding do <dialog> já
    reservou a margem, e vw/vh aqui somariam a barra de rolagem de novo */
@@ -3159,6 +3183,49 @@ span.codigo__repo { border-style: dashed; }
 }
 .lupa__fechar:hover  { transform: translate(-1px, -1px); box-shadow: 3px 3px 0 var(--ink); }
 .lupa__fechar:active { transform: translate(2px, 2px);   box-shadow: 0 0 0 var(--ink); }
+
+/* O botão 1:1. Ele só aparece onde a captura chegou encolhida a ponto de a
+   interface dentro dela parar de se ler - quem decide é o módulo 24, pela
+   razão entre o tamanho na tela e o natural, então na maioria dos desktops
+   ele nunca é visto. Pressionado, inverte a polaridade como qualquer outro
+   estado ligado deste site. */
+.lupa__perto {
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  color: var(--ink);
+  padding: 3px 9px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  box-shadow: 2px 2px 0 var(--ink);
+  transition: transform 110ms steps(2, end), box-shadow 110ms steps(2, end);
+}
+.lupa__perto:hover  { transform: translate(-1px, -1px); box-shadow: 3px 3px 0 var(--ink); }
+.lupa__perto:active { transform: translate(2px, 2px);   box-shadow: 0 0 0 var(--ink); }
+.lupa__perto[aria-pressed='true'] { background: var(--ink); color: var(--paper); }
+
+/* A vista aproximada: o palco vira janela e a imagem volta ao tamanho natural.
+   `place-content: start` é obrigatório e não é estética - item de grade maior
+   que a área centralizado tem o próprio topo e a própria esquerda fora do
+   alcance da rolagem, e metade da captura fica inatingível. */
+.lupa--pode-perto .lupa__palco { cursor: zoom-in; }
+.lupa--perto .lupa__palco {
+  overflow: auto;
+  overscroll-behavior: contain;
+  place-content: start;
+  cursor: zoom-out;
+}
+.lupa--perto .lupa__img {
+  width: auto;
+  height: auto;
+  max-width: none;
+  max-height: none;
+  object-fit: none;
+}
+
+/* a dica só existe enquanto o botão existe, e some junto */
+.lupa__dica { color: var(--ink-2); }
+.lupa__dica::before { content: ' · '; }
 
 /* `flex: 1` mais `min-height: 0` é o que dá altura definida ao palco. Sem
    isso ele mede o próprio conteúdo, o `max-height: 100%` da imagem cai numa

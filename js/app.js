@@ -57,6 +57,10 @@
     capAnterior:  diz('Captura anterior', 'Previous screenshot'),
     capProxima:   diz('Próxima captura', 'Next screenshot'),
     ampliar:      diz('Ampliar: ', 'Enlarge: '),
+    aproximar:    diz('1:1', '1:1'),
+    aproximarCap: diz('Ver no tamanho real e arrastar', 'View at real size and drag'),
+    afastarCap:   diz('Ver a captura inteira', 'Fit the whole screenshot'),
+    arraste:      diz('arraste para ler', 'drag to read'),
     captura:      diz('captura', 'screenshot'),
     nestaPagina:  diz('nesta página', 'on this page'),
     blocos:       diz(' blocos', ' sections'),
@@ -1146,12 +1150,16 @@
             '<button class="lupa__seta" type="button" data-lupa-prox ' +
                     'aria-label="' + T.capProxima + '">›</button>' +
           '</span>' +
+          '<button class="lupa__perto" type="button" data-lupa-perto hidden ' +
+            'aria-label="' + T.aproximarCap + '" aria-pressed="false">' +
+            T.aproximar + '</button>' +
           '<button class="lupa__fechar" type="button" data-lupa-fecha autofocus ' +
             'aria-label="' + T.fecharCap + '">' +
             T.fechar + '</button>' +
         '</div>' +
         '<div class="lupa__palco" data-lupa-palco></div>' +
-        '<p class="lupa__cap mono-caps" data-lupa-cap></p>' +
+        '<p class="lupa__cap mono-caps"><span data-lupa-cap></span>' +
+          '<span class="lupa__dica" data-lupa-dica hidden>' + T.arraste + '</span></p>' +
       '</div>';
     document.body.appendChild(lupa);
 
@@ -1161,7 +1169,47 @@
     var lupaCap = lupa.querySelector('[data-lupa-cap]');
     var lupaConta = lupa.querySelector('[data-lupa-conta]');
     var lupaSetas = lupa.querySelector('[data-lupa-setas]');
-    var atual = 0, devolver = null;
+    var botaoPerto = lupa.querySelector('[data-lupa-perto]');
+    var lupaDica = lupa.querySelector('[data-lupa-dica]');
+    var atual = 0, devolver = null, perto = false;
+
+    // "Abre em tamanho de verdade" era mentira no celular. Medido num aparelho
+    // de 390px: uma captura de 1440x900 abria com 342px de largura, 23,8% do
+    // natural, e nesse tamanho um painel de sistema não tem rótulo nenhum
+    // legível - a lupa entregava uma miniatura maior, não a captura.
+    //
+    // Então ela ganhou um segundo estado: 1:1 com o palco rolando. O primeiro
+    // continua sendo a captura inteira, que é o que responde "como é a cara
+    // disso"; o segundo responde "o que está escrito aí", que é a pergunta que
+    // só aparece depois da primeira.
+    //
+    // O gatilho é a RAZÃO entre o tamanho na tela e o natural, não a largura da
+    // janela: numa janela estreita de desktop o problema é o mesmo, e num
+    // tablet largo a captura já cabe e o botão nem aparece. Abaixo de 68% a
+    // interface dentro da imagem começa a se desmanchar.
+    var LIMITE_PERTO = 0.68;
+
+    function ajustarPerto(img) {
+      var cabe = img.getBoundingClientRect().width;
+      var vale = !!(cabe && img.naturalWidth && cabe / img.naturalWidth < LIMITE_PERTO);
+      botaoPerto.hidden = !vale;
+      lupaDica.hidden = !vale;
+      lupa.classList.toggle('lupa--pode-perto', vale);
+      if (!vale && perto) trocarPerto(false);
+    }
+
+    function trocarPerto(quer) {
+      perto = quer;
+      lupa.classList.toggle('lupa--perto', perto);
+      botaoPerto.setAttribute('aria-pressed', perto ? 'true' : 'false');
+      botaoPerto.setAttribute('aria-label', perto ? T.afastarCap : T.aproximarCap);
+      if (!perto) return;
+      // entra pelo meio na horizontal e pelo topo: o canto esquerdo de captura
+      // de sistema é quase sempre barra lateral, e o topo é onde mora o que
+      // identifica a tela
+      palco.scrollLeft = (palco.scrollWidth - palco.clientWidth) / 2;
+      palco.scrollTop = 0;
+    }
 
     // o nome do arquivo vira título de painel, do mesmo jeito que retrato.bmp e
     // embeddings.ts: diz de onde a imagem veio sem precisar de uma frase
@@ -1192,9 +1240,15 @@
       // o nome definitivo é o do arquivo que o browser de fato buscou, e isso
       // só se sabe no load; até lá vale o do atributo, que nunca fica vazio
       lupaNome.textContent = arquivoDe(img.getAttribute('src'));
+      // trocar de captura volta para a vista inteira: a próxima pode ser de
+      // outro tamanho, e herdar o zoom da anterior abriria no meio do nada
+      trocarPerto(false);
+      botaoPerto.hidden = true;
       img.addEventListener('load', function () {
         lupaNome.textContent = arquivoDe(img.currentSrc || img.src);
+        ajustarPerto(img);
       });
+      if (lupa.open && img.complete && img.naturalWidth) ajustarPerto(img);
       lupaCap.textContent = legendaDe(fig);
       lupaConta.textContent = telas.length > 1 ? (atual + 1) + '/' + telas.length : '';
     }
@@ -1202,8 +1256,13 @@
       devolver = origem;
       mostrar(i);
       lupa.showModal();
+      // só agora a imagem tem caixa: antes do showModal o diálogo não está no
+      // layout e toda medida sai zero
+      var img = palco.querySelector('img');
+      if (img && img.complete && img.naturalWidth) ajustarPerto(img);
     }
     function fechar() {
+      trocarPerto(false);
       if (reduced) return lupa.close();
       quadro.classList.add('saindo');
       setTimeout(function () {
@@ -1216,6 +1275,12 @@
     lupa.querySelector('[data-lupa-ant]').addEventListener('click', function () { mostrar(atual - 1); });
     lupa.querySelector('[data-lupa-prox]').addEventListener('click', function () { mostrar(atual + 1); });
     lupa.querySelector('[data-lupa-fecha]').addEventListener('click', fechar);
+    botaoPerto.addEventListener('click', function () { trocarPerto(!perto); });
+    // e o gesto óbvio também: tocar na imagem. No toque, arrastar não dispara
+    // clique, então rolar o palco aproximado não fecha o zoom sem querer.
+    palco.addEventListener('click', function () {
+      if (lupa.classList.contains('lupa--pode-perto')) trocarPerto(!perto);
+    });
 
     // clique no véu fecha: o alvo só é o próprio <dialog> quando o clique caiu
     // fora do quadro, porque o quadro cobre a si mesmo e aos filhos
