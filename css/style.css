@@ -1089,6 +1089,43 @@ span.codigo__repo { border-style: dashed; }
 .card:hover .card__veu,
 .card:focus-visible .card__veu { opacity: 0.18; }
 
+/* 5.5.2 a captura ditherizada de verdade (módulo 26).
+   O canvas nasce em JS e cobre a <img> com a mesma imagem passada pela matriz
+   de Bayer, em duas cores. Sem z-index de propósito: assim o ::after do thumb,
+   que é a erosão sob o cursor, continua caindo por cima dele - e o véu, que
+   tem z-index 1, continua sendo o repouso de quem não tem canvas nenhum.
+
+   `object-fit` e `object-position` repetem os da <img> porque o canvas tem a
+   proporção da imagem inteira: quem recorta é o CSS, nos dois, com a mesma
+   conta. Um pixel fora e a troca no hover piscaria deslocada.
+
+   `pixelated` é obrigatório: o canvas é pequeno de propósito (um pixel dele
+   vale três na tela) e a interpolação do navegador desmancharia justamente o
+   ponto que o dither existe para fazer. */
+.card__1bit {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top left;
+  image-rendering: pixelated;
+  transition: opacity 260ms steps(4, end);
+}
+.card:hover .card__1bit,
+.card:focus-visible .card__1bit { opacity: 0; }
+
+/* Onde o canvas existe, o véu vira redundância: eram duas retículas empilhadas
+   e a de baixo agora é desenho. E a captura por baixo já pode ficar em tinta
+   cheia nos dois temas, porque em repouso ela está coberta - quem escurecia
+   e quem fantasmava era justamente o disfarce que o dither substituiu. */
+.card.tem-1bit .card__veu { display: none; }
+.card.tem-1bit .card__shot,
+:root[data-theme='light'] .card.tem-1bit .card__shot {
+  opacity: 1;
+  filter: grayscale(1) contrast(1.02);
+}
+
 .card__idx {
   position: absolute;
   z-index: 2;                  /* acima do véu e do papel que o cursor derrama */
@@ -1586,6 +1623,15 @@ span.codigo__repo { border-style: dashed; }
 
 /* 6.1 hero */
 .hero { padding-block: clamp(48px, 8vw, 92px) var(--bay); }
+
+/* Em tela baixa cada pixel de respiro sai do argumento. Sem isto o nome tinha
+   de encolher muito mais para os botões caberem na abertura (o módulo 9 é
+   quem faz essa conta). O gatilho é a altura e não a largura: monitor largo e
+   baixo tem exatamente o mesmo problema que notebook. */
+@media (min-width: 900px) and (max-height: 1000px) {
+  .hero { padding-block: clamp(28px, 3vw, 44px) var(--bay); }
+  .masthead { margin-block: 8px clamp(18px, 2.4vw, 28px); }
+}
 .hero__grid {
   display: grid;
   gap: clamp(30px, 5vw, 56px);
@@ -1808,10 +1854,40 @@ span.codigo__repo { border-style: dashed; }
 .spec-row dd { margin: 0; flex: 1 1 auto; }
 
 /* 6.3 skills */
+/* Eram cinco cards num `auto-fit` de 240px, e cinco não fecha fila nenhuma:
+   quatro colunas acima de 1180 deixavam três buracos, três colunas deixavam
+   um, duas colunas deixavam outro. Medido de 600 a 1600 e sobrava em todas.
+   É o mesmo buraco dos números do case, só que na seção que existe pra
+   impressionar e no card mais novo da pilha.
+
+   Seis trilhos em vez de `auto-fit`: o card normal toma dois (três colunas)
+   ou três (duas colunas), e a fila que sobra incompleta se abre até encostar
+   nas bordas. Três colunas em vez de quatro no desktop é ganho de tabela: o
+   card fica ~360px em vez de ~270 e os títulos de duas palavras param de
+   quebrar no meio.
+
+   As duas regras da cauda são estruturais de propósito, como a dos games: se
+   um sexto card entrar, as duas param de valer sozinhas e a grade volta a
+   fechar duas filas cheias. Nenhuma delas sabe que hoje são cinco. */
 .grid-skills {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  grid-template-columns: 1fr;
   gap: clamp(14px, 2vw, 20px);
+}
+@media (min-width: 560px) {
+  .grid-skills { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .skill { grid-column: span 3; }
+  /* fila final com um card só: ele atravessa em vez de ficar ao lado do vazio */
+  .skill:last-child:nth-child(odd) { grid-column: span 6; }
+}
+@media (min-width: 900px) {
+  .skill,
+  .skill:last-child:nth-child(odd) { grid-column: span 2; }
+  /* dois na última fila de três: cada um toma metade e a fila fecha */
+  .skill:nth-last-child(2):nth-child(3n+1),
+  .skill:nth-last-child(2):nth-child(3n+1) ~ .skill { grid-column: span 3; }
+  /* um só na última fila de três: atravessa */
+  .skill:last-child:nth-child(3n+1) { grid-column: span 6; }
 }
 .skill {
   position: relative;
@@ -2060,6 +2136,99 @@ span.codigo__repo { border-style: dashed; }
 .invert {
   background: var(--paper);
   color: var(--ink);
+}
+
+/* 6.5c a virada de polaridade dissolve em vez de cortar.
+   O site inteiro fala em retícula e as seis trocas de cor eram seis linhas
+   retas de régua, atravessando a tela. A `.ramp` que já existia não resolve
+   isso e nem tentava: ela mora dentro do `.wrap`, tem largura de coluna, e é
+   um divisor entre blocos - o corte da polaridade é sangrado, de borda a borda.
+
+   A faixa mora DENTRO da seção invertida, e não pendurada fora dela: `.sec` usa
+   `content-visibility: auto`, que implica contenção de pintura, e tudo que
+   passasse da caixa seria recortado sem aviso. Dentro, ela pinta na cor de
+   quem está do outro lado - que é `--ink` aqui, porque a inversão de polaridade
+   é justamente essa: a tinta do bloco invertido É o papel da página. Um token
+   novo para isso seria um quinto lugar para desalinhar.
+
+   Cinco fileiras de 9px, cada uma com o ponto menor que a de cima. Degrau e não
+   rampa contínua: o resto do site anima em `steps()` e um degradê suave aqui
+   seria a única superfície interpolada da página. `repeat-x` é o que prende
+   cada camada na sua fileira - sem ele cada gradiente ladrilharia a faixa
+   inteira e as cinco densidades virariam uma sopa só.
+
+   z-index negativo porque a contenção de pintura já fez da seção um contexto
+   de empilhamento: a faixa cai atrás do texto e continua na frente do fundo,
+   que é exatamente onde ela precisa estar. */
+.sec.invert { position: relative; }
+.sec.invert::before,
+.sec.invert::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 54px;
+  z-index: -1;
+  pointer-events: none;
+  background-repeat: repeat-x;
+  background-size: 9px 9px;
+  /* A primeira fileira tem raio maior que meia célula de propósito: os círculos
+     encostam nos vizinhos e só sobram os quatro vãos das quinas. Sem ela a
+     faixa começava em 53% de cobertura e ficava uma costura visível entre o
+     bloco cheio e o primeiro degrau. */
+  background-image:
+    radial-gradient(circle, var(--ink) 4.7px, transparent 4.9px),
+    radial-gradient(circle, var(--ink) 3.7px, transparent 3.9px),
+    radial-gradient(circle, var(--ink) 2.9px, transparent 3.1px),
+    radial-gradient(circle, var(--ink) 2.1px, transparent 2.3px),
+    radial-gradient(circle, var(--ink) 1.4px, transparent 1.6px),
+    radial-gradient(circle, var(--ink) 0.8px, transparent 1px);
+  background-position: 0 0, 0 9px, 0 18px, 0 27px, 0 36px, 0 45px;
+}
+.sec.invert::before { top: 0; }
+/* A de baixo é a mesma lista de imagens com as posições ao contrário, para a
+   fileira cheia encostar na borda de baixo: o bloco desmancha dos dois lados.
+   Inverter aqui, e não com um `scaleY(-1)`, porque espelhar por transform
+   obriga a origem a ficar no centro - e a origem é justamente o que a revelação
+   logo abaixo precisa ter na borda. */
+.sec.invert::after {
+  bottom: 0;
+  background-position: 0 45px, 0 36px, 0 27px, 0 18px, 0 9px, 0 0;
+}
+
+/* E a faixa se revela fileira a fileira conforme a virada sobe na tela, presa à
+   rolagem: `animation-timeline: view()` é o relógio, sem um listener de scroll
+   e sem uma linha de JS. `steps(6, end)` com seis fileiras de 9px dá exatamente
+   uma fileira por degrau - a erosão acontece em pixel inteiro, que é a única
+   forma honesta num sistema de 1 bit.
+   `clip-path` e não `scaleY`: escalar achataria os pontos em elipses no meio do
+   caminho, e ponto de retícula esmagado é a coisa que mais denuncia efeito.
+   Onde a API ainda não existe, a faixa fica inteira - que já é o desenho certo.
+   A animação é o tempero, nunca o prato. */
+@supports (animation-timeline: view()) {
+  @media not (prefers-reduced-motion: reduce) {
+    .sec.invert::before,
+    .sec.invert::after {
+      animation: linear both;
+      animation-timeline: view();
+      animation-range: cover 0% cover 42%;
+      animation-timing-function: steps(6, end);
+    }
+    .sec.invert::before { animation-name: brotar-desce; }
+    .sec.invert::after  { animation-name: brotar-sobe; }
+  }
+}
+/* O `to` é escrito, e não deixado implícito como no `erodir` lá de cima: sem
+   ele o valor de chegada é o `clip-path: none` do repouso, e `inset()` não
+   interpola com `none` - a faixa pulava de invisível a inteira num quadro só,
+   no meio do percurso. Medido: `none` já no primeiro terço da rolagem. */
+@keyframes brotar-desce {
+  from { clip-path: inset(0 0 100% 0); }
+  to   { clip-path: inset(0 0 0 0); }
+}
+@keyframes brotar-sobe {
+  from { clip-path: inset(100% 0 0 0); }
+  to   { clip-path: inset(0 0 0 0); }
 }
 
 /* 6.5b a lâmpada na barra do retrato ------------------------------------- */
@@ -2430,6 +2599,9 @@ span.codigo__repo { border-style: dashed; }
      toque é o módulo 22. Sem isto o toque só deslocava a textura em bloco,
      que é resposta de card inteiro - não de onde a pessoa tocou. */
   .card:active .card__thumb::after { opacity: 1; }
+  /* e o dither abre no toque pelo mesmo motivo: sem ponteiro, o :active é a
+     única chance de ver o produto sem sair da home */
+  .card:active .card__1bit { opacity: 0; }
 }
 
 /* ---------- 7b. PÁGINA DE CASE ------------------------------------------- */
@@ -2998,15 +3170,66 @@ span.codigo__repo { border-style: dashed; }
 }
 
 @media print {
-  /* no papel a polaridade inverte: tinta escura sobre branco */
-  :root, :root[data-theme='light'] {
+  @page { margin: 14mm; }
+
+  /* No papel a polaridade inverte: tinta escura sobre branco. E aqui vale a
+     mesma regra dos quatro escopos do resto do arquivo, que faltava justo
+     onde ninguém testa: `.invert` declara os próprios tokens, então zerar só
+     o `:root` deixava a seção invertida com a tinta dela. Imprimindo do modo
+     claro isso era texto #eee8d5 sobre papel branco - três seções inteiras
+     saíam em branco na folha, e não tem como perceber olhando a tela. */
+  :root,
+  :root[data-theme='light'],
+  .invert,
+  .guia--inv,
+  :root[data-theme='light'] .invert,
+  :root[data-theme='light'] .guia--inv {
     --paper: #fff; --paper-2: #f0f0ee; --ink: #111; --ink-2: #555;
     --rule: #111; --rule-soft: #bbb; --accent: #111;
+    --pop-1: #111; --pop-2: #111; --pop-3: #111;
+    --tex: rgba(0, 0, 0, 0.08); --tex-hi: rgba(0, 0, 0, 0.08);
+    --shadow: none;
   }
-  .nav, .nav__panel, .hero__figure, .grid-glow, .wipe { display: none !important; }
+
+  /* O que só existe na tela sai da folha: navegação, guia lateral, cortina,
+     rastro do clique, seletor de idioma, lupa e a barra de rolagem em ASCII.
+     Junto vão as duas retículas decorativas - a faixa que dissolve a virada de
+     polaridade e a rampa - porque no papel elas viram só toner gasto numa
+     borda que a folha já separa sozinha. */
+  .nav, .nav__panel, .hero__figure, .grid-glow, .wipe, .guia, .click-fx,
+  .lang, .lupa, .shot__lupa, .ramp, [data-progresso], .orb { display: none !important; }
+  .sec.invert::before, .sec.invert::after { display: none; }
+
+  /* O canvas ditherizado guarda as duas cores da TELA, assadas em pixel: na
+     folha ele sairia como um retângulo escuro por cima da captura de verdade,
+     que é justamente o que interessa imprimir. */
+  .card__1bit { display: none !important; }
+
   body { background: #fff; background-image: none; }
   /* o corpo do masthead vem do JS, medido em pixel de tela - no papel não serve */
+  .masthead { max-width: none !important; }
   .masthead__line { font-size: 38px !important; margin-right: 0; }
   .card, .panel, .detail__hero, .case__meta, .case__shot { box-shadow: none; }
   .invert { background: #f0f0ee; }
+
+  /* `content-visibility: auto` é economia de pintura em tela. Na impressão o
+     documento inteiro é uma página só, e vale ser explícito. */
+  .sec { content-visibility: visible; }
+
+  /* Nada de bloco partido no meio pela quebra de página. */
+  .card, .skill, .tl__item, .case__block, .field, .spec-row { break-inside: avoid; }
+  .sec__head, .h2, .h3 { break-after: avoid; }
+
+  /* Link no papel não clica. O endereço vira texto ao lado - só o externo e o
+     do próprio site, porque âncora interna (#projetos) impressa não leva a
+     lugar nenhum e só suja a linha. */
+  main a[href^="http"]::after,
+  main a[href^="mailto:"]::after {
+    content: ' <' attr(href) '>';
+    font-family: var(--font-mono);
+    font-size: 0.82em;
+    word-break: break-all;
+  }
+  main a[href^="http"].btn::after,
+  main a[href^="http"] .tag::after { content: none; }
 }

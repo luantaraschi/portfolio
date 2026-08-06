@@ -522,9 +522,13 @@
   // atributo data-theme só acabou de mudar.
   var BARRA = { dark: '#1a1917', light: '#eee8d5' };
 
-  function setTheme(theme) {
+  // `semGravar` só é usado pelo módulo 27, quando quem trocou foi o sistema
+  // operacional e não a pessoa: gravar ali carimbaria uma escolha que ninguém
+  // fez, e a partir da primeira troca automática o site pararia de acompanhar
+  // o sistema para sempre. A chave no localStorage significa "ele clicou".
+  function setTheme(theme, semGravar) {
     root.setAttribute('data-theme', theme);
-    try { localStorage.setItem(STORE, theme); } catch (_) {}
+    if (!semGravar) { try { localStorage.setItem(STORE, theme); } catch (_) {} }
     var metaBarra = document.querySelector('meta[name="theme-color"]');
     if (metaBarra) metaBarra.setAttribute('content', BARRA[theme]);
     paintToggles(theme);
@@ -557,10 +561,10 @@
   // chegaria depois da nova e poria os óculos no tema errado.
   var vez = 0;
 
-  function trocar(theme) {
+  function trocar(theme, semGravar) {
     if (reduced || !wipeEl || cortinando) {
       if (cortinando) return;
-      setTheme(theme);
+      setTheme(theme, semGravar);
       reagir(theme);
       return;
     }
@@ -583,7 +587,7 @@
         film.style.setProperty('--congela', anterior);
         film.classList.add('congelado');
       }
-      setTheme(theme);
+      setTheme(theme, semGravar);
     }, METADE);
     setTimeout(function () {
       wipeEl.classList.remove('is-on');
@@ -694,8 +698,14 @@
   var TRACK = 0.04;   // igual ao letter-spacing de .masthead; a última letra
                       // também recebe tracking, e essa sobra viraria buraco à
                       // direita. Mexeu num, mexe no outro.
+  var nome = document.querySelector('.masthead');
+  var argumento = document.querySelector('.hero__cta');
+  var PISO = 0.48;    // o bloco do nome não encolhe além disto da coluna.
+                      // 0.48 é onde 1366x768 - notebook comum por aqui - ainda
+                      // fecha os botões dentro da janela. Abaixo disso o nome
+                      // vira um bloco pequeno no canto e o remédio fica pior.
 
-  function encaixar() {
+  function preencher() {
     Array.prototype.forEach.call(fitLines, function (el) {
       var largura = el.parentElement.clientWidth;
       if (!largura) return;
@@ -705,6 +715,43 @@
       // px inteiro: fonte bitmap em corpo fracionário rende pixel sujo
       el.style.fontSize = Math.floor(PROVA * largura / glifos) + 'px';
     });
+  }
+
+  // O nome só obedecia à largura, e no notebook isso engolia a tela de
+  // abertura: medido em 1440x900, o masthead tomava 618px de altura e a linha
+  // "Desenvolvedor full stack" nascia em y=884, dezesseis pixels abaixo da
+  // dobra. Quem abria via barra, kicker e nome - o argumento inteiro ficava
+  // atrás do primeiro rolar. No celular sempre coube; o problema era só o
+  // desktop, que é onde o recrutador abre.
+  //
+  // Então o bloco do nome também responde à altura: ele se estreita até os
+  // botões encostarem no fim da janela. O JS continua fazendo uma coisa só,
+  // encher o pai - quem muda de tamanho é o pai. As duas linhas encolhem
+  // juntas e continuam encostando nas bordas do bloco, então o retângulo
+  // sólido do nome se mantém; ele só deixa de sangrar a coluna inteira em
+  // tela baixa, que é exatamente onde sangrar custava a primeira frase.
+  function encaixar() {
+    if (nome) nome.style.maxWidth = '';
+    preencher();
+    if (!nome || !argumento) return;
+    var coluna = nome.clientWidth;
+    if (!coluna) return;
+    var atual = coluna;
+    // Estreitar muda a altura, e a altura nova muda o quanto ainda falta. A
+    // relação é linear, então três passadas sobram - o `break` sai antes.
+    for (var i = 0; i < 3; i++) {
+      var sobra = argumento.getBoundingClientRect().bottom
+                + window.scrollY - window.innerHeight;
+      if (sobra <= 0) break;
+      var alto = nome.getBoundingClientRect().height;
+      if (alto <= 0) break;
+      var proximo = Math.max(Math.floor(coluna * PISO),
+                             Math.floor(atual * (alto - sobra) / alto));
+      if (proximo >= atual) break;
+      atual = proximo;
+      nome.style.maxWidth = atual + 'px';
+      preencher();
+    }
   }
 
   if (fitLines.length) {
@@ -1296,5 +1343,254 @@
         }
       }
     }
+  }
+
+  /* ---- 26. a captura em 1 bit de verdade --------------------------------- */
+  // Em repouso o card mostrava a captura escurecida com um padrão de pontos do
+  // CSS por cima: uma foto atrás de pontos, não uma imagem ditherizada. Era o
+  // único lugar do site onde a retícula era enfeite e não desenho.
+  //
+  // Aqui a imagem passa pela mesma matriz de Bayer 8x8 da esfera e vira duas
+  // cores de verdade, lidas do escopo onde o card mora - os games estão dentro
+  // do .invert e ditherizam com a polaridade de lá, sem saber disso. O hover
+  // apaga o canvas e a captura real aparece por baixo, que é a revelação que o
+  // véu do CSS só imitava.
+  //
+  // Só na home, de propósito. Na página do case a captura é a prova, e quem
+  // abriu o case foi ver o produto: trocar prova por desenho ali custaria
+  // informação a quem já decidiu que quer olhar.
+  var capturas = document.querySelectorAll('.card__thumb .card__shot');
+
+  if (capturas.length && document.createElement('canvas').getContext) {
+    // A mesma matriz do módulo 4. Um dither novo com outra matriz seria outra
+    // superfície, e a esfera e as capturas precisam ser a mesma.
+    var BAYER8 = [
+       0, 32,  8, 40,  2, 34, 10, 42,
+      48, 16, 56, 24, 50, 18, 58, 26,
+      12, 44,  4, 36, 14, 46,  6, 38,
+      60, 28, 52, 20, 62, 30, 54, 22,
+       3, 35, 11, 43,  1, 33,  9, 41,
+      51, 19, 59, 27, 49, 17, 57, 25,
+      15, 47,  7, 39, 13, 45,  5, 37,
+      63, 31, 55, 23, 61, 29, 53, 21
+    ];
+    var CELULA = 2;    // um pixel do dither mede isto na tela
+    var GAMA = 1.15;   // depois dos níveis, só um empurrão nos meios-tons
+
+    function corDoEscopo(el, nome) {
+      var v = getComputedStyle(el).getPropertyValue(nome).trim().replace('#', '');
+      if (v.length !== 6) return null;
+      return [parseInt(v.slice(0, 2), 16),
+              parseInt(v.slice(2, 4), 16),
+              parseInt(v.slice(4, 6), 16)];
+    }
+
+    // Subir até o thumb em vez de contar dois parentElement: a <img> mora
+    // dentro de um <picture> e o <video> do POV mora solto. Contar níveis
+    // funcionaria hoje e quebraria calado no dia em que um deles mudasse.
+    function thumbDe(el) {
+      var n = el;
+      while (n && n !== document.body) {
+        if (n.classList && n.classList.contains('card__thumb')) return n;
+        n = n.parentElement;
+      }
+      return null;
+    }
+
+    function medida(f) {
+      return [f.naturalWidth || f.videoWidth || 0, f.naturalHeight || f.videoHeight || 0];
+    }
+
+    function ditherizar(fonte, refazerNiveis) {
+      var thumb = thumbDe(fonte);
+      if (!thumb) return;
+      var m = medida(fonte);
+      if (!m[0] || !m[1]) return;
+      var caixa = thumb.getBoundingClientRect();
+      if (!caixa.width || !caixa.height) return;
+
+      var papel = corDoEscopo(thumb, '--paper');
+      var tinta = corDoEscopo(thumb, '--ink');
+      if (!papel || !tinta) return;
+
+      // O canvas guarda a imagem inteira na proporção dela e quem recorta é o
+      // CSS, com o mesmo `cover` e o mesmo `top left` da fonte - assim a troca
+      // no hover não desloca um pixel. O tamanho sai da conta inversa: depois
+      // do cover, um pixel do canvas tem de medir CELULA na tela.
+      var escala = Math.max(caixa.width / CELULA / m[0], caixa.height / CELULA / m[1]);
+      var w = Math.max(1, Math.round(m[0] * escala));
+      var h = Math.max(1, Math.round(m[1] * escala));
+
+      var tela = thumb.querySelector('.card__1bit');
+      if (!tela) {
+        tela = document.createElement('canvas');
+        tela.className = 'card__1bit';
+        tela.setAttribute('aria-hidden', 'true');
+        // depois do <picture> ou do <video>, e não depois da fonte: no card de
+        // imagem a fonte está um nível abaixo do thumb
+        var irmao = fonte;
+        while (irmao.parentElement && irmao.parentElement !== thumb) irmao = irmao.parentElement;
+        thumb.insertBefore(tela, irmao.nextSibling);
+      }
+      // trocar width/height limpa o canvas inteiro, então só quando muda mesmo
+      if (tela.width !== w || tela.height !== h) {
+        tela.width = w;
+        tela.height = h;
+        refazerNiveis = true;
+      }
+      tela.dataset.medida = Math.round(caixa.width);
+
+      var ctx = tela.getContext('2d', { alpha: false });
+      ctx.drawImage(fonte, 0, 0, w, h);
+
+      var quadro;
+      // Canvas sujo acontece de verdade aqui: abrir por file://, como o README
+      // diz que funciona, tinge o canvas e getImageData estoura. Nesse caso o
+      // canvas some e o véu do CSS continua sendo o repouso, como antes.
+      try { quadro = ctx.getImageData(0, 0, w, h); }
+      catch (e) { tela.parentElement.removeChild(tela); return; }
+
+      var px = quadro.data;
+      var total = w * h;
+      var luz = new Float32Array(total);
+      var faixa = new Uint32Array(64);
+      for (var p = 0; p < total; p++) {
+        var j = p * 4;
+        // luminância perceptual e não média dos canais: na média o azul de
+        // interface pesa igual ao verde e a tela inteira achata num tom só
+        var l = (px[j] * 0.2126 + px[j + 1] * 0.7152 + px[j + 2] * 0.0722) / 255;
+        luz[p] = l;
+        faixa[Math.min(63, l * 64 | 0)]++;
+      }
+
+      // Níveis automáticos, e é isto que separa dither de chuvisco. Captura de
+      // painel escuro vive num pedaço estreito da escala: sem esticar, todo
+      // pixel cai perto do limiar da matriz e o resultado é uma tela inteira de
+      // meio a meio, ruído com forma de nada. Esticando entre o 2º e o 98º
+      // percentil, o fundo do painel vira papel limpo, a barra lateral vira uma
+      // faixa de pontos e o texto vira tinta cheia - o desenho volta. Percentil
+      // e não mínimo/máximo porque um só pixel branco de cursor, ou um só preto
+      // de sombra, decidiria a escala da imagem inteira.
+      //
+      // No vídeo a conta roda uma vez e fica: refeita a cada quadro, a escala
+      // mudaria junto com o conteúdo e a imagem pulsaria de brilho sozinha.
+      if (refazerNiveis || !tela.niveis) {
+        var corte = total * 0.02, soma = 0, lo = 0, hi = 1, k;
+        for (k = 0; k < 64; k++) { soma += faixa[k]; if (soma >= corte) { lo = k / 64; break; } }
+        soma = 0;
+        for (k = 63; k >= 0; k--) { soma += faixa[k]; if (soma >= corte) { hi = (k + 1) / 64; break; } }
+        var amp = hi - lo;
+        if (amp < 0.08) { lo = 0; amp = 1; }   // imagem chapada: deixa como está
+        tela.niveis = { lo: lo, amp: amp };
+      }
+      var base = tela.niveis.lo, faixaUtil = tela.niveis.amp;
+
+      for (var y = 0; y < h; y++) {
+        for (var x = 0; x < w; x++) {
+          var idx = y * w + x;
+          var lum = (luz[idx] - base) / faixaUtil;
+          lum = lum < 0 ? 0 : lum > 1 ? 1 : lum;
+          lum = Math.pow(lum, 1 / GAMA);
+          var cor = lum > (BAYER8[(y & 7) * 8 + (x & 7)] + 0.5) / 64 ? tinta : papel;
+          var i = idx * 4;
+          px[i] = cor[0]; px[i + 1] = cor[1]; px[i + 2] = cor[2]; px[i + 3] = 255;
+        }
+      }
+      ctx.putImageData(quadro, 0, 0);
+      thumb.parentElement.classList.add('tem-1bit');
+    }
+
+    Array.prototype.forEach.call(capturas, function (fonte) {
+      if (fonte.tagName !== 'VIDEO') {
+        if (fonte.complete && fonte.naturalWidth) ditherizar(fonte, true);
+        else fonte.addEventListener('load', function () { ditherizar(fonte, true); }, false);
+        return;
+      }
+
+      // O POV é vídeo, e cobrir vídeo com uma foto parada custaria justamente o
+      // que ele tem de melhor. Então ele ditheriza quadro a quadro: 26 mil
+      // pixels por quadro, menos que a esfera do topo faz sem ninguém notar.
+      // Quem decide se toca continua sendo o módulo 23 - fora da tela ele
+      // pausa, e o laço para junto porque escuta o `pause`.
+      //
+      // requestVideoFrameCallback dispara uma vez por quadro DECODIFICADO, e
+      // não uma por quadro de tela: num vídeo de 30 fps a 120 Hz isso é um
+      // quarto do trabalho, ditherizando exatamente as mesmas imagens. Onde
+      // não existe (Firefox), o rAF faz o mesmo com repetição.
+      var laco = 0;
+      var porQuadro = typeof fonte.requestVideoFrameCallback === 'function';
+      function proximo() {
+        if (fonte.paused || fonte.ended) { laco = 0; return; }
+        ditherizar(fonte, false);
+        laco = porQuadro ? fonte.requestVideoFrameCallback(proximo)
+                         : requestAnimationFrame(proximo);
+      }
+      function comecar() { if (!laco) proximo(); }
+      function parar() {
+        if (!laco) return;
+        if (porQuadro) fonte.cancelVideoFrameCallback(laco);
+        else cancelAnimationFrame(laco);
+        laco = 0;
+      }
+      fonte.addEventListener('loadeddata', function () { ditherizar(fonte, true); }, false);
+      fonte.addEventListener('play', comecar, false);
+      fonte.addEventListener('pause', parar, false);
+      if (fonte.readyState >= 2) ditherizar(fonte, true);
+      if (!fonte.paused) comecar();
+    });
+
+    // O interruptor troca as duas cores, e um dither pintado com a paleta
+    // anterior fica sendo a única coisa da página que não trocou de tema.
+    document.addEventListener('themechange', function () {
+      Array.prototype.forEach.call(capturas, function (fonte) { ditherizar(fonte, false); });
+    });
+
+    // Redesenhar a cada pixel de resize seria caro à toa; o que importa é o
+    // ponto não esticar. Abaixo de 12% de diferença ninguém vê, e os cards
+    // mudam de largura em degraus grandes (a grade troca de contagem).
+    var refazer = 0;
+    window.addEventListener('resize', function () {
+      clearTimeout(refazer);
+      refazer = setTimeout(function () {
+        Array.prototype.forEach.call(capturas, function (fonte) {
+          var thumb = thumbDe(fonte);
+          var tela = thumb && thumb.querySelector('.card__1bit');
+          if (!tela) return;
+          var larg = thumb.getBoundingClientRect().width;
+          if (Math.abs(larg - tela.dataset.medida) / (tela.dataset.medida || 1) > 0.12) {
+            ditherizar(fonte, true);
+          }
+        });
+      }, 220);
+    });
+  }
+
+  /* ---- 27. o sistema apaga a luz e o site acompanha ---------------------- */
+  // O script do <head> lê a preferência do sistema uma vez, antes da primeira
+  // pintura, e nunca mais olha. Quem deixa o computador virar para o escuro às
+  // seis da tarde ficava com a aba no tema da manhã até recarregar - e num site
+  // que tem um interruptor de luz desenhado no topo, isso é justamente onde a
+  // falta se nota.
+  //
+  // Só vale para quem nunca tocou no interruptor. A chave no localStorage
+  // aparece no primeiro clique e em mais lugar nenhum, então a existência dela
+  // É a escolha explícita da pessoa - e escolha explícita ganha do sistema.
+  // Por isso a troca automática passa o `semGravar`: gravar aqui carimbaria uma
+  // decisão que ninguém tomou, e o site pararia de acompanhar para sempre logo
+  // na primeira vez que acompanhasse.
+  //
+  // Entra pela cortina, como o clique. A troca é a mesma coisa; o que muda é
+  // quem pediu, e não avisar seria a página trocando de cor sem motivo visível.
+  if (window.matchMedia) {
+    var sistemaEscuro = window.matchMedia('(prefers-color-scheme: dark)');
+    var seguirSistema = function (e) {
+      try { if (localStorage.getItem(STORE)) return; } catch (_) { return; }
+      var alvo = e.matches ? 'dark' : 'light';
+      if (root.getAttribute('data-theme') === alvo) return;
+      trocar(alvo, true);
+    };
+    // addListener é o nome antigo; Safari só ganhou addEventListener em 14
+    if (sistemaEscuro.addEventListener) sistemaEscuro.addEventListener('change', seguirSistema);
+    else if (sistemaEscuro.addListener) sistemaEscuro.addListener(seguirSistema);
   }
 })();

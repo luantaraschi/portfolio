@@ -27,7 +27,7 @@ sobre.html              a versão longa da história
 projeto-*.html          os oito cases: jvb, triagem, devtools, gesture, dub,
                         soms, sus, pov
 css/style.css           tokens, componentes, seções, responsivo, acessibilidade
-js/app.js               25 módulos, todos com guarda de prefers-reduced-motion
+js/app.js               27 módulos, todos com guarda de prefers-reduced-motion
 en/                     as mesmas 11 páginas em inglês, mesmos nomes de arquivo
 assets/shots/           prints e capturas dos projetos
 brand-spec.md           paleta, tipografia e as referências que originaram o sistema
@@ -80,7 +80,7 @@ dias. O CSS, o JS, o HTML, o PDF do currículo e o `fontes.css` seguem revalidan
 a cada visita: eles mudam mantendo o mesmo endereço, e `immutable` neles deixaria
 quem já visitou preso na versão velha por um ano.
 
-**Tudo respeita `prefers-reduced-motion`.** Os vinte e três módulos de JS checam
+**Tudo respeita `prefers-reduced-motion`.** Os vinte e sete módulos de JS checam
 antes de animar, e o CSS tem um bloco que zera duração e atraso — inclusive o
 atraso, senão a escada de entrada deixaria elemento invisível por meio segundo
 mesmo com a animação já cortada.
@@ -176,9 +176,93 @@ A checagem 8 exige o par nos dois sentidos. hreflang que só um lado declara o
 Google descarta inteiro, e o sintoma disso é nenhum: as duas páginas continuam
 indexadas, cada uma por conta própria, competindo entre si.
 
+**As capturas são ditherizadas de verdade, não cobertas por pontos.** O cartão
+em repouso era uma foto escurecida com um padrão de pontos do CSS por cima:
+era o único lugar do site onde a retícula era enfeite e não desenho. Agora a
+imagem passa pela mesma matriz de Bayer do módulo 4 e vira duas cores, lidas do
+escopo onde o cartão mora — os games estão no `.invert` e ditherizam com a
+polaridade de lá sem saber disso. O hover apaga o canvas e a captura real
+aparece por baixo.
+
+O que separa dither de chuvisco são os níveis automáticos. Captura de painel
+escuro vive num pedaço estreito da escala: sem esticar, todo pixel cai perto do
+limiar da matriz e sai uma tela inteira de meio a meio, ruído com forma de nada.
+Esticando entre o 2º e o 98º percentil, o fundo vira papel limpo, a barra
+lateral vira faixa de pontos e o texto vira tinta cheia. Percentil e não
+mínimo/máximo porque um pixel branco de cursor decidiria a escala da imagem toda.
+
+O POV é vídeo, e cobrir vídeo com uma foto parada custaria o que ele tem de
+melhor — então ele ditheriza quadro a quadro, com `requestVideoFrameCallback`,
+que dispara uma vez por quadro decodificado em vez de uma por quadro de tela.
+Os níveis desse são calculados uma vez e ficam: refeitos a cada quadro, a escala
+mudaria junto com o conteúdo e a imagem pulsaria de brilho sozinha.
+
+Só na home, e isso é decisão. Na página do case a captura é a prova, e quem
+abriu o case foi ver o produto: trocar prova por desenho ali custaria informação
+a quem já decidiu que quer olhar.
+
+**A virada de polaridade dissolve em vez de cortar.** O site inteiro fala em
+retícula e as seis trocas de cor eram seis linhas retas de régua atravessando a
+tela. A `.ramp` que já existia não resolve isso e nem tentava: ela mora dentro
+do `.wrap`, tem largura de coluna, e é um divisor entre blocos — o corte da
+polaridade é sangrado, de borda a borda.
+
+A faixa mora **dentro** da seção invertida, e não pendurada fora dela: `.sec`
+usa `content-visibility: auto`, que implica contenção de pintura, e tudo que
+passasse da caixa seria recortado sem aviso. Dentro, ela pinta em `--ink`,
+porque a inversão de polaridade é justamente isso: a tinta do bloco invertido É
+o papel da página. Um token novo para isso seria um quinto lugar para
+desalinhar.
+
+E ela se revela fileira a fileira conforme a virada sobe na tela, com
+`animation-timeline: view()` — sem listener de scroll e sem uma linha de JS.
+Seis fileiras de 9px e `steps(6, end)` dão exatamente uma fileira por degrau.
+`clip-path` e não `scaleY`: escalar achataria os pontos em elipses no meio do
+caminho, e ponto de retícula esmagado é o que mais denuncia efeito. Uma
+armadilha: sem escrever o `to`, o valor de chegada é o `clip-path: none` do
+repouso, e `inset()` não interpola com `none` — a faixa pulava de invisível a
+inteira num quadro só.
+
+**O nome também obedece à altura da janela.** Ele só respondia à largura, e no
+notebook isso engolia a tela de abertura: medido em 1440×900, o masthead tomava
+618px e a linha "Desenvolvedor full stack" nascia em y=884, dezesseis pixels
+abaixo da dobra. Quem abria via barra, kicker e nome — o argumento inteiro
+ficava atrás do primeiro rolar. No celular sempre coube; o problema era só o
+desktop, que é onde o recrutador abre. Agora o bloco do nome se estreita até os
+botões encostarem no fim da janela, com piso em 48% da coluna, que é onde
+1366×768 ainda fecha. O módulo 9 continua fazendo uma coisa só, encher o pai:
+quem muda de tamanho é o pai.
+
+**Cinco cards não fecham fila nenhuma.** A stack era um `auto-fit` de 240px:
+quatro colunas acima de 1180 deixavam três buracos, três colunas deixavam um,
+duas deixavam outro. Medido de 600 a 1600 e sobrava em todas — o mesmo buraco
+dos números do case, só que na seção que existe para impressionar e no card mais
+novo da pilha. Agora são seis trilhos, o card toma dois ou três, e a fila que
+sobra incompleta se abre até encostar nas bordas. As duas regras da cauda são
+estruturais como a dos games: se um sexto card entrar, elas param de valer
+sozinhas. Nenhuma delas sabe que hoje são cinco.
+
+**No papel a folha também precisa dos quatro escopos.** A regra dos tokens vale
+para o `@media print` igual, e faltava justo onde ninguém testa: `.invert`
+declara os próprios tokens, então zerar só o `:root` deixava a seção invertida
+com a tinta dela. Medido, imprimindo do modo claro: texto `#eee8d5` sobre papel
+`#f0f0ee`, 1,04:1 de contraste — "Como eu trabalho" saía em branco na folha, e
+não tem como perceber isso olhando a tela. O canvas ditherizado também sai da
+impressão, porque ele guarda as duas cores da tela assadas em pixel e no papel
+viraria um retângulo escuro por cima da captura de verdade.
+
 **O tema é aplicado antes da primeira pintura.** Um script inline no `<head>` de
 cada página lê o `localStorage` e marca o `<html>` antes do CSS carregar, para o
 modo claro não piscar preto ao abrir.
+
+E depois disso ele passou a acompanhar o sistema com a aba aberta. Quem deixa o
+computador virar para o escuro às seis da tarde ficava no tema da manhã até
+recarregar, e num site que tem um interruptor de luz desenhado no topo é
+justamente onde a falta se nota. Vale só para quem nunca tocou no interruptor: a
+chave no `localStorage` aparece no primeiro clique e em mais lugar nenhum, então
+a existência dela É a escolha explícita da pessoa. Por isso a troca automática
+não grava — gravar carimbaria uma decisão que ninguém tomou, e o site pararia de
+acompanhar para sempre logo na primeira vez que acompanhasse.
 
 **A contagem dos números do case roda em JS, e a da página "sobre" roda em CSS.**
 Não é inconsistência: `counter()` do CSS não sabe escrever "3.500" com ponto de
