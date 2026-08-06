@@ -217,6 +217,37 @@ sobra incompleta se abre até encostar nas bordas. As duas regras da cauda são
 estruturais como a dos games: se um sexto card entrar, elas param de valer
 sozinhas. Nenhuma delas sabe que hoje são cinco.
 
+**Sombra dura sobre superfície vazada é contradição.** O botão secundário era
+`background: transparent` e a placa de número não declarava `background`
+nenhum. Numa página de retícula isso não é "sem fundo": é o ponteado passando
+por dentro da peça e por dentro da sombra dela. A sombra promete um objeto
+pousado no papel e o vazado mostra que não tem objeto — e o defeito só aparece
+em movimento, quando o botão anda 2px no hover e a textura de trás anda junto.
+O que separa o secundário do primário é a polaridade, e polaridade precisa de
+duas cores; vazio não é uma delas.
+
+**O que não é clicável responde diferente do que é clicável.** As placas do
+placar da home são link e invertem inteiras no hover. As placas de dentro do
+case não levam a lugar nenhum — o número já está na página que ele descreve —
+então elas fazem o que os cards de stack fazem: a chapa e a retícula sobem por
+dentro, o rótulo ganha tinta cheia, e nada levanta nem ganha sombra. Card que
+se comporta como botão sem ser um é mentira de interface. Mas superfície que
+não responde a nada lê como imagem colada, e essas são quatro caixas grandes no
+meio da leitura. `:not(a)` é o seletor porque a condição de verdade é não ser
+link, não é estar nesta ou naquela seção.
+
+**A saída do case é uma grade que não sabe quantos links tem.** Eram dois ou
+três botões pequenos jogados nos extremos de uma coluna de 1128px, com 625px de
+vazio no meio: não liam como um par, liam como restos. E o rodapé começa no
+pixel seguinte ao fim deles, então a sombra dura de 4px caía dentro do rodapé.
+Agora `grid-auto-flow: column` reparte a linha em partes iguais — seis dos oito
+cases têm três links e dois têm dois, e uma contagem fixa abriria em metade
+deles o mesmo buraco dos cards de stack. As pontas encostam nas bordas de fora,
+o do meio fica centrado, e o forte é `:not(.btn--ghost)` porque o HTML já marca
+qual é: no POV, que é o último da fila, o forte é o "todos os projetos", que ali
+é justamente o avançar. Abaixo de 1100px vira pilha, medido: o rótulo mais longo
+das dezesseis páginas quebra quando a célula desce de 303px.
+
 **No papel a folha também precisa dos quatro escopos.** A regra dos tokens vale
 para o `@media print` igual, e faltava justo onde ninguém testa: `.invert`
 declara os próprios tokens, então zerar só o `:root` deixava a seção invertida

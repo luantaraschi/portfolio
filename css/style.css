@@ -540,7 +540,16 @@ a { color: inherit; }
 
 /* primário = inversão de polaridade, a "seleção" do sistema 1-bit */
 .btn--primary { background: var(--ink); border-color: var(--ink); color: var(--paper); }
-.btn--ghost   { background: transparent; }
+
+/* O secundário era `transparent`, e numa página de retícula isso não é "sem
+   fundo": é o ponteado passando por dentro do botão e por dentro da sombra
+   dele. O botão perdia a borda de objeto - lia como um contorno desenhado por
+   cima do papel, não como uma peça pousada nele. E o efeito piorava no hover,
+   onde ele anda 2px e a textura de trás anda junto, denunciando que ali não
+   tem chapa nenhuma. O que separa o secundário do primário é a polaridade, e
+   polaridade precisa de duas cores: papel com tinta em vez de tinta com papel.
+   Vazio não é uma delas. */
+.btn--ghost   { background: var(--paper); }
 
 .btn--tiny {
   min-height: 40px;
@@ -2709,14 +2718,65 @@ span.codigo__repo { border-style: dashed; }
    embaixo dos menores é o dither de fundo do <figure> aparecendo por baixo da
    legenda - lê como falha de carregamento, não como textura */
 .case__gallery > .shot { align-self: start; }
+/* A saída do case. Eram dois botões pequenos jogados nos extremos de uma
+   coluna de 1128px, com 625px de vazio no meio: não liam como um par, liam
+   como dois restos. E o rodapé começa no pixel seguinte ao fim deles, então a
+   sombra dura de 4px caía dentro do rodapé - no hover, que joga a sombra para
+   6px, caía mais fundo ainda.
+
+   Agora eles fecham a linha inteira, em partes iguais, com o rótulo encostado
+   na borda de fora de cada ponta: quem volta puxa para a esquerda, quem avança
+   empurra para a direita, e o par ocupa a largura que o texto do case ocupa.
+   Mais altos porque numa metade de 554px o corpo de 13px sozinho boiava.
+
+   `grid-auto-flow: column` e não uma contagem fixa: seis dos oito cases têm
+   TRÊS links (anterior, todos, próximo) e dois têm dois. Numa grade de duas
+   colunas os de três abririam exatamente o buraco dos cards de stack. Aqui a
+   grade nasce do número de filhos e não sabe quantos são. */
 .case__nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  justify-content: space-between;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  gap: clamp(12px, 1.6vw, 18px);
   border-top: 2px solid var(--ink);
   margin-top: var(--bay);
   padding-top: 26px;
+  padding-bottom: clamp(34px, 5vw, 58px);
+}
+/* o do meio, quando existe, é o "todos os projetos": ele não aponta para lado
+   nenhum, então fica centrado enquanto as pontas se encostam nas bordas */
+.case__nav .btn { min-height: 64px; justify-content: center; text-align: center; }
+.case__nav .btn:first-child { justify-content: flex-start; text-align: left; }
+.case__nav .btn:last-child  { justify-content: flex-end;   text-align: right; }
+
+/* No fim do case, avançar é a ação principal: quem chegou até aqui leu tudo, e
+   o próximo case é o que a página tem a oferecer em seguida. A polaridade faz
+   essa hierarquia sem precisar de mais nenhum desenho.
+   `:not(.btn--ghost)` em vez de `:last-child` porque o HTML já marca qual é o
+   forte, e nas oito páginas ele é sempre um só - no POV, que é o último da
+   fila, o forte é o "todos os projetos", que ali é justamente o avançar. */
+.case__nav .btn:not(.btn--ghost) {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--paper);
+}
+
+/* Rótulo partido em duas linhas dentro do botão é pior que pilha, então abaixo
+   de uma certa largura o par vira pilha - e aí encostar nas bordas de fora não
+   quer dizer mais nada, porque não há mais fora: todos voltam para o meio.
+
+   1100px e não um número redondo qualquer: medido nas dezesseis páginas, o
+   rótulo mais longo é "‹ Anterior: Seamless AI Dub" (e o "Previous" do inglês,
+   que empata), e ele quebra quando a célula desce de 303px - o que acontece em
+   1060px de janela com três links. Cem pixels de folga em cima disso para a
+   fonte render um fio mais larga em outro sistema sem estourar a conta. */
+@media (max-width: 1099px) {
+  .case__nav {
+    grid-auto-flow: row;
+    grid-auto-columns: auto;
+  }
+  .case__nav .btn:first-child,
+  .case__nav .btn:last-child { justify-content: center; text-align: center; }
 }
 /* números do case: a escala do sistema dita de uma vez, sem virar parágrafo */
 /* O placar da home. É o mesmo .case__nums de dentro dos cases, só que aqui ele
@@ -2807,7 +2867,49 @@ span.codigo__repo { border-style: dashed; }
 @media (max-width: 559px) {
   .case__nums > :last-child:nth-child(odd) { grid-column: 1 / -1; }
 }
-.case__num { border: 2px solid var(--ink); padding: 16px 18px; box-shadow: var(--shadow); }
+/* O `background` faltava desde sempre, e é o defeito mais visível da página:
+   a placa tinha borda, sombra e nada dentro, então a retícula do fundo e a
+   faixa que dissolve a seção passavam por dentro dela. Sombra dura sobre
+   superfície vazada é contradição - a sombra promete um objeto pousado no
+   papel, e o vazado mostra que não tem objeto nenhum. */
+.case__num {
+  position: relative;
+  border: 2px solid var(--ink);
+  background: var(--paper);
+  padding: 16px 18px;
+  box-shadow: var(--shadow);
+}
+
+/* As placas de dentro do case não são link e não vão virar um: no case o
+   número já está na página que ele descreve e não teria para onde levar.
+   Mas superfície que não responde a nada lê como imagem colada, não como
+   parte da página - e essas são quatro caixas grandes, no meio da leitura.
+   Então elas fazem o que os cards da stack fazem, que é a resposta reservada
+   ao que não é clicável: a retícula sobe por dentro e o rótulo ganha tinta
+   cheia. Nada levanta, nada ganha sombra, nada se move. Card que se comporta
+   como botão sem ser um é mentira de interface.
+
+   `:not(a)` e não `.case__block .case__num`: a condição de verdade é não ser
+   link, e escrita assim ela continua valendo no dia em que uma placa dessas
+   aparecer em outro lugar da página. */
+.case__num:not(a)::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  /* a chapa junto com os pontos, como no card de stack: só a retícula em
+     `--rule-soft` sobre `--paper` é diferença de dois por cento de luminância
+     no tema escuro, e o realce não chegava a acontecer. Quem faz a superfície
+     mudar é o `--paper-2`; a retícula é o que diz que a mudança é desta casa */
+  background-color: var(--paper-2);
+  background-image: radial-gradient(var(--rule-soft) 0.8px, transparent 0.9px);
+  background-size: 9px 9px;
+  clip-path: inset(100% 0 0 0);
+  transition: clip-path 320ms steps(6, end);
+}
+.case__num:not(a) > * { position: relative; }
+.case__num:not(a):hover::before { clip-path: inset(0 0 0 0); }
+.case__num:not(a):hover span { color: var(--ink); }
+.case__num span { transition: color 200ms steps(3, end); }
 .case__num b {
   display: block;
   font-family: var(--font-display);
