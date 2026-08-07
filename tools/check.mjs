@@ -95,6 +95,22 @@ for (const [nome, src] of html) {
       `sitemap.xml: ${loc} com lastmod fora do formato AAAA-MM-DD (${lastmod})`);
     exigir(lastmod < amanha, `sitemap.xml: ${loc} com lastmod no futuro (${lastmod})`);
   }
+
+  // O llms.txt é o sitemap dos leitores que não rastreiam: quem chega por
+  // ChatGPT ou Claude lê este arquivo e não as 22 páginas. Ele repete o que já
+  // está no site de propósito - se um estudo de caso novo entrar no sitemap e
+  // não aqui, o site passa a ter duas versões da verdade e a que a IA cita é a
+  // velha. Por isso a exigência é a mesma lista de páginas, menos o 404.
+  const llms = existsSync(join(RAIZ, 'llms.txt'))
+    ? await readFile(join(RAIZ, 'llms.txt'), 'utf8') : '';
+  exigir(llms !== '', 'llms.txt: não existe');
+  if (llms) {
+    exigir(llms.startsWith('# '), 'llms.txt: não abre com o H1 que o formato pede');
+    exigir(/^>\s/m.test(llms), 'llms.txt: sem o resumo em blockquote logo abaixo do título');
+    for (const p of PAGINAS.filter((p) => !p.endsWith('404.html') && !p.startsWith('en/'))) {
+      exigir(llms.includes(HOME[p] ? 'luantaraschi.dev/)' : p), `llms.txt: não lista ${p}`);
+    }
+  }
 }
 
 // --- 6. dados estruturados ---

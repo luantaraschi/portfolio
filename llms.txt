@@ -1,0 +1,41 @@
+# Luan Taraschi
+
+> Desenvolvedor full stack em Salvador (BA), focado em SaaS, automação e
+> agentes de IA em produção. Faz o ciclo inteiro: requisitos, arquitetura,
+> modelagem de banco, integrações, deploy e suporte. Cinco clientes atendidos,
+> dois sistemas em produção que ele mantém. Contato: luantaraschi@gmail.com
+
+Cursa Engenharia de Software na UCSAL, conclusão prevista para 2027.2, e
+trabalha sem interrupção desde o primeiro semestre da graduação. A frente que
+mais o interessa hoje é orquestração de agentes: deixar a IA assumir a triagem
+repetitiva e devolver ao humano só o que exige julgamento — LangGraph, MCP,
+RAG e integrações por API, em produção.
+
+Stack principal: TypeScript, React, Next.js, Node.js, tRPC, Python,
+PostgreSQL, Docker, CI/CD.
+
+O site é estático, escrito à mão, sem framework e sem build. Versão em inglês
+em https://luantaraschi.dev/en/ (mesmo conteúdo, mesma estrutura de URLs).
+
+## Páginas principais
+
+- [Home](https://luantaraschi.dev/): apresentação, projetos, jogos de navegador, stack por área e linha do tempo.
+- [A história inteira](https://luantaraschi.dev/sobre.html): trajetória completa, de um mod de Minecraft aos dez anos até agentes de IA em produção.
+- [Currículo em PDF](https://luantaraschi.dev/assets/luan-taraschi-cv.pdf): versão para download.
+
+## Estudos de caso
+
+- [JVB — ERP jurídico sob medida](https://luantaraschi.dev/projeto-jvb.html): ERP em produção construído por um desenvolvedor único. 124 tabelas, 881 endpoints tipados, 3.500 testes e um servidor MCP com 67 ferramentas. TypeScript, React 19, tRPC, PostgreSQL.
+- [Triagem por IA no WhatsApp](https://luantaraschi.dev/projeto-triagem.html): agente que tria cerca de mil conversas por mês no WhatsApp de um escritório jurídico, com RAG sobre a base do escritório e guardrails para nunca dar consultoria jurídica.
+- [Dev Tools](https://luantaraschi.dev/projeto-devtools.html): 17 utilitários de desenvolvedor num painel só, servidos por uma rota dinâmica única em Next.js 15.
+- [Gesture AI Desk](https://luantaraschi.dev/projeto-gesture.html): controle do computador pela webcam. 21 pontos por mão a 30fps, sete gestos, tudo offline.
+- [Seamless AI Dub](https://luantaraschi.dev/projeto-dub.html): pipeline em Python que recebe vídeo em inglês e devolve dublado em português, com sincronia por segmento.
+- [SOMS](https://luantaraschi.dev/projeto-soms.html): party game musical em tempo real; o problema difícil foram as URLs assinadas do Deezer, que morrem em 30 minutos.
+- [SUS](https://luantaraschi.dev/projeto-sus.html): jogo do impostor em tempo real com Convex. Entra sem conta, joga pelo celular, três modos.
+- [POV](https://luantaraschi.dev/projeto-pov.html): party game de percepção em Svelte e Convex, com um medidor que tem que parecer peça mecânica.
+
+## Perfis
+
+- [GitHub](https://github.com/luantaraschi)
+- [LinkedIn](https://www.linkedin.com/in/luantaraschi/)
+- [Instagram](https://www.instagram.com/luantaraschi/)
