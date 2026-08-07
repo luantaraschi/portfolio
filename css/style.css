@@ -2220,6 +2220,45 @@ span.codigo__repo { border-style: dashed; }
   background-position: 0 45px, 0 36px, 0 27px, 0 18px, 0 9px, 0 0;
 }
 
+/* E quando a rampa encosta no topo, a fileira de 4.7 deixa de estar certa.
+   Ela é quase sólida de propósito, para emendar num bloco de cor cheia da
+   MESMA cor dela - e era isso que existia quando o número foi escolhido. Desde
+   que a rampa passou a terminar no pixel exato em que a seção começa, o que
+   está em cima dela não é mais bloco cheio: é a fileira mais densa da rampa,
+   que é a polaridade oposta.
+
+   Medido na emenda do #sobre, cobertura de creme por fileira: a rampa sobe
+   1,5 / 6,5 / 11,3 / 13,8 / 26,1 / 27,9 / 42,9 / 50,5 / 58,2 e a faixa
+   recomeçava em 14,8. Uma queda de 43 pontos no sentido contrário, mais 5px de
+   escuro sólido sem retícula nenhuma atravessando a tela - que num sistema de
+   1 bit é o mesmo pecado do meio-tom, só que de tarja. O #games não tem rampa,
+   encosta em bloco chapado e mede 0,3 / 0,3 / 14,8 / 44,4: mesma faixa, mesmos
+   números, curva monotônica. A faixa nunca esteve errada - errado é recomeçar
+   do quase-sólido quando já tem uma rampa contando.
+
+   Então aqui ela continua a contagem em vez de recomeçá-la: medido depois,
+   62,3 / 66,6 / 74,0 / 88,8 / 93,8 / 98,8, emendando nos 58,2 em que a rampa
+   parou - o degrau da emenda fica em 4,1 pontos, do tamanho dos outros. E em
+   3px o diâmetro é 6 num ladrilho de 9: os círculos não se tocam, e a tarja
+   sólida some junto.
+
+   O primeiro raio é 3 e não os 3.3 que a área pura pediria. πr²/81 dá a
+   cobertura ideal, mas o ponto pintado sai ~3,5 pontos mais denso que ela por
+   causa da borda antisserrilhada, e com 3.3 a emenda ainda caía 4 pontos.
+   Quem manda aqui é o pixel medido, não a fórmula.
+
+   Só o topo, e só com rampa na frente. As duas faixas de baixo e o #games
+   continuam encostando em bloco cheio, e lá o 4.7 é o número certo. */
+.ramp + .sec.invert::before {
+  background-image:
+    radial-gradient(circle, var(--ink) 3px, transparent 3.2px),
+    radial-gradient(circle, var(--ink) 2.9px, transparent 3.1px),
+    radial-gradient(circle, var(--ink) 2.4px, transparent 2.6px),
+    radial-gradient(circle, var(--ink) 1.8px, transparent 2px),
+    radial-gradient(circle, var(--ink) 1.2px, transparent 1.4px),
+    radial-gradient(circle, var(--ink) 0.5px, transparent 0.7px);
+}
+
 /* E a faixa se revela fileira a fileira conforme a virada sobe na tela, presa à
    rolagem: `animation-timeline: view()` é o relógio, sem um listener de scroll
    e sem uma linha de JS. `steps(6, end)` com seis fileiras de 9px dá exatamente
