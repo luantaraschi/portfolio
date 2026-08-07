@@ -477,72 +477,94 @@ a { color: inherit; }
           mask-image: linear-gradient(155deg, #000 8%, rgba(0, 0, 0, 0.45) 52%, transparent 92%);
 }
 
-/* Faixa divisória: a erosão da referência 2 em degraus reais de densidade.
-   Nove fileiras de 9px, o ponto encolhendo de uma para a outra, e a cor
-   trocando de três em três - é onde o acento do modo claro aparece de verdade.
+/* Faixa divisória: a dissolução entre a página e o painel invertido, numa
+   grade só.
 
-   A primeira versão fazia a rampa com `mask-image` em degradê de alfa, e era o
-   erro que dava para ver da outra ponta da sala: alfa parcial em cima de um
-   ponto sólido produz ponto meio transparente, ou seja meio-tom, e meio-tom é
-   exatamente o que um sistema de 1 bit não tem. A faixa saía como um borrão
-   liso enquanto tudo em volta era ponto cheio ou papel. Pior ainda, cada banda
-   esmaecia dentro de si mesma e a seguinte recomeçava opaca: a densidade
-   subia e descia três vezes em vez de cair uma só, e o serrilhado disso é o
-   que fazia a faixa ler como mancha.
+   Duas versões erradas antes desta, e as duas ensinam a mesma coisa.
 
-   Agora a densidade cai monotonicamente, do quase-cheio ao quase-nada, e o que
-   muda é o tamanho do ponto - nunca a opacidade dele. Mesma conta da faixa que
-   dissolve a virada de polaridade (6.5c), e de propósito: são o mesmo gesto em
-   escalas diferentes, e resolvê-los de dois jeitos seria inventar um segundo
-   vocabulário para dizer a mesma coisa.
+   A primeira fazia a rampa com `mask-image` em degradê de alfa: alfa parcial em
+   cima de ponto sólido produz ponto meio transparente, ou seja meio-tom, e
+   meio-tom é exatamente o que um sistema de 1 bit não tem. Saía um borrão liso
+   no meio de uma página que é toda ponto cheio ou papel.
 
-   Altura fixa em múltiplo de 9 porque as fileiras são posicionadas em pixel: a
-   altura elástica de antes deixava a última fileira cortada no meio do ponto. */
+   A segunda - esta aqui até agora - eram DUAS peças: esta rampa de 81px, com
+   pontos de tinta crescendo sobre o papel, e depois um `::before` de 54px dentro
+   da seção, com pontos OUTROS, de papel, encolhendo sobre a tinta. Corrigi o
+   tom da emenda entre elas e continuou feio, porque o defeito não era o tom: a
+   segunda peça não continua a primeira, ela recomeça. A grade troca de dono no
+   meio do caminho, e o olho lê duas transições emendadas em vez de uma.
+
+   O jeito certo é o que a retícula de verdade sempre fez, e não tem inversão
+   nenhuma: UMA grade, um círculo por célula, o raio só crescendo. Enquanto o
+   raio é menor que meia célula sai ponto sobre o fundo. Passando de 4.5 num
+   ladrilho de 9 os círculos encostam nos vizinhos, e o que sobra do fundo vira
+   sozinho um losango côncavo entre quatro círculos - que encolhe até fechar em
+   6.36, a meia diagonal. O "ponto de papel diminuindo" no fim da faixa não é
+   desenhado por ninguém: é o buraco que sobra. Por isso não tem costura, não
+   tem recomeço e não tem o que emendar.
+
+   Como a peça agora é opaca (`--paper` de base) ela cobre o próprio pedaço da
+   seção invertida em que pinta, e por isso a margem negativa e o z-index: os
+   135px são os mesmos 81 + 54 de antes, no mesmo lugar, e a altura do documento
+   não mexe um pixel. Conferido: mesma posição de título, mesmo scrollHeight.
+
+   Os quinze raios saem de πr²/81 invertida para cobertura em passo igual de
+   6,25% - com a correção da união de círculos a partir de 4.5, que é onde a
+   área para de ser πr². Medido depois: 8 11 24 26 32 43 46 55 56 65 75 82 85
+   89 95, monotônico, e a última fileira emenda nos 100% do painel. */
 .ramp {
   display: grid;
-  grid-template-rows: repeat(3, 27px);
-  height: 81px;
+  grid-template-rows: repeat(3, 45px);
+  height: 135px;
+  /* os 54px que a peça avança por cima do topo da seção - o mesmo pedaço que o
+     `::before` ocupava. Sem isto o conteúdo da seção desceria 54px. */
+  margin-bottom: -54px;
+  position: relative;
+  /* a seção é `position: relative`, então pinta na camada dos posicionados e
+     passaria por cima desta peça. Aqui ela sobe um degrau e ganha. O trecho
+     coberto é só o miolo do padding do topo, onde não mora conteúdo nenhum. */
+  z-index: 1;
+  background-color: var(--paper);
 }
 .ramp > span {
   background-color: transparent;
   background-repeat: repeat-x;
   background-size: 9px 9px;
+  background-position: 0 0, 0 9px, 0 18px, 0 27px, 0 36px;
 }
-/* O raio vai de 3.9 a 0.7 em nove passos iguais de 0.4. O teto é 3.9 e não o
-   4.7 da dissolução de polaridade, e a diferença é de propósito: aquela faixa
-   encosta num bloco de cor cheia e precisa de uma fileira quase sólida para
-   emendar sem costura; esta aqui flutua no meio da página e não emenda em
-   nada. Com 4.7 num ladrilho de 9px os círculos se tocam, a cobertura passa de
-   85% e a primeira fileira deixa de ser retícula: vira uma tarja. No modo
-   claro, onde cada terço tem uma cor, três tarjas eram exatamente o que se
-   via. Em 3.9 a cobertura de topo fica em 60% e nenhuma fileira chega a
-   fechar. */
-/* A rampa cresce PARA BAIXO, e a faixa da polaridade decresce a partir da
-   borda: juntas, as duas fazem um pico só, centrado exatamente na virada.
-   Antes as duas afinavam no mesmo sentido e se encontravam de frente - medido,
-   as duas rampas terminam no mesmo pixel em que a seção invertida começa, sem
-   um pixel de folga - então a densidade afinava até quase nada e no pixel
-   seguinte voltava a engrossar. Um V, e V lê como erro de montagem. */
+/* A cor troca junto com o raio, e o corte é onde o ponto ainda tem folga: os
+   acentos vão até a sétima fileira, que é 44% de cobertura e 2,3px de vão entre
+   um ponto e o vizinho. Da oitava em diante manda `--ink`, que é a cor do painel
+   e é nela que a faixa tem que terminar. Deixar o acento nas fileiras densas era
+   o defeito visível do modo claro: em 62% o ponto vermelho quase encosta, a
+   fileira deixa de ser retícula e vira tarja - e três tarjas coloridas é o que
+   se via. No modo escuro os três `--pop` apontam para a tinta e nada disso
+   aparece; esta regra existe inteira para o modo claro. */
 .ramp > span:nth-child(1) {
   background-image:
-    radial-gradient(circle, var(--pop-3) 0.7px, transparent 0.9px),
-    radial-gradient(circle, var(--pop-3) 1.1px, transparent 1.3px),
-    radial-gradient(circle, var(--pop-3) 1.5px, transparent 1.7px);
-  background-position: 0 0, 0 9px, 0 18px;
+    radial-gradient(circle, var(--pop-3) 1.27px, transparent 1.47px),
+    radial-gradient(circle, var(--pop-3) 1.8px, transparent 2px),
+    radial-gradient(circle, var(--pop-3) 2.2px, transparent 2.4px),
+    radial-gradient(circle, var(--pop-2) 2.54px, transparent 2.74px),
+    radial-gradient(circle, var(--pop-2) 2.84px, transparent 3.04px);
 }
 .ramp > span:nth-child(2) {
   background-image:
-    radial-gradient(circle, var(--pop-2) 1.9px, transparent 2.1px),
-    radial-gradient(circle, var(--pop-2) 2.3px, transparent 2.5px),
-    radial-gradient(circle, var(--pop-2) 2.7px, transparent 2.9px);
-  background-position: 0 0, 0 9px, 0 18px;
+    radial-gradient(circle, var(--pop-1) 3.11px, transparent 3.31px),
+    radial-gradient(circle, var(--pop-1) 3.36px, transparent 3.56px),
+    radial-gradient(circle, var(--ink) 3.59px, transparent 3.79px),
+    radial-gradient(circle, var(--ink) 3.81px, transparent 4.01px),
+    radial-gradient(circle, var(--ink) 4.01px, transparent 4.21px);
 }
+/* Daqui pra baixo os círculos encostam (4.5 é meia célula) e quem desenha o
+   ritmo é o vão, não o ponto. */
 .ramp > span:nth-child(3) {
   background-image:
-    radial-gradient(circle, var(--pop-1) 3.1px, transparent 3.3px),
-    radial-gradient(circle, var(--pop-1) 3.5px, transparent 3.7px),
-    radial-gradient(circle, var(--pop-1) 3.9px, transparent 4.1px);
-  background-position: 0 0, 0 9px, 0 18px;
+    radial-gradient(circle, var(--ink) 4.21px, transparent 4.41px),
+    radial-gradient(circle, var(--ink) 4.4px, transparent 4.6px),
+    radial-gradient(circle, var(--ink) 4.59px, transparent 4.79px),
+    radial-gradient(circle, var(--ink) 4.87px, transparent 5.07px),
+    radial-gradient(circle, var(--ink) 5.28px, transparent 5.48px);
 }
 
 /* A rampa se escreve fileira a fileira ao entrar em cena, uma vez só, junto com
@@ -557,7 +579,7 @@ a { color: inherit; }
   from { clip-path: inset(0 0 100% 0); }
   to   { clip-path: inset(0 0 0 0); }
 }
-.ramp.is-in > span { animation: erodir 420ms steps(3, end) backwards; }
+.ramp.is-in > span { animation: erodir 420ms steps(5, end) backwards; }
 .ramp.is-in > span:nth-child(2) { animation-delay: 120ms; }
 .ramp.is-in > span:nth-child(3) { animation-delay: 240ms; }
 
@@ -2220,44 +2242,16 @@ span.codigo__repo { border-style: dashed; }
   background-position: 0 45px, 0 36px, 0 27px, 0 18px, 0 9px, 0 0;
 }
 
-/* E quando a rampa encosta no topo, a fileira de 4.7 deixa de estar certa.
-   Ela é quase sólida de propósito, para emendar num bloco de cor cheia da
-   MESMA cor dela - e era isso que existia quando o número foi escolhido. Desde
-   que a rampa passou a terminar no pixel exato em que a seção começa, o que
-   está em cima dela não é mais bloco cheio: é a fileira mais densa da rampa,
-   que é a polaridade oposta.
+/* Onde tem rampa na frente, esta faixa some: a rampa já faz a dissolução
+   inteira, dos 135px, numa grade só, e ela é opaca justamente para poder cobrir
+   este pedaço. Duas peças aqui era o defeito - a de baixo não continuava a de
+   cima, recomeçava com outra grade, e o olho lia duas transições emendadas.
+   O porquê inteiro está no comentário da `.ramp`, no módulo 4.
 
-   Medido na emenda do #sobre, cobertura de creme por fileira: a rampa sobe
-   1,5 / 6,5 / 11,3 / 13,8 / 26,1 / 27,9 / 42,9 / 50,5 / 58,2 e a faixa
-   recomeçava em 14,8. Uma queda de 43 pontos no sentido contrário, mais 5px de
-   escuro sólido sem retícula nenhuma atravessando a tela - que num sistema de
-   1 bit é o mesmo pecado do meio-tom, só que de tarja. O #games não tem rampa,
-   encosta em bloco chapado e mede 0,3 / 0,3 / 14,8 / 44,4: mesma faixa, mesmos
-   números, curva monotônica. A faixa nunca esteve errada - errado é recomeçar
-   do quase-sólido quando já tem uma rampa contando.
-
-   Então aqui ela continua a contagem em vez de recomeçá-la: medido depois,
-   62,3 / 66,6 / 74,0 / 88,8 / 93,8 / 98,8, emendando nos 58,2 em que a rampa
-   parou - o degrau da emenda fica em 4,1 pontos, do tamanho dos outros. E em
-   3px o diâmetro é 6 num ladrilho de 9: os círculos não se tocam, e a tarja
-   sólida some junto.
-
-   O primeiro raio é 3 e não os 3.3 que a área pura pediria. πr²/81 dá a
-   cobertura ideal, mas o ponto pintado sai ~3,5 pontos mais denso que ela por
-   causa da borda antisserrilhada, e com 3.3 a emenda ainda caía 4 pontos.
-   Quem manda aqui é o pixel medido, não a fórmula.
-
-   Só o topo, e só com rampa na frente. As duas faixas de baixo e o #games
-   continuam encostando em bloco cheio, e lá o 4.7 é o número certo. */
-.ramp + .sec.invert::before {
-  background-image:
-    radial-gradient(circle, var(--ink) 3px, transparent 3.2px),
-    radial-gradient(circle, var(--ink) 2.9px, transparent 3.1px),
-    radial-gradient(circle, var(--ink) 2.4px, transparent 2.6px),
-    radial-gradient(circle, var(--ink) 1.8px, transparent 2px),
-    radial-gradient(circle, var(--ink) 1.2px, transparent 1.4px),
-    radial-gradient(circle, var(--ink) 0.5px, transparent 0.7px);
-}
+   As outras três continuam: o #games não tem rampa e encosta em bloco chapado,
+   e as duas de baixo também. Aí a fileira de 4.7 emenda em cor cheia da própria
+   cor dela, que é para o que ela foi calculada, e continua certa. */
+.ramp + .sec.invert::before { display: none; }
 
 /* E a faixa se revela fileira a fileira conforme a virada sobe na tela, presa à
    rolagem: `animation-timeline: view()` é o relógio, sem um listener de scroll
